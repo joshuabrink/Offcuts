@@ -5,7 +5,5 @@ script:
   - echo '*********Build Starting**********'
   - echo 'Installing Dependencies'
   - npm install
-  - echo 'Starting Server'
-  - node index.js
   - echo 'Running Tests'
   - npm test
