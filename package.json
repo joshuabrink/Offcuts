@@ -1,0 +1,22 @@
+{
+  "name": "offcuts",
+  "version": "1.0.0",
+  "description": "Classified steel off-cuts website",
+  "main": "index.js",
+  "scripts": {
+    "test": "jshint hello.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshuabrink1/Offcuts.git"
+  },
+  "author": "Joshua Brink",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshuabrink1/Offcuts/issues"
+  },
+  "homepage": "https://github.com/joshuabrink1/Offcuts#readme",
+  "devDependencies": {
+    "jshint": "^2.12.0"
+  }
+}
