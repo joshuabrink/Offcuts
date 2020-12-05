@@ -4,7 +4,7 @@
   "description": "Classified steel off-cuts website",
   "main": "index.js",
   "scripts": {
-    "test": "jshint hello.js"
+    "test": "jshint index.js"
   },
   "repository": {
     "type": "git",
