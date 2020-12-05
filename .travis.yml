@@ -6,4 +6,5 @@ script:
   - echo 'Installing Dependencies'
   - npm install
   - echo 'Running Tests'
+  - node index.js & 
   - npm test
