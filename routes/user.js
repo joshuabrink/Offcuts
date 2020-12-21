@@ -186,8 +186,8 @@ router.post('/register', (req, res, next) => {
   })
 })
 const thumbStr = (imagePath) => {
-  return imagePath.substring(0, imagePath.indexOf('\\') + 1) + 'thumb-' +
-    imagePath.substring(imagePath.indexOf('\\') + 1)
+  return imagePath.substring(0, imagePath.lastIndexOf('\\') + 1) + 'thumb-' +
+    imagePath.substring(imagePath.lastIndexOf('\\') + 1)
 }
 const delImages = async (imagePaths) => {
   const promises = []
@@ -204,7 +204,8 @@ const delImages = async (imagePaths) => {
       })
     }))
   }
-  await Promise.all(promises).then(() => {
+  await Promise.all(promises).then((val, err) => {
+    if (err) return err
     return true
   })
 }
@@ -230,7 +231,8 @@ router.post('/deleteAccount', loggedIn, (req, res, next) => {
         }))
       }
 
-      Promise.all(deletePromises).then(() => {
+      Promise.all(deletePromises).then((val, err) => {
+        if (err) return next(err)
         if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
           return res.status(200).json(user)
         }

@@ -106,8 +106,8 @@ router.post('/newListing', loggedIn, (req, res, next) => {
 })
 
 const thumbStr = (imagePath) => {
-  return imagePath.substring(0, imagePath.indexOf('\\') + 1) + 'thumb-' +
-    imagePath.substring(imagePath.indexOf('\\') + 1)
+  return imagePath.substring(0, imagePath.lastIndexOf('\\') + 1) + 'thumb-' +
+    imagePath.substring(imagePath.lastIndexOf('\\') + 1)
 }
 const delImages = async (imagePaths) => {
   const promises = []
@@ -124,7 +124,8 @@ const delImages = async (imagePaths) => {
       })
     }))
   }
-  Promise.all(promises).then(() => {
+  Promise.all(promises).then((val, err) => {
+    if (err) return (err)
     return true
   })
 }
@@ -172,7 +173,7 @@ router.post('/updateListing', loggedIn, (req, res, next) => {
           sharp(value)
             .resize(200, 200)
             .jpeg({ quality: 50 })
-            .toFile(thumbStr(value)).catch(err => {
+            .toFile(req.files[i].destination + '/thumb-' + req.files[i].originalname).catch(err => {
               if (err) return next(err)
             })
         } else {
