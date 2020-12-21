@@ -193,18 +193,18 @@ describe('Server Request', function () {
     })
   })
 
-  // describe('Delete Listing', function () {
-  //   it('Status 200 and body returned', function (done) {
-  //     server.post('/deleteListing')
-  //       .send({ listingID: listingID })
-  //       .expect(200)
-  //       .end(function (err, res) {
-  //         if (err) setErr(err, res.error)
-  //         expect(res.body).to.be.a('object')
-  //         done(err)
-  //       })
-  //   })
-  // })
+  describe('Delete Listing', function () {
+    it('Status 200 and body returned', function (done) {
+      server.post('/deleteListing')
+        .send({ listingID: listingID })
+        .expect(200)
+        .end(function (err, res) {
+          if (err) setErr(err, res.error)
+          expect(res.body).to.be.a('object')
+          done(err)
+        })
+    })
+  })
 
   describe('Logout', function () {
     it('returns status 302 (redirect)', function (done) {
@@ -218,23 +218,23 @@ describe('Server Request', function () {
     })
   })
 
-  // describe('Delete Account', function () {
-  //   it('Status 200 and body returned', function (done) {
-  //     server.post('/login')
-  //       .send({
-  //         email: UPEMAIL,
-  //         password: PASSWORD
-  //       })
-  //       .end(function (err, res) {
-  //         if (err) setErr(err, res.error)
-  //         server.post('/deleteAccount')
-  //           .expect(200)
-  //           .end(function (err, res) {
-  //             if (err) setErr(err, res.error)
-  //             expect(res.body).to.be.a('object')
-  //             done(err)
-  //           })
-  //       })
-  //   })
-  // })
+  describe('Delete Account', function () {
+    it('Status 200 and body returned', function (done) {
+      server.post('/login')
+        .send({
+          email: UPEMAIL,
+          password: PASSWORD
+        })
+        .end(function (err, res) {
+          if (err) setErr(err, res.error)
+          server.post('/deleteAccount')
+            .expect(200)
+            .end(function (err, res) {
+              if (err) setErr(err, res.error)
+              expect(res.body).to.be.a('object')
+              done(err)
+            })
+        })
+    })
+  })
 })
