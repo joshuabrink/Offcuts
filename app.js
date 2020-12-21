@@ -81,9 +81,9 @@
   app.use(function (err, req, res, next) {
     logger.debug(err)
     if (err instanceof UserFacingError) {
-      // if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
-      //   return res.status(err.statusCode).json({ message: err.message, stack: err.stack })
-      // }
+      if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
+        return res.status(err.statusCode).json({ message: err.message, stack: err.stack })
+      }
       req.flash('error_messages', err.message)
       return res.redirect('back')
     } else {
