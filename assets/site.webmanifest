@@ -1,0 +1,1 @@
+{"short_name":"","name":"","content_security_policy": "script-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com; object-src 'self'","icons":[{"src":"icon.png","type":"image/png","sizes":"192x192"}],"start_url":"/?utm_source=homescreen","background_color":"#fafafa","theme_color":"#fafafa"}

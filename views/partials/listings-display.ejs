@@ -1,0 +1,40 @@
+<% if (typeof listings !== 'undefined') { %>
+
+  <% for( let i = 0; i < listings.length; i++ ) { %>
+    <form action="/getListing" method="get">
+      <input type="hidden" name="id" value="<%= listings[i]._id %>">
+      <button type="submit" class="listing col">
+ 
+        <div class="img-count row">
+          <img src="/images/svg/camera.svg" alt="image count">
+          <span><%= listings[i].images.length %> </span>
+        </div>
+        <% if (listings[i].images[0]) { %>
+          <img class="listing-img" src="<%= listings[i].images[0] %>" alt="listing preview">
+        <% } else { %>
+          <img class="listing-img" src="/images/svg/placeholder.svg" alt="no listing preview">
+          <% } %>
+        <div class="listing-header">
+          <p class="truncate-overflow"><%= listings[i].title %></p>
+        </div>
+        <div class="listing-body">
+          <p class="price">R <%= listings[i].price %></p>
+          <div class="location row">
+            <img src="/images/svg/location.svg" alt="loaction">
+            <p><%= listings[i].location %></p>
+          </div>  
+        </div>
+      
+      </button>
+    </form>
+
+  <% } %>
+ 
+<% } else { %>
+  <div class="col not-found">
+    <img src="/images/svg/notfound.svg" alt="not found">
+    <h2>No Listings Found</h2>
+  </div>
+
+
+<% } %>

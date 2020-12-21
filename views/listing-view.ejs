@@ -1,0 +1,27 @@
+<%- include ('./partials/header.ejs') %>
+
+<section>
+  <% if (typeof listing !== 'undefined' && listing !== null ) { %>
+    <div class="listing-info">
+      <h1><%= listing.title %>  </h1>
+      <h2>R <%= listing.price %>  </h2>
+      <div class="img-container">
+        
+      </div>
+    </div>
+    <div class="seller-info">
+
+    </div>
+
+    <% } else { %>
+     <div class="col not-found">
+       <img src="/images/svg/notfound.svg" alt="not found">
+       <h2>No Listing Found</h2>
+     </div>
+    <% } %>
+</section>
+
+
+
+
+<%- include ('./partials/footer.ejs') %>

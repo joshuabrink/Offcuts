@@ -1,0 +1,109 @@
+@import "partials";
+@import "flexbox";
+
+/***Animated Home Text**/
+
+.text-wrapper {
+    position: relative;
+    display: inline-block;
+    padding-top: 0.2em;
+    padding-right: 0.05em;
+    padding-bottom: 0.1em;
+    overflow-wrap: normal;
+    font-size: 30px;
+    flex: 6;
+
+    & + .btn {
+        flex: 2;
+    }
+}
+
+.letter {
+    transform-origin: 50% 100%;
+    display: inline-block;
+    line-height: 1em;
+}
+
+.inline-img {
+    width: 30px;
+    margin-right: 10px;
+}
+
+.listing-container {
+    width: 70%;
+    @include row(space-between);
+}
+
+.listing {
+    @include align-items(start);
+    @include neustyle($color, true);
+    width: 220px;
+    position: relative;
+    border-radius: 20px;
+    cursor: pointer;
+    &-header {
+        margin-left: 5%;
+        p {
+            font-size: 25px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            min-height: 60px;
+            // overflow: hidden;
+            display: -webkit-box;
+            max-width: inherit;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+    &-body {
+        margin-left: 5%;
+        p {
+            margin-top: 0;
+        }
+        .price {
+            @include font("Cantata One");
+            font-size: 25px;
+            font-weight: bold;
+            color: #547285;
+        }
+    }
+    
+    .listing-img {
+        border-radius: 20px;
+        width: inherit;
+    }
+    .location {
+        margin-bottom: 1rem;
+        width: fit-content;
+        p {
+            margin: 0;
+        }
+    }
+    .img-count {
+        &::before {
+            content: "";
+            display: block;
+            @include neustyle(#b6c3ca, false, topleft, true, 1px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+        }
+        position: absolute;
+        background-color: $bg-color;
+        border-radius: 20px;
+        padding: 3px;
+        top: 5px;
+        left: 5px;
+        width: 35px;
+        height: 24px;
+        overflow: hidden;
+        img,
+        span {
+            z-index: 1;
+        }
+    }
+}
