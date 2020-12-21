@@ -204,7 +204,7 @@ const delImages = async (imagePaths) => {
       })
     }))
   }
-  await Promise.all(promises).then((val, err) => {
+  Promise.all(promises).then((val, err) => {
     if (err) return err
     return true
   })
@@ -221,7 +221,7 @@ router.post('/deleteAccount', loggedIn, (req, res, next) => {
       for (let i = 0; i < listings.length; i++) {
         const listing = listings[i]
         deletePromises.push(new Promise((resolve, reject) => {
-          Listings.deleteListing(listing._id).then((deletedListing) => {
+          Listings.deleteListing(listing._id).then(async (deletedListing) => {
             if (deletedListing instanceof Error) return reject(next(new DatabaseError('Error deleting Listings')))
             delImages(listing.images).then((val, err) => {
               if (err) reject(err)
