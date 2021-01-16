@@ -42,7 +42,7 @@
     border-radius: 20px;
     cursor: pointer;
     @include gutter('h',20px);
-    @include gutter('v',20px);
+    margin-bottom: 15px;
     &-header {
         margin-left: 5%;
         p {
