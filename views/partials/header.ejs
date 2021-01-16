@@ -2,206 +2,165 @@
 <html class="no-js" lang="">
 
 <head>
-  <meta charset="UTF-8">
-  <% if (title) { %>
-    <title><%= title.charAt(0).toUpperCase() + title.slice(1) %></title>
-    <% } else { %>
-    <title>Offcuts</title>
-    <% } %>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <% if (typeof title !='undefined' ) { %>
+        <title>
+            <%= title.charAt(0).toUpperCase() + title.slice(1) %>
+        </title>
+        <% if (title==='post' ) { %>
+            <link rel="stylesheet" href="/css/post.css">
+            <% } if (title==='Listing' ) { %>
+                <link rel="stylesheet" href="/css/listing.css">
+                <link rel="stylesheet" href="/css/vendor/ol.css">
+                <script defer src="/js/slider.js"></script>
+                <% } %>
+        <% } else { %>
+            <title>Offcuts</title>
+            <% } %>
+            <meta name="description" content="">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+            <meta property="og:title" content="">
+            <meta property="og:type" content="">
+            <meta property="og:url" content="">
+            <meta property="og:image" content="">
 
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
+            <link rel="manifest" href="/site.webmanifest">
+            <link rel="apple-touch-icon" href="icon.png">
 
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="apple-touch-icon" href="icon.png">
-  
+            <link rel="stylesheet" href="/css/styles.css">
+            <link rel="stylesheet" href="/css/dark.css">
+            <link rel="stylesheet" href="/css/vendor/normalize.css">
+            <!-- <link rel="stylesheet" href="/css/vendor/autoComplete.min.css"> -->
 
-  <link rel="stylesheet" href="/css/normalize.css">
-  <link rel="stylesheet" href="/css/styles.css">
+            <script defer src="/js/vendor/anime.min.js"></script>
+            <script defer src="/js/vendor/modernizr-3.11.2.min.js"></script>
+            <script defer src="/js/vendor/autoComplete.min.js"></script>
 
-  <meta name="theme-color" content="#fafafa">
-  
+            <script defer src="/js/plugins.js"></script>
+            <script defer src="/js/animation.js"></script>
+            <script defer src="/js/darkmode.js"></script>
+
+            <meta name="theme-color" content="#fafafa">
+
 </head>
 
 <body>
+    <nav class="flex">
 
-
-  <nav class="flex" >
-
-    <a href="/" id="logo"></a>
-
-    <form action="/search" method="post" >
-      <div class="row">
-       
-        <ul class="dropdown-container">
-          <li class=flyout>
-             
-            <a class="location">
-                <img src="/images/svg/location.svg" alt="" class="top">
-                <img src="/images/svg/location-i.svg" alt="" class="invert">
-            </a>
-                 
-                 <!-- Flyout -->
-                 <ul class="flyout-content dropdown stacked">
-                     <li><a href=#>Eastern Cape</a></li>
-                     <li><a href=#>Free State</a></li>
-                     <li><a href=#>Gauteng</a></li>
-                     <li><a href=#>KwaZulu-Natal</a></li>
-                     <li><a href=#>Limpopo</a></li>
-                     <li><a href=#>Mpumalanga</a></li>
-                     <li><a href=#>Northern Cape</a></li>
-                     <li><a href=#>North West</a></li>
-                     <li><a href=#>Western Cape</a></li>
-                     <li class="flyout-alt">
-                         
-                         <a href=#>Baz Foo</a>
-                         
-                         <ul class="flyout-content nav stacked">
-                             <li><a href=#>Foo Bar</a></li>
-                             <li><a href=#>Bar Baz</a></li>
-                             <li class="flyout-alt">
-                                 
-                                 <a href=#>Baz Foo</a>
-            
-                                 <ul class="flyout-content nav stacked">
-                                     <li class="flyout-alt">
-                                         
-                                         <a href=#>Foo Bar</a>
-                                         
-                                         <ul class="flyout-content nav stacked">
-                                             <li><a href=#>Bar Baz</a></li>
-                                             <li class="flyout-alt">
-                                                 
-                                                 <a href=#>Baz Foo</a>
-                                                 
-                                              
-                                                 <ul class="flyout-content nav stacked">
-                                                     <li><a href=#>Bar Baz</a></li>
-                                                     <li><a href=#>Baz Foo</a></li>
-                                                     <li><a href=#>Foo Bar</a></li>
-                                                 </ul>
-                                             
-                                             </li>
-                                             <li><a href=#>Foo Bar</a></li>
-                                         </ul>
-                                         
-                                     </li>
-                                     <li><a href=#>Bar Baz</a></li>
-                                     <li class="flyout-alt">
-                                         
-                                         <a href=#>Baz Foo</a>
-                                         
-                                        
-                                         <ul class="flyout-content nav stacked">
-                                             <li><a href=#>Bar Baz</a></li>
-                                             <li><a href=#>Baz Foo</a></li>
-                                             <li><a href=#>Foo Bar</a></li>
-                                         </ul>
-                                         
-                                     </li>
-                                 </ul>
-                                 
-                             </li>
-                         </ul>
-                         
-                     </li>
-                 </ul>
-             
-             </li>
-         </ul>
-    
-        <input type="search" name="search" id="">
-        <input type="submit" value="">
-      </div>
-      <div class="row search-filter">
-      </div>
-     
-    </form>
-
-    <div class="nav-list flex">
-      <a id="acc-icon" href="#account-modal">
-        <img class="top" src="/images/svg/account.svg" alt="Your Account">
-        <img class="invert" src="/images/svg/account-i.svg" alt="Your Account">
-      </a>
-      <a href="/post">Post</a>
-    </div>
-  </nav>
-  <% if(success_messages) { %>
-  <% for( let i = 0; i < success_messages.length; i++ ) { %>
-  <div class="flash ok row"><%= success_messages[i] %>     <a title="Close" class="flash-close flex" >
-    <img src="/images/svg/cross.svg" alt="Close flash">
-</a></div>
-  <% } %>
-
-  <% } %>
-  <% if(error_messages) { %>
-  <% for( let i = 0; i < error_messages.length; i++ ) { %>
-  <div class="flash err row"><%= error_messages[i] %>     <a title="Close" class="flash-close flex" >
-    <img src="/images/svg/cross.svg" alt="Close flash">
-</a></div>
-  <% } %>
-  <% } %>
-  <div id="account-modal" class="modal-window flex">
-    <div class="col">
-        <a href="#" title="Close" class="modal-close">
-            <img src="/images/svg/cross.svg" alt="Close login">
+        <a href="/" id="logo">
+            <%- include ('../svgs/logo.ejs') %>
         </a>
-        <h1>
-            <span class="tab bold">Login </span>·
-            <span class="tab "> Register</span>
-        </h1>
-        <div class="tab-content flex">
-            <form action="/login" method="post" class="pg-1-body" id="login">
-                <div class="input">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email">
-                </div>
-                <div class="input">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password">
-                </div>
-                <div class="input">
-                    <input type="submit" value="Submit">
-                </div>
-         
-            </form>
-            <form action="/register" method="post" class="pg-2-body" id="register">
-                <div class="input">
-                    <label for="name">Name:</label>
-                    <input type="name" name="name" >
-                </div>
-                <div class="input">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" >
-                </div>
-                <div class="input">
-                    <label for="number">Number:</label>
-                    <input type="number" name="number" >
-                </div>
-                <div class="input">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" >
-                </div>
-                <div class="input">
-                    <label for="passwordConfirm">Confirm Password:</label>
-                    <input type="password" name="passwordConfirm" >
-                </div>
-                <div class="input">
-                    <input type="submit" value="Submit">
-                </div>
-    
-       
-           
-            
-            </form>
-        
+
+        <form class="search" action="/search" method="post">
+            <div class="row">
+                <%- include ('./dropdown.ejs') %>
+                <input id="autoComplete" type="search" name="search" class="search-input neu" dir="ltr" 
+                spellcheck="false" 
+                autocorrect="off" 
+                autocomplete="off" 
+                autocapitalize="off" 
+                maxlength="2048" 
+                tabindex="1"
+                 role="combobox" 
+                 aria-haspopup="true" 
+                 aria-expanded="false" 
+                 aria-controls="autoComplete_list" 
+                 aria-autocomplete="both" placeholder="Search">
+                <button class="search-btn" type="submit">
+                    <%- include ('../svgs/search.ejs') %>             
+                 </button>
+            </div>
+            <div class="row search-under">
+                <div class="search-filter row"></div>
+            </div>
+
+        </form>
+
+        <div class="nav-list row around">
+            <a class="dark-mode-button" href="#">dark</a>
+            <%- include ('../svgs/account.ejs') %>
+            <a href="/post">Post</a>
         </div>
- 
-    
-    </div>
-</div>
+    </nav>
+
+    <% if(typeof success_messages !='undefined' ) { %>
+        <% for( let i=0; i < success_messages.length; i++ ) { %>
+            <div class="flash ok row neu-static">
+                    <%= success_messages[i] %>
+                <a title="Close" class="flash-close flex">
+                    <svg viewBox="0 0 24 24" width="18px" height="18px"><path class="light" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    <!-- <img src="/images/svg/cross.svg" alt="Close flash"> -->
+                </a>
+            </div>
+            <% } %>
+
+    <% } %>
+    <% if(typeof error_messages !='undefined' ) { %>
+        <% for( let i=0; i < error_messages.length; i++ ) { %>
+            <div class="flash err row neu-static">
+                <%= error_messages[i] %> <a title="Close" class="flash-close flex">
+                        <img src="/images/svg/cross.svg" alt="Close flash">
+                    </a>
+            </div>
+        <% } %>
+    <% } %>
+        <div id="account-modal" class="modal-window row">
+            <div class="col">
+                <a href="#" title="Close" class="modal-close">
+                    <img src="/images/svg/cross.svg" alt="Close login">
+                </a>
+                <h1>
+                    <span class="tab bold">Login </span>·
+                    <span class="tab "> Register</span>
+                </h1>
+                <div class="tab-content flex">
+                    <form action="/login" method="post" class="pg-1-body" id="login">
+                        <div class="col start">
+                            <label for="email">Email:</label>
+                            <input type="email" name="email" class="neu">
+                        </div>
+                        <div class="col start">
+                            <label for="password">Password:</label>
+                            <input type="password" name="password" class="neu">
+                        </div>
+                        <div class="col start">
+                            <input type="submit" value="Submit" class="neu">
+                        </div>
+
+                    </form>
+                    <form action="/register" method="post" class="pg-2-body" id="register">
+                        <div class="col start">
+                            <label for="name">Name:</label>
+                            <input type="name" name="name" class="neu">
+                        </div>
+                        <div class="col start">
+                            <label for="email">Email:</label>
+                            <input type="email" name="email" class="neu">
+                        </div>
+                        <div class="col start">
+                            <label for="number">Number:</label>
+                            <input type="number" name="number" class="neu">
+                        </div>
+                        <div class="col start">
+                            <label for="password">Password:</label>
+                            <input type="password" name="password" class="neu">
+                        </div>
+                        <div class="col start">
+                            <label for="passwordConfirm">Confirm Password:</label>
+                            <input type="password" name="passwordConfirm" class="neu">
+                        </div>
+                        <div class="col start">
+                            <input type="submit" value="Submit" class="neu">
+                        </div>
+
+
+
+
+                    </form>
+
+                </div>
+
+
+            </div>
+        </div>
