@@ -1,0 +1,96 @@
+body.dark-mode {
+  color: #e8eff3;
+  background-color: #739db6;
+}
+body.dark-mode ::-webkit-input-placeholder {
+  color: #e8eff3;
+}
+body.dark-mode ::-moz-placeholder {
+  color: #e8eff3;
+}
+body.dark-mode :-ms-input-placeholder {
+  color: #e8eff3;
+}
+body.dark-mode ::-ms-input-placeholder {
+  color: #e8eff3;
+}
+body.dark-mode ::placeholder {
+  color: #e8eff3;
+}
+body.dark-mode nav, body.dark-mode .modal-window > div, body.dark-mode .listing .img-count, body.dark-mode .autoComplete_list {
+  background-color: #739db6;
+}
+body.dark-mode a, body.dark-mode p, body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4, body.dark-mode h5 {
+  color: #e8eff3;
+}
+body.dark-mode .neu {
+  -webkit-transition: box-shadow 0.3s ease;
+  -o-transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  box-shadow: -4px -4px 6px rgba(165, 192, 208, 0.7), 4px 4px 6px #517f9b, inset -4px -4px 12px rgba(142, 176, 196, 0.1), inset 4px 4px 12px #739db6;
+}
+body.dark-mode .neu:hover {
+  -webkit-box-shadow: -4px -4px 10px rgba(142, 176, 196, 0.2), 4px 4px 6px #739db6, inset -4px -4px 12px rgba(142, 176, 196, 0.6), inset -2px -2px 2px rgba(165, 192, 208, 0.2), inset 4px 4px 6px #5485a2;
+  box-shadow: -4px -4px 10px rgba(142, 176, 196, 0.2), 4px 4px 6px #739db6, inset -4px -4px 12px rgba(142, 176, 196, 0.6), inset -2px -2px 2px rgba(165, 192, 208, 0.2), inset 4px 4px 6px #5485a2;
+}
+body.dark-mode .neu-static {
+  -webkit-transition: box-shadow 0.3s ease;
+  -o-transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  box-shadow: -4px -4px 6px rgba(165, 192, 208, 0.7), 4px 4px 6px #517f9b, inset -4px -4px 12px rgba(142, 176, 196, 0.1), inset 4px 4px 12px #739db6;
+}
+body.dark-mode .neu-static-i {
+  -webkit-transition: box-shadow 0.3s ease;
+  -o-transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  box-shadow: -4px -4px 10px rgba(142, 176, 196, 0.2), 4px 4px 6px #739db6, inset -4px -4px 12px rgba(142, 176, 196, 0.6), inset -2px -2px 2px rgba(165, 192, 208, 0.2), inset 4px 4px 6px #5485a2;
+}
+body.dark-mode .neu-i {
+  -webkit-transition: box-shadow 0.3s ease;
+  -o-transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  box-shadow: -4px -4px 10px rgba(142, 176, 196, 0.2), 4px 4px 6px #739db6, inset -4px -4px 12px rgba(142, 176, 196, 0.6), inset -2px -2px 2px rgba(165, 192, 208, 0.2), inset 4px 4px 6px #5485a2;
+}
+body.dark-mode .neu-i:hover {
+  -webkit-box-shadow: -4px -4px 6px rgba(165, 192, 208, 0.7), 4px 4px 6px #517f9b, inset -4px -4px 12px rgba(142, 176, 196, 0.1), inset 4px 4px 12px #739db6;
+  box-shadow: -4px -4px 6px rgba(165, 192, 208, 0.7), 4px 4px 6px #517f9b, inset -4px -4px 12px rgba(142, 176, 196, 0.1), inset 4px 4px 12px #739db6;
+}
+body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
+  color: #e8eff3;
+}
+body.dark-mode input::-webkit-search-cancel-button, body.dark-mode select::-webkit-search-cancel-button, body.dark-mode textarea::-webkit-search-cancel-button {
+  background-image: url("/images/svg/cross-i.svg");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: contain;
+}
+body.dark-mode .flyout-content {
+  background-color: #739db6;
+}
+body.dark-mode .flyout-content .selected {
+  -webkit-transition: box-shadow 0.3s ease;
+  -o-transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  box-shadow: -4px -4px 6px rgba(165, 192, 208, 0.7), 4px 4px 6px #517f9b, inset -4px -4px 12px rgba(142, 176, 196, 0.1), inset 4px 4px 12px #739db6;
+}
+body.dark-mode .flyout-content li:hover {
+  -webkit-transition: box-shadow 0.3s ease;
+  -o-transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  box-shadow: -4px -4px 6px rgba(165, 192, 208, 0.7), 4px 4px 6px #517f9b, inset -4px -4px 12px rgba(142, 176, 196, 0.1), inset 4px 4px 12px #739db6;
+}
+body.dark-mode .flyout-content li:hover:hover {
+  -webkit-box-shadow: -4px -4px 10px rgba(142, 176, 196, 0.2), 4px 4px 6px #739db6, inset -4px -4px 12px rgba(142, 176, 196, 0.6), inset -2px -2px 2px rgba(165, 192, 208, 0.2), inset 4px 4px 6px #5485a2;
+  box-shadow: -4px -4px 10px rgba(142, 176, 196, 0.2), 4px 4px 6px #739db6, inset -4px -4px 12px rgba(142, 176, 196, 0.6), inset -2px -2px 2px rgba(165, 192, 208, 0.2), inset 4px 4px 6px #5485a2;
+}
+body.dark-mode svg .light {
+  fill: #e8eff3;
+}
+body.dark-mode svg .dark {
+  fill: #f9fdff;
+}
+body.dark-mode svg .line {
+  stroke: #f9fdff;
+}
+
+/*# sourceMappingURL=dark.css.map */
