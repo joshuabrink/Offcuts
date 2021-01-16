@@ -36,7 +36,7 @@
 
 .listing {
     @include align-items(start);
-    @include neustyle($color, true);
+    // @include neustyle($color, true);
     width: 220px;
     position: relative;
     border-radius: 20px;
@@ -48,7 +48,6 @@
             margin-top: 10px;
             margin-bottom: 15px;
             min-height: 60px;
-            // overflow: hidden;
             display: -webkit-box;
             max-width: inherit;
             -webkit-line-clamp: 2;
@@ -65,11 +64,18 @@
             @include font("Cantata One");
             font-size: 25px;
             font-weight: bold;
-            color: #547285;
+            // color: #547285;
         }
+    }
+
+    &:hover .listing-img {
+        @include prefix(transform, translateY(-10px), (webkit));
+        @include prefix(filter, drop-shadow(0px 5px 5px rgba(0,0,0,0.3)), (webkit));
+
     }
     
     .listing-img {
+        @include prefix(transition, all ease 0.2s, (webkit,o));
         border-radius: 20px;
         width: inherit;
     }
@@ -81,17 +87,6 @@
         }
     }
     .img-count {
-        &::before {
-            content: "";
-            display: block;
-            @include neustyle(#b6c3ca, false, topleft, true, 1px);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-        }
         position: absolute;
         background-color: $bg-color;
         border-radius: 20px;
@@ -101,9 +96,21 @@
         width: 35px;
         height: 24px;
         overflow: hidden;
-        img,
-        span {
+        z-index: 1;
+        &::before {
+            content: "";
+            display: block;
+            // @include neustyle(#b6c3ca, false, topleft, true, 1px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
             z-index: 1;
+        }
+        img, span {
+            z-index: 3;
         }
     }
 }

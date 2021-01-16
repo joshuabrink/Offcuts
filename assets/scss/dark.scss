@@ -1,0 +1,72 @@
+@import "mixins";
+$bg-dark:  #739db6;
+$text-dark: #e8eff3;
+$sec-dark: #2c7bbd;
+$light-color: #f9fdff;
+
+body.dark-mode {
+  color: $text-dark;
+  background-color: $bg-dark;
+
+  ::-webkit-input-placeholder {
+    color: $text-dark;
+  }
+  ::-moz-placeholder {
+    color: $text-dark;
+  }
+  :-ms-input-placeholder {
+    color: $text-dark;
+  }
+  ::-ms-input-placeholder {
+    color: $text-dark;
+  }
+  ::placeholder {
+    color: $text-dark;
+  }
+
+  nav, .modal-window > div, .listing .img-count, .autoComplete_list {
+    background-color: $bg-dark;
+  }
+  a,p,h1,h2,h3,h4,h5 {
+    color: $text-dark;
+  }
+  //Neumorphism classes
+.neu {
+  @include neustyle($bg-dark,true);
+  &-static {
+    @include neustyle($bg-dark, false);
+    &-i {
+      @include neustyle($bg-dark,false,topleft,true);
+    }
+  }
+  &-i {
+    @include neustyle($bg-dark,true,topleft,true);
+  }
+}
+  input,select,textarea {
+    color: $text-dark;
+    &::-webkit-search-cancel-button {
+      @include background("/images/svg/cross-i.svg", 50%);
+    }
+  }
+  .flyout-content {
+    background-color: $bg-dark;
+    .selected {
+      @include neustyle($bg-dark, false);
+    }
+    li:hover {
+      @include neustyle($bg-dark, true);
+    }
+  }
+  svg {
+    .light {
+      fill: $text-dark;
+    }
+    .dark {
+      fill: $light-color;
+    }
+    .line {
+      stroke: $light-color;
+    }
+  }
+}

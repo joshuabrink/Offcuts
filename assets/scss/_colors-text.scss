@@ -1,0 +1,25 @@
+$bg-color: #e8eff3;
+$text-color: #739db6;
+$sec-color: #2c7bbd;
+$dark-color:#547285;
+$err-color:#f44336;
+$suc-color:#4caf50;
+
+//IMPORT FONTS
+@include font-face("Raleway", "/font/raleway-v18-latin-regular");
+@include font-face("Cantata One", "/font/cantata-one-v10-latin-regular");
+
+//TEXT
+h1,h2,h3,h4,h5 {
+  @include font("Cantata One");
+  color: $text-color;
+}
+
+a,p {
+  color: $text-color;
+  text-decoration: none;
+}
+
+.title {
+  font-size: 3rem;
+}

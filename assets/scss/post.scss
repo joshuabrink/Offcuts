@@ -1,0 +1,19 @@
+@import "mixins";
+
+.post {
+
+  input,select {
+    margin-bottom: 20px;
+  }
+}
+
+.type {
+  @include neustyle($color, false);
+  border-radius: 20px;
+  margin-bottom: 20px;
+  padding: 15px;
+  img {
+    width: 100%;
+    border-radius: 20px;
+  }
+}

@@ -1,5 +1,5 @@
+@use "sass:list";
 //IMPORT FONTS
-
 @mixin font-face($family, $path, $weight: normal, $style: normal) {
   /* raleway-regular - latin */
   @font-face {
@@ -7,13 +7,12 @@
     font-display: swap;
     font-style: $style;
     font-weight: 400;
-    src: url($path+'.eot'); /* IE9 Compat Modes */
-    src: local(''),
-         url($path +'.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url($path +'.woff2') format('woff2'), /* Super Modern Browsers */
-         url($path +'.woff') format('woff'), /* Modern Browsers */
-         url($path +'.ttf') format('truetype'), /* Safari, Android, iOS */
-         url($path +'.svg#Raleway') format('svg'); /* Legacy iOS */
+    src: url($path + ".eot"); /* IE9 Compat Modes */
+    src: local(""), url($path + ".eot?#iefix") format("embedded-opentype"),
+      /* IE6-IE8 */ url($path + ".woff2") format("woff2"),
+      /* Super Modern Browsers */ url($path + ".woff") format("woff"),
+      /* Modern Browsers */ url($path + ".ttf") format("truetype"),
+      /* Safari, Android, iOS */ url($path + ".svg#Raleway") format("svg"); /* Legacy iOS */
   }
 }
 
@@ -34,104 +33,60 @@
 }
 
 
-@mixin closeIcon($top: 10px, $right: 10px) {
-  line-height: 50px;
-  font-size: 80%;
-  position: absolute;
-  right: $right;
-  text-align: center;
-  top: $top;
-  text-decoration: none;
-  &:hover {
-    @include dropShadow("sm")
+@mixin form($color: black) {
+  @include flexbox;
+  @include justify-content(center);
+  @include flex-direction(column);
+
+  label {
+    color: $color;
+    padding-left: 10px;
+    padding-bottom: 5px;
   }
-  img {
-    width:28px;
+
+  textarea {
+    @include input;
+    padding: 10px 10px !important;
+  }
+
+  input,
+  select {
+    height: 30px;
+    @include input($color);
+
+    &[type="checkbox"] {
+      height: auto;
+    }
+
+    &[type="submit"] {
+      width: auto;
+      height: auto;
+      cursor: pointer;
+      @include align-self(center);
+      padding: 4px 12px;
+      font-size: 20px;
+    }
   }
 }
-
-
-@mixin form($color: black) {
-    @include flexbox;
-    @include justify-content(center);
-    @include flex-direction(column);
-
-    label {
-      color: $color;
-      padding-left: 10px;
-      padding-bottom: 5px;
-    }
-
-    input:-internal-autofill-selected {
-      background-color: #303030;
-    }
-
-    textarea {
-      @include input;
-      padding: 10px 10px  !important;
-    }
-
-    input {
-      height: 30px;
-      @include input($color);
-
-      &[type="submit"] {
-        // margin-top: 18px;
-        width: auto;
-        height: auto;
-        cursor: pointer;
-        @include align-self(center);
-        padding: 4px 12px;
-        font-size: 20px;
-
-      }
-    }
-
+@mixin input($color: black) {
+ 
+  margin-bottom: 10px;
+  background-color: transparent;
+  border: none;
+  border-radius: 20px;
+  color: $color;
+  @include prefix("transition", all 0.3s, (o,webkit));
+  padding: 1px 10px;
+  font-size: 18px;
+  &:focus {
+    outline: none;
   }
-
-  @mixin input($color: black) {
-    margin-bottom: 10px;
-    background-color: transparent;
-    border: none;
-    border-radius: 20px;
-    color: $color;
-    transition: all 0.3s;
-    padding: 1px 10px;
-    font-size: 18px;
-  
-    &:focus {
-      outline: none;
-  
-    }
-  }
-
+}
 
 @mixin position($pos: relative, $top: 0, $left: 0) {
   position: $pos;
   top: $top;
-  left: $left
-}
-
-@mixin arrow($direction: down, $size: 5px, $color: #555) {
-  width: 0;
-  height: 0;
-  @if ($direction == left) {
-    border-top: $size solid transparent;
-    border-bottom: $size solid transparent;
-    border-right: $size solid $color;
-  } @else if ($direction == right) {
-    border-top: $size solid transparent;
-    border-bottom: $size solid transparent;
-    border-left: $size solid $color;
-  } @else if ($direction == down) {
-    border-left: $size solid transparent;
-    border-right: $size solid transparent;
-    border-top: $size solid $color;
-  } @else {
-    border-left: $size solid transparent;
-    border-right: $size solid transparent;
-    border-bottom: $size solid $color;
-  }
+  left: $left;
 }
 
 $breakpoints: (
@@ -156,26 +111,28 @@ $breakpoints: (
   }
 }
 
-$prefixes: "webkit", "moz", "ms", "o", "none";
-@mixin prefix($property, $arguments) {
+$prefixes: "webkit", "ms", "o", "none";
+@mixin prefix($property, $value, $selected) {
   @each $prefix in $prefixes {
     @if $prefix == "none" {
-      #{$property}: $arguments;
+      #{$property}: $value;
     } @else {
-      -#{$prefix}-#{$property}: $arguments;
+      @if list.index($selected,$prefix) {
+        -#{$prefix}-#{$property}: $value;
+      }
     }
   }
 }
 
 @mixin dropShadow($size) {
   @if $size == "sm" {
-    @include prefix(filter, drop-shadow(-1px 1px 2px rgba(0, 0, 0, 0.3)));
+    @include prefix(filter, drop-shadow(-1px 1px 2px rgba(0, 0, 0, 0.3)),(webkit));
   }
   @if $size == "lg" {
-    @include prefix(filter, drop-shadow(-3px 3px 3px rgba(0, 0, 0, 0.3)));
+    @include prefix(filter, drop-shadow(-3px 3px 3px rgba(0, 0, 0, 0.3)),(webkit));
   }
-  @if $size == "none"{
-    @include prefix(filter, drop-shadow(0px 0px 0px rgba(0, 0, 0, 0)));
+  @if $size == "none" {
+    @include prefix(filter, drop-shadow(0px 0px 0px rgba(0, 0, 0, 0)),(webkit));
   }
 }
 
@@ -185,60 +142,54 @@ $prefixes: "webkit", "moz", "ms", "o", "none";
     repeat: no-repeat;
     position: $x $y;
   }
-
-  @include prefix("background-size", contain);
+  background-size:contain; 
 }
 
-@mixin underline {
-  background-image: linear-gradient(transparent calc(95% - 1px), #fff 5px);
-  background-size: 0;
-  background-repeat: no-repeat;
-  display: inline;
-  transition: 0.2s ease;
+// @mixin underline {
+//   background-image: linear-gradient(transparent calc(95% - 1px), #fff 5px);
+//   background-size: 0;
+//   background-repeat: no-repeat;
+//   display: inline;
+//   @include prefix(transition, 0.2s ease, (webkit));
 
-  &:hover {
-    background-size: 100%;
-  }
-}
+//   &:hover {
+//     background-size: 100%;
+//   }
+// }
 
 @mixin overlay($parent) {
   #{$parent} {
-    @include position;
+    position: relative;
 
     .top {
-     
-        width: 100%;
-        @include position;
-        @include prefix('transition', opacity 0.3s ease);
+      width: 100%;
+      @include position;
+      @include prefix("transition", opacity 0.3s ease, (o,webkit));
     }
 
     & .under {
       @include position(absolute);
       width: 100%;
-
+    }
   }
-}
 }
 
 @mixin crossfade($parent) {
-
   @include overlay($parent);
   #{$parent} {
-
     & .invert {
       @include position(absolute);
-        width: 100%;
-       
-        @include prefix("opacity", 0);
+      width: 100%;
 
+     opacity:0;
     }
     &:hover {
-        & .invert {
-            @include prefix("opacity", 1);  
-        }
-        .top {
-            @include prefix("opacity", 0);
-        }
+      & .invert {
+        opacity:1;
+      }
+      .top {
+        opacity:0;
+      }
     }
   }
 }
@@ -255,10 +206,10 @@ $prefixes: "webkit", "moz", "ms", "o", "none";
   }
 }
 
-@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white, 50%)) {
   // For Google Chrome
   &::-webkit-scrollbar {
-    width:  $size;
+    width: $size;
     height: $size;
   }
 
@@ -279,59 +230,182 @@ $prefixes: "webkit", "moz", "ms", "o", "none";
 
 $color: #e8eff3;
 
-@mixin neustyle( 
-		$color, 
-		$hover: false, 
-		$direction: topleft, 
-		$inset: false, 
-		$distance: 2px 
-	) {
-  transition: box-shadow .3s ease, color .3s ease;
-	$v: 2px;
-	
-	@if $distance {
-		$v: $distance;		
-	}
+@mixin neustyle($color, $hover: false, $direction: topleft, $inset: false, $distance: 2px) {
+  @include prefix("transition", box-shadow 0.3s ease, (o,webkit));
+  $v: 2px;
 
-	$topX: ($v*2*-1);
-	$topY: ($v*2*-1);
-		
-	@if $direction == 'topcenter' {
-		$topX: 0px;
-		$topY: ($v*2*-1);
-	}
-	@if $direction == 'topright' {
-		$topX: ($v*2);
-		$topY: ($v*2*-1);
-	}
-		
-	$out: $topX $topY ($v*3) rgba(#fff,.7),
-		  $topX*-1 $topY*-1 ($v*3) darken($color,12),
-		  inset $topX $topY ($v*6) rgba(#fff,.1),
-		  inset $topX*-1 $topY*-1 ($v*6) darken($color,0);
+  @if $distance {
+    $v: $distance;
+  }
 
-	$in: $topX $topY ($v*5) rgba(#fff,.2),
-		 $topX*-1 $topY*-1 ($v*3) darken($color,0),
-		 inset $topX $topY ($v*6) rgba(#fff,.6),
-	     inset $topX/2 $topY/2 ($v) rgba(#fff,.2),
-		 inset $topX*-1 $topY*-1 ($v*3) darken($color,10);
-		
-	@if $inset {
-		box-shadow: $in;
-	}
-	@else {
-		box-shadow: $out;
-	}
-		
-	@if $hover {
-		&:hover {
-			@if $inset {
-				box-shadow: $out;
-			}
-			@else {
-				box-shadow: $in;
-			}
-		}
-	}
+  $topX: ($v * 2 * -1);
+  $topY: ($v * 2 * -1);
+
+  @if $direction == "topcenter" {
+    $topX: 0px;
+    $topY: ($v * 2 * -1);
+  }
+  @if $direction == "topright" {
+    $topX: ($v * 2);
+    $topY: ($v * 2 * -1);
+  }
+
+  $out: $topX $topY ($v * 3) rgba(lighten($color,15), 0.7), $topX * -1 $topY * -1 ($v * 3) darken($color, 12),
+    inset $topX $topY ($v * 6) rgba(lighten($color,8), 0.1), inset $topX * -1 $topY * -1 ($v * 6) darken($color, 0);
+
+  $in: $topX $topY ($v * 5) rgba(lighten($color,8), 0.2), $topX * -1 $topY * -1 ($v * 3) darken($color, 0),
+    inset $topX $topY ($v * 6) rgba(lighten($color,8), 0.6), inset $topX/2 $topY/2 ($v) rgba(lighten($color,15), 0.2),
+    inset $topX * -1 $topY * -1 ($v * 3) darken($color, 10);
+
+  @if $inset {
+    box-shadow: $in;
+  } @else {
+    box-shadow: $out;
+  }
+
+  @if $hover {
+    &:hover {
+      @if $inset {
+        -webkit-box-shadow: $out;
+        box-shadow: $out;
+      } @else {
+        -webkit-box-shadow: $in;
+        box-shadow: $in;
+      }
+    }
+  }
 }
 
+@mixin dropdown( $width: 100px, $top: 100%) {
+ 
+    & > li,
+    & > li > a {
+      display: block;
+    }
+
+  .flyout,
+  .flyout-alt {
+    position: relative;
+  }
+  .flyout {
+    &-content {
+      position: absolute;
+      top: $top;
+      background: $bg-color;
+      left: -99999px;
+      width: 135px;
+      padding: 0;
+      border-radius: 20px;
+      height: 0;
+      z-index: 10;
+      overflow: hidden;
+  
+      & > li:first-child {
+        border-radius: 20px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      & > li:last-child {
+        border-radius: 20px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+      & > li:only-child {
+        border-radius: 20px;
+      }
+      & > li {
+        border-radius: 20px;
+        width: 100%;
+        &:hover {
+          @include neustyle($bg-color, false);
+        }
+        & > a {
+          line-height: 2.2;
+          width: inherit;
+          text-align: center;
+          border-radius: 20px;
+        }
+      }
+    }
+    &:hover > .flyout-content {
+      left: -55px;
+    }
+    &-alt:hover > .flyout-content {
+      top: 0;
+      left: 100%;
+    }
+    &:hover > .flyout-content,
+    &-alt:hover > .flyout-content  {
+      height: auto;
+      overflow: visible;
+    }
+    &-alt > a:after {
+      content: " »";
+    }
+  }
+  .selected {
+    @include neustyle($bg-color, false);
+  }
+}
+
+//TEMPLATE:
+
+// <label class="radio">
+// <span class="radio-input">
+//   <input type="radio" name="base" id="tubing" value="tubing">
+//   <span class="radio-control row"></span>
+// </span>
+// <span class="radio-label">Tubing</span>
+// </label>
+
+@mixin radio() {
+
+    color: $text-color;
+    width: 100%;
+    &:focus-within {
+      .radio-label {
+        @include prefix("transform", scale(1.05), (ms,webkit));
+        opacity: 1;
+        color: $dark-color;
+      }
+    }
+    .radio-input {
+      display: flex;
+      margin-right: 10px;
+      input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+
+        &:focus + .radio-control {
+          @include neustyle(#b6c3ca, false, topleft, true, 1px);
+        }
+      }
+    }
+    .radio-control {
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      outline: none;
+      // @include neustyle($bg-color, true);
+    }
+
+    input + .radio-control::before {
+      content: "";
+      width: 0.5em;
+      height: 0.5em;
+      box-shadow: inset 0.5em 0.5em $text-color;
+      border-radius: 50%;
+      @include prefix("transition", 180ms transform ease-in-out, (o,webkit));
+      @include prefix("transform", scale(0), (ms,webkit));
+    }
+
+    input:checked + .radio-control {
+      @include neustyle(#b6c3ca, false, topleft, true, 1px);
+    }
+
+    input:checked + .radio-control::before {
+      @include prefix("transform", scale(1), (ms,webkit));
+    }
+  
+}
