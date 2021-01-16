@@ -44,6 +44,18 @@ describe('Database Tests:', function () {
     it('User Deleted', async function () {
       const deletedUser = await mongo.Users.deleteUser(user._id)
       assert.ok(deletedUser)
+    })
+  })
+  describe('Find Listings', function () {
+    it('Listings Found', async function () {
+      const listings = await mongo.Listings.findListings()
+      assert.ok(listings)
+    })
+  })
+  describe('Search Listing', function () {
+    it('Listing Found', async function () {
+      const listing = await mongo.Listings.searchListings('dol')
+      assert.ok(listing)
       mongo.close()
     })
   })
