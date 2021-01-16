@@ -20,6 +20,7 @@ class Listing {
   }
 
   async updateListing (id, update) {
+    if (!ObjectID.isValid(id)) return new Error('Incorrect ID type')
     const objId = new ObjectID(id)
     return await this.collection.findOneAndUpdate({ _id: objId }, update).then((upListing, err) => {
       if (err) return err
@@ -49,8 +50,23 @@ class Listing {
     })
   }
 
-  async findListings (filter) {
-    return await this.collection.find(filter).toArray().then((listings, err) => {
+  async findListings (filter, limit = 0) {
+    return await this.collection.find(filter).limit(limit).toArray().then((listings, err) => {
+      if (err) return err
+      return listings
+    })
+  }
+
+  async searchListings (query) {
+    return await this.collection.aggregate(
+      {
+        $search: {
+          regex: {
+            path: 'title',
+            query: query + '(.*)'
+          }
+        }
+      }).limit(5).toArray().then((listings, err) => {
       if (err) return err
       return listings
     })
