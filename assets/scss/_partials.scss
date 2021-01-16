@@ -97,7 +97,11 @@ form {
     @include radio;
   }
 
-  .autoComplete_list {
+  .autoComplete {
+    &_highlighted {
+      font-weight: 800;
+    }
+    &_list {
     background-color: $bg-color;
     padding: 0;
     margin: 0;
@@ -125,8 +129,10 @@ form {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        max-width: 70%;
       }
     }
+  }
   }
 
   // select,
@@ -200,6 +206,7 @@ nav {
         margin-left: 10px;
         padding: 6px;
         border-radius: 20px;
+        background-color: $bg-color;
       }
       svg {
         vertical-align: bottom;

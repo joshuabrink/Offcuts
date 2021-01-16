@@ -17,7 +17,7 @@ body.dark-mode ::-ms-input-placeholder {
 body.dark-mode ::placeholder {
   color: #e8eff3;
 }
-body.dark-mode nav, body.dark-mode .modal-window > div, body.dark-mode .listing .img-count, body.dark-mode .autoComplete_list {
+body.dark-mode nav, body.dark-mode .modal-window > div, body.dark-mode .listing .img-count, body.dark-mode .autoComplete_list, body.dark-mode .search-filter span {
   background-color: #739db6;
 }
 body.dark-mode a, body.dark-mode p, body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4, body.dark-mode h5 {

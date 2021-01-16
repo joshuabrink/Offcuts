@@ -412,6 +412,9 @@ form .radio input:checked + .radio-control::before {
   -ms-transform: scale(1);
   transform: scale(1);
 }
+form .autoComplete_highlighted {
+  font-weight: 800;
+}
 form .autoComplete_list {
   background-color: #e8eff3;
   padding: 0;
@@ -441,6 +444,7 @@ form .autoComplete_list > li > span {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  max-width: 70%;
 }
 
 nav {
@@ -580,6 +584,7 @@ nav .search-filter span {
   margin-left: 10px;
   padding: 6px;
   border-radius: 20px;
+  background-color: #e8eff3;
 }
 nav .search-filter svg {
   vertical-align: bottom;
