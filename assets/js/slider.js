@@ -12,29 +12,8 @@ class Slider {
     this.direction = 1 // -1
     this.baseAnimeSettings = {
       rotation: 45,
-      duration: 750,
+      duration: 350,
       easing: 'easeInOutCirc'
-    }
-    this.baseAnimeSettingsBack = {
-      rotation: 45,
-      duration: 1850,
-      elasticity: function (el, i, l) {
-        return (200 + i * 200)
-      }
-    }
-    this.baseAnimeSettingsFront = {
-      rotation: 45,
-      duration: 2250,
-      elasticity: function (el, i, l) {
-        return (200 + i * 200)
-      }
-    }
-    this.baseAnimeSettingsTitle = {
-      rotation: 45,
-      duration: 1750,
-      elasticity: function (el, i, l) {
-        return (200 + i * 200)
-      }
     }
 
     this.navBar = this.rootElement.querySelector('.slider__nav-bar')
@@ -60,31 +39,12 @@ class Slider {
 
     anime(Object.assign({}, self.baseAnimeSettings, {
       targets: nextSlide,
-      rotate: [90 * dir + 'deg', 0],
-      translateX: [90 * dir + '%', 0]
-    }))
-
-    anime(Object.assign({}, self.baseAnimeSettingsBack, {
-      targets: nextSlide.querySelectorAll('.back__element'),
-      rotate: [90 * dir + 'deg', 0],
-      translateX: [90 * dir + '%', 0]
-    }))
-
-    anime(Object.assign({}, self.baseAnimeSettingsFront, {
-      targets: nextSlide.querySelectorAll('.front__element'),
-      rotate: [90 * dir + 'deg', 0],
-      translateX: [90 * dir + '%', 0]
-    }))
-
-    anime(Object.assign({}, self.baseAnimeSettingsTitle, {
-      targets: nextSlide.querySelectorAll('.title__element'),
-      rotate: [90 * dir + 'deg', 0],
       translateX: [90 * dir + '%', 0]
     }))
 
     anime(Object.assign({}, self.baseAnimeSettings, {
       targets: prevSlide,
-      rotate: [0, -90 * dir + 'deg'],
+
       translateX: [0, -100 * dir + '%'],
       complete: function (anim) {
         self.isAnimating = false
@@ -94,24 +54,6 @@ class Slider {
           item.classList[action]('nav-control_active')
         })
       }
-    }))
-
-    anime(Object.assign({}, self.baseAnimeSettingsBack, {
-      targets: prevSlide.querySelectorAll('.back__element'),
-      rotate: [0, -90 * dir + 'deg'],
-      translateX: [0, -100 * dir + '%']
-    }))
-
-    anime(Object.assign({}, self.baseAnimeSettingsFront, {
-      targets: prevSlide.querySelectorAll('.front__element'),
-      rotate: [0, -90 * dir + 'deg'],
-      translateX: [0, -100 * dir + '%']
-    }))
-
-    anime(Object.assign({}, self.baseAnimeSettingsTitle, {
-      targets: prevSlide.querySelectorAll('.title__element'),
-      rotate: [0, -90 * dir + 'deg'],
-      translateX: [0, -100 * dir + '%']
     }))
   }
 
@@ -156,3 +98,38 @@ class Slider {
 const slider = new Slider({
   element: document.querySelector('.slider')
 })
+
+class TypeSelector {
+  constructor (props) {
+    this.rootElement = props.element
+    this.baseTypes = Array.from(
+      this.rootElement.querySelectorAll('.base-type input')
+    )
+    this.secondaryType = []
+    this.current = 0
+    this.isAnimating = false
+    this.direction = 1 // -1
+    this.baseAnimeSettings = {
+      rotation: 45,
+      duration: 750,
+      easing: 'easeInOutCirc'
+    }
+
+    this.navBar = this.rootElement.querySelector('.slider__nav-bar')
+    this.thumbs = Array.from(this.rootElement.querySelectorAll('.nav-control'))
+
+    // this.slides[this.current].classList.add('type-active')
+
+    this._bindEvents()
+  }
+
+  displaySecondary (base) {
+    if (this.isAnimating) return
+    const self = this
+    let secTypes = []
+    if (base === 'bar') secTypes = ['square', 'circle', 'rectangle', 'rebar']
+    if (base === 'tubing') secTypes = ['square', 'circle', 'rectangle']
+    if (base === 'beam') secTypes = ['t', 'h', 'i', 'channel']
+    if (base === 'sheet') secTypes = ['flat', 'corrugated', 'flat', 'rebar']
+  }
+}
