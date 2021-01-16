@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "Classified steel off-cuts website",
   "main": "app.js",
+  "module": "main.js",
   "scripts": {
-    "test": "mocha --reporter spec --timeout 5000"
+    "start": "nodemon -r esm app.js | pino-pretty",
+    "sass": "sass --watch ./assets/scss/:./assets/css/",
+    "test": "mocha --reporter ./test/reporters/timing.js"
   },
   "repository": {
     "type": "git",
@@ -23,11 +26,13 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "helmet": "^4.2.0",
     "mongodb": "^3.6.3",
     "multer": "^1.4.2",
+    "ol": "^6.5.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "sharp": "^0.26.3",
@@ -47,5 +52,9 @@
     "pino": "^6.8.0",
     "pino-pretty": "^4.3.0",
     "supertest": "^6.0.1"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
   }
 }
