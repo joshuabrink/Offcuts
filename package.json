@@ -5,7 +5,7 @@
   "main": "app.js",
   "module": "main.js",
   "scripts": {
-    "start": "nodemon -r esm app.js | pino-pretty",
+    "start": "nodemon app.js | pino-pretty",
     "sass": "sass --watch ./assets/scss/:./assets/css/",
     "test": "mocha --reporter ./test/reporters/timing.js"
   },
@@ -26,7 +26,6 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
-    "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "helmet": "^4.2.0",
