@@ -1,19 +1,50 @@
 /* eslint-disable no-undef */
 // eslint-disable-next-line new-cap
+
+// LIBRARIES
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const fs = require('fs')
+const jsonParser = require('body-parser').json()
 
+// CUSTOM LIBRARIES
 const { DatabaseError } = require('../lib/errorHandle/errors')
 const { BadRequestError, NotFoundError } = require('../lib/errorHandle/userFacing')
 const { Users, Listings } = require('../lib/mongoUtil')
 const { validateUser, validateFields } = require('../lib/validate')
 const { loggedIn } = require('../lib/auth')
 
-router.post('/login', (req, res, next) => {
+// HELPER FUNCTIONS
+const thumbStr = (imagePath) => {
+  return imagePath.substring(0, imagePath.lastIndexOf('\\') + 1) + 'thumb-' +
+    imagePath.substring(imagePath.lastIndexOf('\\') + 1)
+}
+const delImages = async (imagePaths) => {
+  const promises = []
+  for (let i = 0; i < imagePaths.length; i++) {
+    const imagePath = imagePaths[i]
+    promises.push(new Promise((resolve, reject) => {
+      fs.unlink(imagePath, err => {
+        if (err) return reject(err)
+        fs.unlink(thumbStr(imagePath), err => {
+          if (err) return reject(err)
+
+          resolve(imagePath)
+        })
+      })
+    }))
+  }
+  Promise.all(promises).then((val, err) => {
+    if (err) return err
+    return true
+  })
+}
+
+// ROUTES
+router.post('/login', jsonParser, (req, res, next) => {
   passport.authenticate('local', function (err, user) {
     if (err) return next(err)
 
@@ -36,7 +67,7 @@ router.post('/login', (req, res, next) => {
   })(req, res, next)
 })
 
-router.post('/updateUser', loggedIn, (req, res, next) => {
+router.post('/updateUser', loggedIn, jsonParser, (req, res, next) => {
   const { name, email, number } = req.body
 
   const userFields = {
@@ -79,7 +110,7 @@ router.post('/updateUser', loggedIn, (req, res, next) => {
   })
 })
 
-router.post('/updatePassword', loggedIn, (req, res, next) => {
+router.post('/updatePassword', loggedIn, jsonParser, (req, res, next) => {
   const { currentPassword, newPassword, newPasswordConfirm } = req.body
 
   const passSet = {
@@ -138,24 +169,10 @@ router.post('/updatePassword', loggedIn, (req, res, next) => {
   })
 })
 
-router.post('/register', (req, res, next) => {
-  const { name, email, number, password, passwordConfirm } = req.body
-
-  const newUser = {
-    name,
-    email,
-    number,
-    password,
-    passwordConfirm
-  }
-
-  const valid = validateUser(newUser)
+router.post('/register', jsonParser, validateUser, (req, res, next) => {
+  const newUser = res.locals.user
 
   delete newUser.passwordConfirm
-
-  if (valid instanceof Error) {
-    return next(valid)
-  }
 
   bcrypt.genSalt(10, (err, salt) => {
     if (err) return next(err)
@@ -185,36 +202,13 @@ router.post('/register', (req, res, next) => {
     })
   })
 })
-const thumbStr = (imagePath) => {
-  return imagePath.substring(0, imagePath.lastIndexOf('\\') + 1) + 'thumb-' +
-    imagePath.substring(imagePath.lastIndexOf('\\') + 1)
-}
-const delImages = async (imagePaths) => {
-  const promises = []
-  for (let i = 0; i < imagePaths.length; i++) {
-    const imagePath = imagePaths[i]
-    promises.push(new Promise((resolve, reject) => {
-      fs.unlink(imagePath, err => {
-        if (err) return reject(err)
-        fs.unlink(thumbStr(imagePath), err => {
-          if (err) return reject(err)
 
-          resolve(imagePath)
-        })
-      })
-    }))
-  }
-  Promise.all(promises).then((val, err) => {
-    if (err) return err
-    return true
-  })
-}
 router.post('/deleteAccount', loggedIn, (req, res, next) => {
   const id = req.session.passport.user
   Users.deleteUser(id).then((user) => {
     if (user instanceof Error) return next(new DatabaseError('Error deleting user'))
 
-    Listings.findListings({ userID: id }).then((listings) => {
+    Listings.findListings({ userID: id }).then(async (listings) => {
       if (listings instanceof Error) return next(new DatabaseError('Error getting Listings'))
       const deletePromises = []
 
@@ -223,7 +217,7 @@ router.post('/deleteAccount', loggedIn, (req, res, next) => {
         deletePromises.push(new Promise((resolve, reject) => {
           Listings.deleteListing(listing._id).then(async (deletedListing) => {
             if (deletedListing instanceof Error) return reject(next(new DatabaseError('Error deleting Listings')))
-            delImages(listing.images).then((val, err) => {
+            await delImages(listing.images).then((val, err) => {
               if (err) reject(err)
               resolve(deletedListing)
             })

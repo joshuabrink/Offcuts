@@ -1,4 +1,5 @@
 
+// LIBRARIES
 const express = require('express')
 const router = express.Router()
 const multer = require('multer')
@@ -6,104 +7,18 @@ const sharp = require('sharp')
 const validator = require('validator')
 const { loggedIn } = require('../lib/auth')
 const fs = require('fs')
+// logger
+const pino = require('pino')
+// const expressPino = require('express-pino-logger')
+const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
 
+// CUSTOM LIBRARIES
 const { DatabaseError } = require('../lib/errorHandle/errors')
 const { BadRequestError } = require('../lib/errorHandle/userFacing')
 const { Listings } = require('../lib/mongoUtil')
-const { validateListing } = require('../lib/validate')
+const { validateListing, validateFilter } = require('../lib/validate')
 
-// SET STORAGE
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dest = 'assets/uploads'
-    cb(null, dest)
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname.toLowerCase().split(' ').join('-'))
-  }
-})
-
-const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    if (!validator.isMimeType(file.mimetype)) {
-      cb(new BadRequestError('Mime type is incorrectly formated'))
-    }
-    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
-      cb(null, true)
-    } else {
-      cb(new BadRequestError('Only .png, .jpg and .jpeg format allowed!'))
-    }
-  }
-}).array('images', 5)
-
-router.get('/listings', (req, res, next) => {
-  Listings.findListings({}).then(listings => {
-    res.render('listings', { listings: listings })
-  })
-})
-
-router.get('/getListing', (req, res, next) => {
-  const { id } = req.query
-  Listings.findById(id).then(listing => {
-    if (listing instanceof Error) return next(listing)
-    return res.render('listing-view', { title: 'Listing', listing: listing })
-  })
-})
-
-router.post('/newListing', loggedIn, (req, res, next) => {
-  upload(req, res, function (err) {
-    if (err) return next(err)
-
-    const { title, price, quantity, material, type, description, location, date } = req.body
-    const userID = req.session.passport.user
-    const fields = {
-      title,
-      price,
-      quantity,
-      material,
-      type,
-      description,
-      location,
-      date,
-      userID
-    }
-
-    const valid = validateListing(fields)
-
-    if (valid instanceof Error) {
-      return next(valid)
-    }
-
-    const paths = []
-
-    for (let i = 0; i < req.files.length; i++) {
-      sharp(req.files[i].path)
-        .resize(200, 200)
-        .jpeg({ quality: 50 })
-        .toFile(req.files[i].destination + '/thumb-' + req.files[i].originalname)
-        .catch(err => {
-          if (err) return next(err)
-        })
-      paths.push(req.files[i].path)
-    }
-
-    fields.images = paths
-
-    Listings.addListing(fields).then(listing => {
-      if (listing instanceof Error) {
-        return next(listing)
-      }
-
-      if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
-        return res.status(200).json(listing)
-      }
-
-      req.flash('success_messages', 'Listing has been posted')
-      return res.redirect('back')
-    })
-  })
-})
+// HELPER FUNCTIONS
 
 const thumbStr = (imagePath) => {
   return imagePath.substring(0, imagePath.lastIndexOf('\\') + 1) + 'thumb-' +
@@ -130,72 +45,171 @@ const delImages = async (imagePaths) => {
   })
 }
 
-router.post('/updateListing', loggedIn, (req, res, next) => {
-  upload(req, res, function (err) {
-    if (err) return next(err)
+const getChangedImages = (dbImages, upImages) => {
+  dbImages = dbImages.map(img => 'assets\\' + img)
+  return dbImages.map(x => {
+    if (!upImages.some(y => { return y === x })) {
+      return { value: x, query: false }
+    }
+    return null
+  })
+    .concat(upImages.map(x => {
+      if (!dbImages.some(y => { return y === x })) {
+        return { value: x, query: true }
+      }
+      return null
+    }))
+    .filter(n => n)
+}
 
-    const { title, price, quantity, material, type, description, location, date, listingID } = req.body
-    const fields = {
-      title,
-      price,
-      quantity,
-      material,
-      type,
-      description,
-      location,
-      date
+// set storage of images
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dest = 'assets/uploads'
+    cb(null, dest)
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname.toLowerCase().split(' ').join('-'))
+  }
+})
+
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (!validator.isMimeType(file.mimetype)) {
+      cb(new BadRequestError('Mime type is incorrectly formated'))
+    }
+    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+      cb(null, true)
+    } else {
+      cb(new BadRequestError('Only .png, .jpg and .jpeg format allowed!'))
+    }
+  }
+}).array('images', 5)
+
+// ROUTES
+
+router.get('/post', loggedIn, (req, res) => {
+  res.render('post', { title: 'post' })
+})
+
+router.get('/listings/', (req, res, next) => {
+  Listings.findListings({}, 20).then(listings => {
+    res.render('listings', { listings: listings })
+  })
+})
+
+router.get('/listings/search/:query', (req, res, next) => {
+  const { query } = req.params
+  Listings.searchListings(query).then(titles => {
+    res.send(titles)
+  })
+})
+
+router.get('/listings/:material', validateFilter, (req, res) => {
+  logger.info('first-level: ' + req.params.material)
+  const { material } = req.params
+  Listings.findListings({ material: material }).then(listings => {
+    return res.render('listings', { title: 'Listing', listings: listings })
+  })
+})
+
+router.get('/listings/:material/:type', validateFilter, (req, res, next) => {
+  logger.info('first-level: ' + req.params.material + ' second-level: ' + req.params.type)
+  const { type, material } = req.params
+  Listings.findListings({ type: type, material: material }).then(listings => {
+    if (listings instanceof Error) return next(listings)
+    return res.render('listings', { title: 'Listing', listings: listings })
+  })
+})
+
+router.get('/listings/:material/:type/:id', validateFilter, (req, res, next) => {
+  logger.info('first-level: ' + req.params.material +
+  '\n second-level: ' + req.params.type +
+  '\n third-level: ' + req.params.id)
+  const { id } = req.params
+
+  Listings.findById(id).then(listing => {
+    if (listing instanceof Error) return next(listing)
+    return res.render('listing-view', { title: 'Listing', listing: listing })
+  })
+})
+
+router.post('/newListing', loggedIn, upload, validateListing, (req, res, next) => {
+  const fields = res.locals.listing
+
+  const paths = []
+
+  for (let i = 0; i < req.files.length; i++) {
+    const path = req.files[i].path
+    sharp(path)
+      .resize(200, 200)
+      .jpeg({ quality: 50 })
+      .toFile(req.files[i].destination + '/thumb-' + req.files[i].originalname)
+      .catch(err => {
+        if (err) return next(err)
+      })
+    paths.push(path.substr(path.indexOf('\\')))
+  }
+
+  fields.images = paths
+
+  Listings.addListing(fields).then(listing => {
+    if (listing instanceof Error) {
+      return next(listing)
     }
 
-    const paths = req.files.map(file => { return file.path })
+    if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
+      return res.status(200).json(listing)
+    }
 
-    Listings.updateListing(listingID, { $set: fields }).then((listing) => {
-      const changedImages = listing.images.map(x => {
-        if (!paths.some(y => { return y === x })) {
-          return { value: x, query: false }
-        }
-        return null
-      })
-        .concat(paths.map(x => {
-          if (!listing.images.some(y => { return y === x })) {
-            return { value: x, query: true }
-          }
-          return null
-        }))
-        .filter(n => n)
+    req.flash('success_messages', 'Listing has been posted')
+    return res.redirect('back')
+  })
+})
 
-      const remove = []
-      const add = []
+router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next) => {
+  const { listingID } = req.body
 
-      for (let i = 0; i < changedImages.length; i++) {
-        const value = changedImages[i].value
-        if (changedImages[i].query) {
-          add.push(value)
-          sharp(value)
-            .resize(200, 200)
-            .jpeg({ quality: 50 })
-            .toFile(req.files[i].destination + '/thumb-' + req.files[i].originalname).catch(err => {
-              if (err) return next(err)
-            })
-        } else {
-          remove.push(value)
-        }
-      }
+  const fields = res.locals.listing
 
-      delImages(remove).then((val, err) => {
-        if (err) return next(err)
-        const pullQuery = { $pull: { images: { $in: remove } } }
-        const pushQuery = { $push: { images: { $each: add } } }
+  const paths = req.files.map(file => { return file.path })
 
-        Listings.updateListing(listing._id, pullQuery).then(pullListing => {
-          if (pullListing instanceof Error) return next(new DatabaseError('Error updating image paths'))
-          Listings.updateListing(listing._id, pushQuery).then(pushListing => {
-            if (pushListing instanceof Error) return next(new DatabaseError('Error updating image paths'))
-            if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
-              return res.status(200).json(listing)
-            }
-            req.flash('success_messages', 'Your Listing was updated')
-            return res.redirect('back')
+  Listings.updateListing(listingID, { $set: fields }).then((listing) => {
+    const changedImages = getChangedImages(listing.images, paths)
+
+    const remove = []
+    const add = []
+
+    for (let i = 0; i < changedImages.length; i++) {
+      const value = changedImages[i].value
+      if (changedImages[i].query) {
+        add.push(value)
+        sharp(value)
+          .resize(200, 200)
+          .jpeg({ quality: 50 })
+          .toFile(req.files[i].destination + '/thumb-' + req.files[i].originalname).catch(err => {
+            if (err) return next(err)
           })
+      } else {
+        remove.push(value)
+      }
+    }
+
+    delImages(remove).then((val, err) => {
+      if (err) return next(err)
+      const pullQuery = { $pull: { images: { $in: remove } } }
+      const pushQuery = { $push: { images: { $each: add } } }
+
+      Listings.updateListing(listing._id, pullQuery).then(pullListing => {
+        if (pullListing instanceof Error) return next(new DatabaseError('Error updating image paths'))
+        Listings.updateListing(listing._id, pushQuery).then(pushListing => {
+          if (pushListing instanceof Error) return next(new DatabaseError('Error updating image paths'))
+          if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
+            return res.status(200).json(listing)
+          }
+          req.flash('success_messages', 'Your Listing was updated')
+          return res.redirect('back')
         })
       })
     })

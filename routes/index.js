@@ -4,7 +4,7 @@ const { Listings } = require('../lib/mongoUtil')
 
 router.get('/', (req, res, next) => {
   // res.send('working')
-  Listings.findListings({}).then(listings => {
+  Listings.findListings({}, 20).then(listings => {
     res.render('home', { title: 'Home', listings: listings })
   })
   // res.render('home', { title: 'Home' })
