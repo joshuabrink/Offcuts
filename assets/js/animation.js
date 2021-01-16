@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   modalShow()
-  tabSwapper()
+  tabSwapper('.tab', '.col')
   flash()
 })
 
@@ -81,8 +81,8 @@ function modalShow () {
   })
 }
 
-function tabSwapper () {
-  const tabLinks = Array.from(document.querySelectorAll('.tab'))
+function tabSwapper (tabSelector = '.tab', inputSelector = '.input') {
+  const tabLinks = Array.from(document.querySelectorAll(tabSelector))
   let swaped = false
 
   const swapTL = anime.timeline({
@@ -111,7 +111,7 @@ function tabSwapper () {
       if (!swaped) {
         for (let j = 1; j <= tabLinks.length; j++) {
           swapTL.add({
-            targets: '.tab-content .pg-' + j + '-body .input',
+            targets: '.tab-content .pg-' + j + '-body ' + inputSelector,
             translateX: (el, k) => {
               return w * (-i) // distance * (-0, -1, -2 )
               // +(-offset*(page%3)); //offset is 0 (if odd page: 3,5) or offset
@@ -136,12 +136,12 @@ function tabSwapper () {
 const topMenu = document.querySelector('.flyout-content')
 
 function topMenuOpen (e) {
-  this.classList.add('open')
+  this.classList.add('neu-static')
 
   let elem = this
   while (elem.parentNode !== topMenu) {
     if (elem.nodeName.toLowerCase() === 'li') {
-      elem.classList.add('open')
+      elem.classList.add('neu-static')
     }
     elem = elem.parentNode
   }
@@ -150,12 +150,12 @@ function topMenuOpen (e) {
   }
 }
 function topMenuClose (e) {
-  this.classList.remove('open')
+  this.classList.remove('neu-static')
 
   let elem = this
   while (elem.parentNode !== topMenu) {
     if (elem.nodeName.toLowerCase() === 'li') {
-      elem.classList.remove('open')
+      elem.classList.remove('neu-static')
     }
     elem = elem.parentNode
   }
@@ -171,19 +171,20 @@ function locationListen (e) {
   if (cf) return
 
   const newLocation = document.createElement('span')
+  newLocation.classList.add('neu-static')
   newLocation.innerText = this.innerText
-  newLocation.innerHTML += '<img src="/images/svg/cross.svg" alt="close">'
+  newLocation.innerHTML += '<svg viewBox="0 0 24 24" width="18px" height="18px"><path class="light" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>'
 
   if (e && e.target && e.target.nodeName.toLowerCase() === 'a') {
     e.preventDefault()
-    e.target.style.boxShadow = '-4px -4px 6px rgba(255, 255, 255, 0.7), 4px 4px 6px #c0d3de, inset -4px -4px 12px rgba(255, 255, 255, 0.1), inset 4px 4px 12px #e8eff3'
+    e.target.classList.add('neu-static')
     filter.appendChild(newLocation)
     deleteListen(newLocation, e.target)
   }
 }
 
 function deleteListen (newLocation, link) {
-  const close = newLocation.querySelector('img')
+  const close = newLocation.querySelector('svg')
   close.addEventListener('click', e => {
     link.style.boxShadow = 'none'
     newLocation.remove()
@@ -217,3 +218,178 @@ Array.prototype.forEach.call(topMenu.querySelectorAll('li>a, li>h3'), function (
   link.addEventListener('focus', topMenuOpen.bind(link.parentNode), false)
   link.addEventListener('click', locationListen.bind(link.parentNode), false)
 })
+
+// autoComplete.js input eventListener for search results event
+document.querySelector('#autoComplete').addEventListener('results', (event) => {
+  console.log(event)
+})
+
+// The autoComplete.js Engine instance creator
+const autoCompleteJS = new autoComplete({
+  name: 'listings',
+  selector: '#autoComplete',
+  observer: false,
+  data: {
+    src: async () => {
+      // Loading placeholder text
+      document
+        .querySelector('#autoComplete')
+        .setAttribute('placeholder', 'Loading...')
+      // Fetch External Data Source
+      const query = document.querySelector('#autoComplete').value
+      // Fetch External Data Source
+      const source = await fetch(`http://localhost:3000/listings/search/\`${query}\`/`, {
+        method: 'GET'
+      })
+      const data = await source.json()
+      // Saves the fetched data into local storage
+      localStorage.setItem('acData', JSON.stringify(data))
+      // Retrieve the cached data from local storage
+      const localData = JSON.parse(localStorage.getItem('acData'))
+      // Post loading placeholder text
+      document
+        .querySelector('#autoComplete')
+        .setAttribute('placeholder', autoCompleteJS.placeHolder)
+      // Returns Fetched data
+      return localData
+    },
+    key: ['title', 'material'],
+    results: (list) => {
+      // Filter duplicates
+      const filteredResults = Array.from(
+        new Set(list.map((value) => value.match))
+      ).map((val2) => {
+        return list.find((value) => value.match === val2)
+      })
+
+      return filteredResults
+    }
+  },
+  trigger: {
+    event: ['input', 'focus']
+  },
+  placeHolder: 'Search',
+  searchEngine: 'strict',
+  highlight: true,
+  maxResults: 5,
+  threshold: 3,
+  debounce: 300,
+  resultsList: {
+    destination: '.search-filter',
+    container: (source) => {
+      source.classList.add('neu-static')
+    }
+  },
+  resultItem: {
+    content: (data, element) => {
+      // Prepare Value's Key
+      const key = Object.keys(data.value).find(
+        (key) => data.value[key] === element.innerText
+      )
+      element.classList.add('row')
+      element.classList.add('between')
+      element.classList.add('neu')
+
+      // Modify Results Item
+      // element.style = 'display: flex; justify-content: space-between;'
+      element.innerHTML = `<span>
+        ${element.innerHTML}</span>
+        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase;">
+      ${key}</span>`
+    }
+  },
+  noResults: (dataFeedback, generateList) => {
+    // Generate autoComplete List
+    generateList(autoCompleteJS, dataFeedback, dataFeedback.results)
+    // No Results List Item
+    const result = document.createElement('li')
+    result.setAttribute('class', 'no_result')
+    result.setAttribute('tabindex', '1')
+    result.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${dataFeedback.query}"</span>`
+    document
+      .querySelector(`#${autoCompleteJS.resultsList.idName}`)
+      .appendChild(result)
+  },
+  onSelection: (feedback) => {
+    document.querySelector('#autoComplete').blur()
+    // Prepare User's Selected Value
+    const selection = feedback.selection.value[feedback.selection.key]
+    // Render selected choice to selection div
+    // document.querySelector('.selection').innerHTML = selection
+    // Replace Input value with the selected value
+    document.querySelector('#autoComplete').value = selection
+    // Console log autoComplete data feedback
+    console.log(feedback)
+  }
+})
+
+// eslint-disable-next-line no-new
+// new autoComplete({
+//   data: { // Data src [Array, Function, Async] | (REQUIRED)
+//     src: async () => {
+//       // API key token
+//       const token = 'this_is_the_API_token_number'
+//       // User search query
+//       const query = document.querySelector('#autoComplete').value
+//       // Fetch External Data Source
+//       const source = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${query}/examples`, {
+//         method: 'GET',
+//         headers: {
+//           'x-rapidapi-key': '98d5fa80c4msh579284da678ecbbp1fd930jsn7ddeeaa4e9f5',
+//           'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com'
+//         }
+//       })
+//       // Format data into JSON
+//       const data = await source.json()
+//       // Return Fetched data
+//       return data.recipes
+//     },
+//     key: ['title'],
+//     cache: false
+//   },
+//   query: { // Query Interceptor               | (Optional)
+//     manipulate: (query) => {
+//       return query.replace('pizza', 'burger')
+//     }
+//   },
+//   sort: (a, b) => { // Sort rendered results ascendingly | (Optional)
+//     if (a.match < b.match) return -1
+//     if (a.match > b.match) return 1
+//     return 0
+//   },
+//   placeHolder: 'Food & Drinks...', // Place Holder text                 | (Optional)
+//   selector: '#autoComplete', // Input field selector              | (Optional)
+//   observer: true, // Input field observer | (Optional)
+//   threshold: 3, // Min. Chars length to start Engine | (Optional)
+//   debounce: 300, // Post duration for engine to start | (Optional)
+//   searchEngine: 'strict', // Search Engine type/mode           | (Optional)
+//   resultsList: { // Rendered results list object      | (Optional)
+//     container: source => {
+//       source.setAttribute('id', 'food_list')
+//     },
+//     destination: '#autoComplete',
+//     position: 'afterend',
+//     element: 'ul'
+//   },
+//   maxResults: 5, // Max. number of rendered results | (Optional)
+//   highlight: true, // Highlight matching results      | (Optional)
+//   resultItem: { // Rendered result item            | (Optional)
+//     content: (data, source) => {
+//       source.innerHTML = data.match
+//     },
+//     element: 'li'
+//   },
+//   noResults: (dataFeedback, generateList) => {
+//     // Generate autoComplete List
+//     generateList(autoCompleteJS, dataFeedback, dataFeedback.results)
+//     // No Results List Item
+//     const result = document.createElement('li')
+//     result.setAttribute('class', 'no_result')
+//     result.setAttribute('tabindex', '1')
+//     result.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${dataFeedback.query}"</span>`
+//     document.querySelector(`#${autoCompleteJS.resultsList.idName}`).appendChild(result)
+//   },
+//   onSelection: feedback => { // Action script onSelection event | (Optional)
+//     console.log(feedback)
+//   }
+// })
