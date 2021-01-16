@@ -1,8 +1,9 @@
-
 (async () => {
   // const https = require('https')
   const express = require('express')
   const { UserFacingError } = require('./lib/errorHandle/errors')
+  const { NotFoundError } = require('./lib/errorHandle/userFacing')
+
   const app = express()
   // const fs = require('fs')
   const bodyParser = require('body-parser')
@@ -18,7 +19,7 @@
   // const expressPino = require('express-pino-logger')
 
   const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
-  logger.info('hi')
+  // logger.info('hi')
   // const expressLogger = expressPino({ logger })
   // app.use(expressLogger)
 
@@ -32,13 +33,13 @@
   app.use(function (req, res, next) {
     res.setHeader(
       'Content-Security-Policy',
-      "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com; style-src 'self' 'unsafe-inline'; frame-src 'self'"
+      "default-src 'self'; font-src 'self'; img-src 'self' https://*.tile.openstreetmap.org; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://www.google.com/"
     )
     next()
   })
 
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: false }))
+  // app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
 
   // Passport Config
   require('./lib/passport')(passport)
@@ -84,6 +85,9 @@
       if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
         return res.status(err.statusCode).json({ message: err.message, stack: err.stack })
       }
+      if (err instanceof NotFoundError) {
+        return res.redirect('/404')
+      }
       req.flash('error_messages', err.message)
       return res.redirect('back')
     } else {
@@ -93,6 +97,12 @@
       return res.redirect('back')
       // return res.status(500).send({ message: err.message, stack: err.stack })
     }
+  })
+
+  // 404 Page
+
+  app.get('*', (req, res) => {
+    res.render('404', { title: '404' })
   })
 
   app.listen(3000)
