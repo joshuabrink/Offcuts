@@ -24,10 +24,11 @@ body.dark-mode {
     color: $text-dark;
   }
 
-  nav, .modal-window > div, .listing .img-count, .autoComplete_list, .search-filter span {
+  .bg-color {
     background-color: $bg-dark;
   }
-  a,p,h1,h2,h3,h4,h5 {
+
+  a,p,h1,h2,h3,h4,h5,label {
     color: $text-dark;
   }
   //Neumorphism classes

@@ -43,6 +43,10 @@ button {
   cursor: pointer;
 }
 
+.bg-color {
+  background-color: $bg-color;
+}
+
 svg {
   .light {
     fill: $text-color;
@@ -102,7 +106,7 @@ form {
       font-weight: 800;
     }
     &_list {
-    background-color: $bg-color;
+    width: 60%;
     padding: 0;
     margin: 0;
     border-radius: 20px;
@@ -154,7 +158,6 @@ nav {
   margin-left: 1%;
   position: absolute;
   width: 98%;
-  background-color: $bg-color;
   z-index: 10;
 
   #logo {
@@ -200,13 +203,14 @@ nav {
       flex-direction: row-reverse;
     }
     &-filter {
-      @include flex(1 1 0);
+      width: 40%;
       @include prefix("transition", all 0.2s, (o, webkit));
       span {
         margin-left: 10px;
         padding: 6px;
         border-radius: 20px;
         background-color: $bg-color;
+        margin: 5px;
       }
       svg {
         vertical-align: bottom;
@@ -224,9 +228,9 @@ nav {
 
 //AUTOCOMPLETE
 
-.autoComplete_list {
-  @include flex(1 1 0);
-}
+// .autoComplete_list {
+//   @include flex(1 1 0);
+// }
 
 //FLASH
 

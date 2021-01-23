@@ -1,54 +1,52 @@
 @import "mixins";
 @import "partials";
 
-.listing-info {
-  width: 50%;
-  padding: 5px 20px;
-  border-radius: 20px;
-  @include neustyle($bg-color, false);
+.listing {
+  &-container {
 
-  .price {
-    font-size: 65px;
-    margin: 0;
-    color: #547285;
-    text-align: center;
-  
-  }
-
-  .map {
-    @include neustyle($bg-color, false);
+    padding: 5px 20px;
     border-radius: 20px;
-    height: 250px; 
-    width: 100%;
-    padding: 20px;
-    .col {
-      @include flex(1 auto);
-    }
-    canvas {
-      border-radius: 20px !important;
+  }
+  &-info {
+
+    .price {
+      font-size: 65px;
+      margin: 0;
+      color: #547285;
+      text-align: center;
     }
   }
-
 }
+
+.map {
+  border-radius: 20px;
+  height: 250px; 
+  width: 100%;
+  // padding: 20px;
+  canvas {
+    border-radius: 20px !important;
+  }
+}
+
 
 .slider {
   position: relative;
   display: block;
   width: 50%;
-  height: 300px;
+  height: 500px;
   overflow: hidden;
 }
 .slider__nav-bar {
   position: absolute;
   width: 180px;
-  height: 60px;
+  height: 45px;
   bottom: 0px;
   left: 50%;
   transform: translateX( -50% );
   border-radius: 90px;
   text-align: center;
   background: $bg-color;
-  z-index: 100;
+  z-index: 2;
 }
 .slider__arrow {
   position: absolute;
@@ -56,28 +54,25 @@
   transform: translateY( -50% );
   width: 54px;
   height: 54px;
-  background:$bg-color;
   cursor: pointer;
-  z-index: 100;
+  z-index: 2;
   border-radius: 50%;
   svg {
-    @include neustyle($bg-color, true, topleft, true);
     border-radius: 50%;
   }
- 
 
-  &::before {
-    content: "";
-    background: $bg-color;
-    width: 64px;
-    height: 64px;
-    left: -5px;
-    top: -5px;
-    border-radius: 50%;
-    display: block;
-    position: absolute;
-    z-index: -1;
-  }
+  // &::before {
+  //   content: "";
+  //   background: $bg-color;
+  //   width: 64px;
+  //   height: 64px;
+  //   left: -5px;
+  //   top: -5px;
+  //   border-radius: 50%;
+  //   display: block;
+  //   position: absolute;
+  //   z-index: -1;
+  // }
 }
 .slider__arrow_prev {
   left: 7px;
@@ -91,8 +86,7 @@
 }
 .nav-control {
   border-radius: 50%;
-  background-color: $bg-color;
-  @include neustyle($bg-color, true);
+  // background-color: $bg-color;
   width: 32px;
   height: 32px;
   transition: 0.2s;
@@ -148,7 +142,7 @@
   position: relative;
   display: block;
   width: 100%;
-  max-width: 320px;
+  max-width: 400px;
   height: auto;
   top: 50%; left: 50%;
   transform: translate( -50%, -50% );
