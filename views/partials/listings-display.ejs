@@ -6,7 +6,7 @@
 
       <a class="listing col neu" href="/listings/<%= listings[i].material %>/<%= listings[i].type %>/<%= listings[i]._id %>">
  
-        <div class="img-count row">
+        <div class="img-count row bg-color">
           <svg height="24" viewBox="0 0 24 24" width="24"><circle class="light" cx="12" cy="12" r="3.2"/><path class="light" d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
           <!-- <img src="/images/svg/camera.svg" alt="image count"> -->
           <span><%= listings[i].images.length %> </span>
@@ -14,9 +14,9 @@
         <% if (listings[i].images[0]) { %>
           <% let img = listings[i].images[0] %> 
           <% img = img.substring(0, img.lastIndexOf('\\') + 1) + 'thumb-' + img.substring(img.lastIndexOf('\\') + 1) %> 
-          <img class="listing-img" onerror="this.src='/images/svg/notfound.svg'" src="<%= img %>" alt="listing preview" >
+          <img class="listing-img" loading="lazy" onerror="this.src='/images/svg/notfound.svg'" src="<%= img %>" alt="listing preview" >
         <% } else { %>
-          <img class="listing-img" src="/images/svg/placeholder.svg" alt="no listing preview">
+          <img class="listing-img" src="/images/svg/notfound.svg" alt="no listing preview">
           <% } %>
         <div class="listing-header">
           <p class="truncate-overflow"><%= listings[i].title %></p>

@@ -11,7 +11,7 @@
             <link rel="stylesheet" href="/css/post.css">
             <% } if (title==='Listing' ) { %>
                 <link rel="stylesheet" href="/css/listing.css">
-                <link rel="stylesheet" href="/css/vendor/ol.css">
+                <link rel="stylesheet" href="/css/vendor/leaflet.css">
                 <script defer src="/js/slider.js"></script>
                 <% } %>
         <% } else { %>
@@ -31,6 +31,7 @@
             <link rel="stylesheet" href="/css/styles.css">
             <link rel="stylesheet" href="/css/dark.css">
             <link rel="stylesheet" href="/css/vendor/normalize.css">
+            <link rel="stylesheet" href="/css/vendor/ol-ext.min.css">
             <!-- <link rel="stylesheet" href="/css/vendor/autoComplete.min.css"> -->
 
             <script defer src="/js/vendor/anime.min.js"></script>
@@ -46,7 +47,7 @@
 </head>
 
 <body>
-    <nav class="flex">
+    <nav class="flex bg-color">
 
         <a href="/" id="logo">
             <%- include ('../svgs/logo.ejs') %>
@@ -71,7 +72,7 @@
                     <%- include ('../svgs/search.ejs') %>             
                  </button>
             </div>
-            <div class="row search-under">
+            <div class="row align-start search-under">
                 <div class="search-filter row"></div>
             </div>
 
@@ -106,7 +107,7 @@
         <% } %>
     <% } %>
         <div id="account-modal" class="modal-window row">
-            <div class="col">
+            <div class="col bg-color">
                 <a href="#" title="Close" class="modal-close">
                     <img src="/images/svg/cross.svg" alt="Close login">
                 </a>

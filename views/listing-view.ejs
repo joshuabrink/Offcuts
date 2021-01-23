@@ -2,54 +2,75 @@
 
 <section>
   <% if (typeof listing !== 'undefined' && listing !== null ) { %>
-    <div class="listing-info row between align-start">
-      <div class="slider">
+    <div class="listing-container row between align-start neu-static">
+      <div class="row align-start">
+        <div class="slider w-50">
         
-        <ul class="slider-list">
-          <% for( let i = 0; i < listing.images.length; i++ ) { %>
-            <li class="slider-list__item  ">
-              <span class="main__element">
-                <img src="<%= listing.images[i] %> " onerror="this.src='/images/svg/notfound.svg'" alt="Preview Image" />
-              </span>
-             </li>
-          <% } %>
-           
-        </ul>
-        
-        <div class="slider__nav-bar row">
-          <% for( let i = 0; i < listing.images.length; i++ ) { %>
-            <a class="nav-control">
-              <svg x="0px" y="0px" viewBox="0 0 1000 1000">
-                <circle class="light" cx="500" cy="500" r="300"/>
-              </svg>
+          <ul class="slider-list">
+            <% for( let i = 0; i < listing.images.length; i++ ) { %>
+              <li class="slider-list__item  ">
+                <span class="main__element">
+                  <img src="<%= listing.images[i] %> " onerror="this.src='/images/svg/notfound.svg'" alt="Preview Image" />
+                </span>
+               </li>
+            <% } %>
+             
+          </ul>
+          
+          <div class="slider__nav-bar row bg-color">
+            <% for( let i = 0; i < listing.images.length; i++ ) { %>
+              <a class="nav-control neu bg-color">
+                <svg x="0px" y="0px" viewBox="0 0 1000 1000">
+                  <circle class="light" cx="500" cy="500" r="300"/>
+                </svg>
+              </a>
+            <% } %>
+          </div>
+          
+          <div class="slider__controls">
+            <a class="slider__arrow slider__arrow_prev">
+              <svg class="neu bg-color" x="0px" y="0px" viewBox="0 0 1000 1000">
+              <polygon class="light" points="241.3,500.6 497.5,352.7 497.5,461.6 750.6,461.6 750.6,538.4 497.5,538.4 497.5,648.5 "/>
+            </svg>
             </a>
-          <% } %>
-        </div>
-        
-        <div class="slider__controls">
-          <a class="slider__arrow slider__arrow_prev">
-            <svg x="0px" y="0px" viewBox="0 0 1000 1000">
-            <polygon class="light" points="241.3,500.6 497.5,352.7 497.5,461.6 750.6,461.6 750.6,538.4 497.5,538.4 497.5,648.5 "/>
+            <a class="slider__arrow slider__arrow_next">
+              <svg class="neu bg-color" x="0px" y="0px" viewBox="0 0 1000 1000">
+            <polygon class="light" points="750.6,500.6 494.4,352.7 494.4,461.6 241.3,461.6 241.3,538.4 494.4,538.4 494.4,648.5 "/>
           </svg>
-          </a>
-          <a class="slider__arrow slider__arrow_next">
-            <svg x="0px" y="0px" viewBox="0 0 1000 1000">
-          <polygon class="light" points="750.6,500.6 494.4,352.7 494.4,461.6 241.3,461.6 241.3,538.4 494.4,538.4 494.4,648.5 "/>
-        </svg>
-          </a>
+            </a>
+          </div>
+    
+        </div>  
+        <div class="col listing-info w-50">
+          <h1><%= listing.title %>  </h1>
+          <h2 class="price">R <%= listing.price %>  </h2>
+          <!-- <div class="col google-map">
+            <iframe allowfullscreen="" frameborder="0" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyCqniPNqIaDq4fkOl_HZ-B9ccWseIxSBKs&amp;q=<%= listing.location %> &amp;zoom=10" width="100%" height="300" style="border-radius: 5px;"></iframe>
+          </div> -->
+          <div id="map" class="map neu-static w-100" data-long="<%= listing.longitude %>" data-lat="<%= listing.latitude %>"></div>
+          <!-- <script src="/js/vendor/ol.js"></script>
+          <script src="/js/vendor/ol-ext.min.js"></script> -->
+          <script src="/js/vendor/outTurf.js"></script>
+          <script src="/js/vendor/leaflet.js"></script>
+
+          <script src="/js/map.js"></script>
+        </div>  
+      </div>
+      <div class="row listing-details">
+        <div class="col start w-50">
+          <h4>Material:</h4>
+          <p><%= listing.material %> </p>
         </div>
-  
-      </div>  
-      <div class="col">
-        <h1><%= listing.title %>  </h1>
-        <h2 class="price">R <%= listing.price %>  </h2>
-        <!-- <div class="col google-map">
-          <iframe allowfullscreen="" frameborder="0" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyCqniPNqIaDq4fkOl_HZ-B9ccWseIxSBKs&amp;q=<%= listing.location %> &amp;zoom=10" width="100%" height="300" style="border-radius: 5px;"></iframe>
-        </div> -->
-        <div id="map" class='map'></div>
-        <script src="/js/vendor/ol.js"></script>
-        <script src="/js/map.js"></script>
-      </div>  
+        <div class="col start w-50">
+          <h4>Type:</h4>
+          <p><%= listing.type %> </p>
+        </div>
+      <div class="col start w-100">
+        <h4>Description:</h4>
+        <p><%= listing.description %> </p>
+      </div>
+   
+      </div>
     </div>
     <div class="seller-info">
 
