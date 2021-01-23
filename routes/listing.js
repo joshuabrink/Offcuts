@@ -89,13 +89,21 @@ const upload = multer({
 
 // ROUTES
 
+const defaultRendor = (res, req, path = 'listings', listings) => {
+  if (!listings) {
+    return res.render(path, { user: req.user })
+  }
+  return res.render(path, { title: path, listings: listings, user: req.user })
+}
+
 router.get('/post', loggedIn, (req, res) => {
-  res.render('post', { title: 'post' })
+  res.render('post', { title: 'post', user: req.user })
+  return defaultRendor(req, res, 'post')
 })
 
 router.get('/listings/', (req, res, next) => {
   Listings.findListings({}, 20).then(listings => {
-    res.render('listings', { listings: listings })
+    return defaultRendor(res, req, 'listings', listings)
   })
 })
 
@@ -117,7 +125,7 @@ router.get('/listings/:material', validateFilter, (req, res) => {
   logger.info('first-level: ' + req.params.material)
   const { material } = req.params
   Listings.findListings({ material: material }).then(listings => {
-    return res.render('listings', { title: 'Listing', listings: listings })
+    return defaultRendor(res, req, 'listings', listings)
   })
 })
 
@@ -126,7 +134,7 @@ router.get('/listings/:material/:type', validateFilter, (req, res, next) => {
   const { type, material } = req.params
   Listings.findListings({ type: type, material: material }).then(listings => {
     if (listings instanceof Error) return next(listings)
-    return res.render('listings', { title: 'Listing', listings: listings })
+    return defaultRendor(res, req, 'listings', listings)
   })
 })
 

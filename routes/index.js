@@ -8,14 +8,14 @@ const jsonParser = require('body-parser').json()
 router.get('/', (req, res, next) => {
   // res.send('working')
   Listings.findListings({}, 20).then(listings => {
-    res.render('home', { title: 'Home', listings: listings })
+    res.render('home', { title: 'Home', listings: listings, user: req.user })
   })
   // res.render('home', { title: 'Home' })
 })
 
 router.get('/about', (req, res) => {
   // res.send('working')
-  res.render('about')
+  res.render('about', { user: req.user })
 })
 
 router.get('/geojson/countries', (req, res) => {
