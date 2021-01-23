@@ -15,8 +15,8 @@ router.get('/', (req, res, next) => {
 
 router.get('/account', (req, res, next) => {
   // res.send('working')
-  Listings.findListings({}, 20).then(listings => {
-    res.render('user', { title: 'Account', user: req.user })
+  Listings.findUsersListings(req.user._id + '').then(listings => {
+    res.render('user', { title: 'Account', user: req.user, listings: listings })
   })
   // res.render('home', { title: 'Home' })
 })

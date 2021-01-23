@@ -134,33 +134,33 @@
 
 //   let listingID = null
 
-//   describe('Add Listing', function () {
-//     it('Status 200 and body returned', function (done) {
-//       const request = server.post('/newListing')
-//         .field('title', 'Stainless Steel')
-//         .field('price', '1000')
-//         .field('quantity', '2')
-//         .field('material', 'stainless')
-//         .field('description', '300x2000 tubing')
-//         .field('location', '24,24')
-//         .field('date', '2002-07-15')
-//         .field('type', 'bar-flat')
+// describe('Add Listing', function () {
+//   it('Status 200 and body returned', function (done) {
+//     const request = server.post('/newListing')
+//       .field('title', 'Stainless Steel')
+//       .field('price', '1000')
+//       .field('quantity', '2')
+//       .field('material', 'stainless')
+//       .field('description', '300x2000 tubing')
+//       .field('location', '24,24')
+//       .field('date', '2002-07-15')
+//       .field('type', 'bar-flat')
 
-//       FILES.forEach(file => {
-//         request.attach('images', file)
-//       })
-//       request
-//         .expect(200)
-//         .end(function (err, res) {
-//           if (err) setErr(err, res.error)
-//           expect(res.body).to.be.a('object')
-
-//           listingID = res.body._id
-
-//           done(err)
-//         })
+//     FILES.forEach(file => {
+//       request.attach('images', file)
 //     })
+//     request
+//       .expect(200)
+//       .end(function (err, res) {
+//         if (err) setErr(err, res.error)
+//         expect(res.body).to.be.a('object')
+
+//         listingID = res.body._id
+
+//         done(err)
+//       })
 //   })
+// })
 
 //   // describe('Update Listing', function () {
 //   //   it('Status 200 and body returned', function (done) {

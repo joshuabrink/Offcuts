@@ -44,8 +44,7 @@ class Listing {
   }
 
   async findUsersListings (id) {
-    const objId = new ObjectID(id)
-    return await this.collection.find({ userID: objId }).toArray().then((listings) => {
+    return await this.collection.find({ userID: id }).toArray().then((listings) => {
       return listings
     })
   }
