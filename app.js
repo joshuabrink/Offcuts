@@ -33,7 +33,7 @@
   app.use(function (req, res, next) {
     res.setHeader(
       'Content-Security-Policy',
-      "default-src 'self'; font-src 'self'; img-src 'self' https://*.tile.openstreetmap.org; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://www.google.com/"
+      "default-src 'self'; font-src 'self'; img-src 'self' data: http://*.tile.openstreetmap.org/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://www.google.com/"
     )
     next()
   })
