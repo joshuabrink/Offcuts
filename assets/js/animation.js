@@ -172,6 +172,7 @@ function locationListen (e) {
 
   const newLocation = document.createElement('span')
   newLocation.classList.add('neu-static')
+  newLocation.classList.add('bg-color')
   newLocation.innerText = this.innerText
   newLocation.innerHTML += '<svg viewBox="0 0 24 24" width="18px" height="18px"><path class="light" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>'
 
@@ -278,6 +279,7 @@ const autoCompleteJS = new autoComplete({
     destination: '.search-filter',
     container: (source) => {
       source.classList.add('neu-static')
+      source.classList.add('bg-color')
     }
   },
   resultItem: {
