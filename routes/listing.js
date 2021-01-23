@@ -106,6 +106,13 @@ router.get('/listings/search/:query', (req, res, next) => {
   })
 })
 
+router.post('/listings/search/:query', (req, res, next) => {
+  const { query } = req.params
+  Listings.searchListings(query).then(titles => {
+    res.send(titles)
+  })
+})
+
 router.get('/listings/:material', validateFilter, (req, res) => {
   logger.info('first-level: ' + req.params.material)
   const { material } = req.params
