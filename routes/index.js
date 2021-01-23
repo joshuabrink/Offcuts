@@ -13,6 +13,14 @@ router.get('/', (req, res, next) => {
   // res.render('home', { title: 'Home' })
 })
 
+router.get('/account', (req, res, next) => {
+  // res.send('working')
+  Listings.findListings({}, 20).then(listings => {
+    res.render('user', { title: 'Account', user: req.user })
+  })
+  // res.render('home', { title: 'Home' })
+})
+
 router.get('/about', (req, res) => {
   // res.send('working')
   res.render('about', { user: req.user })
