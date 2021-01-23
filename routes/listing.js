@@ -97,8 +97,8 @@ const defaultRendor = (res, req, path = 'listings', listings) => {
 }
 
 router.get('/post', loggedIn, (req, res) => {
-  res.render('post', { title: 'post', user: req.user })
-  return defaultRendor(req, res, 'post')
+  // res.render('post', { title: 'post', user: req.user })
+  return defaultRendor(res, req, 'post')
 })
 
 router.get('/listings/', (req, res, next) => {
