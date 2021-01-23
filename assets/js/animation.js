@@ -40,7 +40,7 @@ function modalShow () {
   })
 
   accButton.addEventListener('click', (e) => {
-    e.preventDefault()
+    // e.preventDefault()
 
     modalTarget = e.currentTarget.hash ? e.currentTarget.hash : modalTL
 
