@@ -3,10 +3,6 @@
 }
 
 .type {
-  -webkit-transition: box-shadow 0.3s ease;
-  -o-transition: box-shadow 0.3s ease;
-  transition: box-shadow 0.3s ease;
-  box-shadow: -4px -4px 6px rgba(255, 255, 255, 0.7), 4px 4px 6px #c0d3de, inset -4px -4px 12px rgba(255, 255, 255, 0.1), inset 4px 4px 12px #e8eff3;
   border-radius: 20px;
   margin-bottom: 20px;
   padding: 15px;

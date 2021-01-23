@@ -139,6 +139,30 @@ a, p {
   padding: 40px;
 }
 
+.w-100 {
+  width: 100%;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.w-33 {
+  width: 33.333%;
+}
+
+.w-66 {
+  width: 66.666%;
+}
+
+.w-25 {
+  width: 25%;
+}
+
+.w-75 {
+  width: 75%;
+}
+
 ::-webkit-input-placeholder {
   color: #739db6;
 }
@@ -198,6 +222,10 @@ button {
   border: none;
   padding: 0 !important;
   cursor: pointer;
+}
+
+.bg-color {
+  background-color: #e8eff3;
 }
 
 svg .light {
@@ -416,7 +444,7 @@ form .autoComplete_highlighted {
   font-weight: 800;
 }
 form .autoComplete_list {
-  background-color: #e8eff3;
+  width: 60%;
   padding: 0;
   margin: 0;
   border-radius: 20px;
@@ -461,7 +489,6 @@ nav {
   margin-left: 1%;
   position: absolute;
   width: 98%;
-  background-color: #e8eff3;
   z-index: 10;
 }
 nav #logo {
@@ -573,9 +600,7 @@ nav .search-under {
   flex-direction: row-reverse;
 }
 nav .search-filter {
-  -ms-flex: 1 1 0;
-  flex: 1 1 0;
-  -webkit-box-flex: 1 ;
+  width: 40%;
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   transition: all 0.2s;
@@ -585,6 +610,7 @@ nav .search-filter span {
   padding: 6px;
   border-radius: 20px;
   background-color: #e8eff3;
+  margin: 5px;
 }
 nav .search-filter svg {
   vertical-align: bottom;
@@ -595,12 +621,6 @@ nav .nav-list {
 }
 nav .nav-list #acc-icon {
   width: 30px;
-}
-
-.autoComplete_list {
-  -ms-flex: 1 1 0;
-  flex: 1 1 0;
-  -webkit-box-flex: 1 ;
 }
 
 .flash {
