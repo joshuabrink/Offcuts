@@ -101,6 +101,14 @@ router.get('/post', loggedIn, (req, res) => {
   return defaultRendor(res, req, 'post')
 })
 
+router.get('/boost', (req, res, next) => {
+  // res.send('working')
+  Listings.findUsersListings(req.user._id + '').then(listings => {
+    res.render('boost', { title: 'Boost', user: req.user, listings: listings })
+  })
+  
+})
+
 router.get('/listings/', (req, res, next) => {
   Listings.findListings({}, 20).then(listings => {
     return defaultRendor(res, req, 'listings', listings)
