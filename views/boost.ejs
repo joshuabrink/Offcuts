@@ -13,38 +13,25 @@
             <th>Price</th>
             <th>Boost</th>
          </tr>
+         <% if (typeof listings !== 'undefined') { %>
+
+          <% for( let i = 0; i < listings.length; i++ ) { %>
+         <tr>
+            <td><img src="<%= listings[i].images[0] %>" alt="" /></td>
+            <td><%= listings[i].title %></td>
+            <td><%= listings[i].description %></td>
+            <td><%= listings[i].price %></td>
+            <td> </td>
+         </tr>
+         <% } %>
    
-         <tr>
-            <td><img src="https://i.picsum.photos/id/1005/100/100.jpg" alt="" /></td>
-            <td>Jane Doe</td>
-            <td>jane.doe@foo.com</td>
-            <td>01 800 2000</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </td>
-         </tr>
-   
-         <tr>
-            <td><img src="https://i.picsum.photos/id/1027/100/100.jpg" alt="" /></td>
-            <td>John Doe</td>
-            <td>john.doe@foo.com</td>
-            <td>01 800 2000</td>
-            <td>Blanditiis, aliquid numquam iure voluptatibus ut maiores explicabo ducimus neque, nesciunt rerum perferendis, inventore.</td>
-         </tr>
-   
-         <tr>
-            <td><img src="https://i.picsum.photos/id/64/100/100.jpg" alt="" /></td>
-            <td>Jane Smith</td>
-            <td>jane.smith@foo.com</td>
-            <td>01 800 2000</td>
-            <td> Culpa praesentium unde pariatur fugit eos recusandae voluptas.</td>
-         </tr>
-         
-         <tr>
-            <td><img src="https://i.picsum.photos/id/1025/100/100.jpg" alt="" /></td>
-            <td>John Smith</td>
-            <td>john.smith@foo.com</td>
-            <td>01 800 2000</td>
-            <td>Aut voluptatum accusantium, eveniet, sapiente quaerat adipisci consequatur maxime temporibus quas, dolorem impedit.</td>
-         </tr>
+         <% } else { %>
+           <div class="col not-found">
+             <img src="/images/svg/notfound.svg" alt="not found">
+             <h2>No Listings Found</h2>
+           </div>
+         <% } %>
+  
       </table>
    </div>
 </section>
