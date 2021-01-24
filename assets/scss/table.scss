@@ -4,10 +4,10 @@ $imageBig: 100px;
 $imageSmall: 60px;
 $padding: 10px;
 
-body {
-   background-color: lighten($baseColor, 30%);
-   * { box-sizing: border-box; }
-}
+// body {
+//    background-color: lighten($baseColor, 30%);
+//    * { box-sizing: border-box; }
+// }
 
 .header {
    background-color: darken($baseColor, 5%);
@@ -18,11 +18,11 @@ body {
    text-transform: uppercase;
 }
 
-img {
-   border-radius: 50%;
-   height: $imageSmall;
-   width: $imageSmall;
-}
+// img {
+//    border-radius: 50%;
+//    height: $imageSmall;
+//    width: $imageSmall;
+// }
 
 .table-users {
    border: 1px solid darken($baseColor, 5%);
