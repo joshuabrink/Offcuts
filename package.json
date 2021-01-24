@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon app.js | pino-pretty",
     "sass": "sass --watch ./assets/scss/:./assets/css/",
-    "test": "mocha --reporter ./test/reporters/timing.js"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
