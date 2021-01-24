@@ -91,7 +91,7 @@ const upload = multer({
 
 const defaultRendor = (res, req, path = 'listings', listings) => {
   if (!listings) {
-    return res.render(path, { user: req.user })
+    return res.render(path, { title: path, user: req.user })
   }
   return res.render(path, { title: path, listings: listings, user: req.user })
 }
@@ -154,7 +154,7 @@ router.get('/listings/:material/:type/:id', validateFilter, (req, res, next) => 
 
   Listings.findById(id).then(listing => {
     if (listing instanceof Error) return next(listing)
-    return res.render('listing-view', { title: 'Listing', listing: listing })
+    return res.render('listing-view', { title: 'Listing', listing: listing, user: req.user })
   })
 })
 
