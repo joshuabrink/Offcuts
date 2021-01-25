@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "helmet": "^4.2.0",
+    "leaflet-geosearch": "^3.2.1",
     "mongodb": "^3.6.3",
     "multer": "^1.4.2",
     "ol": "^6.5.0",
