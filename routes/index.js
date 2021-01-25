@@ -21,10 +21,6 @@ router.get('/account', (req, res, next) => {
   // res.render('home', { title: 'Home' })
 })
 
-
-
-
-
 router.get('/about', (req, res) => {
   // res.send('working')
   res.render('about', { user: req.user })
