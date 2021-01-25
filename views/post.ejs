@@ -1,7 +1,7 @@
 <%- include ('./partials/header.ejs') %>
 
   <section>
-    <div class="col post">
+    <div class="col post w-33">
       <h1 class="title">Post</h1>
       <form action="/newListing" method="post">
         <label for="images">Images</label>
@@ -24,7 +24,9 @@
         <label for="type">Type</label>
         <div class="row between type neu-static">
           <div class="col">
-            <img src="/images/svg/notfound.svg" alt="Preview of following Checkbox's">
+            <!-- <img class="preview-img" src="/images/types/bar-square.svg" alt="Preview of following Checkbox's"> -->
+            <object class="preview-img" data="/images/types/bar-square.svg" width="150" height="150"></object>
+            
           </div>
           <div class="col start base-type">
           
@@ -72,30 +74,30 @@
          
 
           </div>
-          <div class="col end sec-type">
-            <!-- <div class="row">
-              <label for="tubing">Tubing</label>
-              <input type="checkbox" name="tubing" id="tubing">
-            </div>
-            <div class="row">
-              <label for="beam">Beam</label>
-              <input type="checkbox" name="beam" id="beam">
-            </div>
-            <div class="row">
-              <label for="sheet-mesh">Sheet/Mesh</label>
-              <input type="checkbox" name="sheet-mesh" id="sheet-mesh">
-            </div> -->
+          <div class="col start sec-type">
+ 
           </div>
         </div>
         <label for="description">Description</label>
         <textarea class="neu" name="description" id="description" cols="30" rows="6"></textarea>
+      
+          <label for="autcomplete"></label>
+          <input class="autocomplete neu" type="text" value="">
+       <div class="results">
+         
+       </div>
+ 
+
         <input type="submit" value="Post" class="neu">
 
+   
 
       </form>
     </div>
 
   </section>
+
+  
 
 
 
