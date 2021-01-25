@@ -3,7 +3,7 @@
   <% for( let i = 0; i < listings.length; i++ ) { %>
 
       <!-- <input type="hidden" name="id" value="<%= listings[i]._id %>"> -->
-
+      <% if (listings[i].promoted == 'true') { %>
       <a class="listing col neu" href="/listings/<%= listings[i].material %>/<%= listings[i].type %>/<%= listings[i]._id %>">
  
         <div class="img-count row bg-color">
@@ -33,7 +33,7 @@
         </div>
       
       </a>
-    
+      <% } %>
 
   <% } %>
  

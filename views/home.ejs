@@ -2,7 +2,7 @@
 
 <section>
   <div class="row">
-    <h1 class="title">Promotion</h1>
+    <h1 class="title">Promoted</h1>
 
 <form action="https://sandbox.payfast.co.za/eng/process" method="post">
    <input type="hidden" name="merchant_id" value="10000100">
@@ -15,75 +15,13 @@
   <div class="listing-container">
 
     <%- include ('./partials/listings-display.ejs') %>
-   
-    <!-- <div class="listing col">
- 
-      <div class="img-count row">
-        <img src="/images/svg/camera.svg" alt="image count">
-        <span>5</span>
-      </div>
-      <img class="listing-img" src="/images/alloy-tube.jpg" alt="listing preview">
-      <div class="listing-header">
-        <p class="truncate-overflow">Stainless Tubing Stainless Tubzfzczx Stainless Tubing</p>
-      </div>
-      <div class="listing-body">
-        <p class="price">R2 000</p>
-        <div class="location row">
-          <img src="/images/svg/location.svg" alt="" class="top">
-          <p>Location</p>
-        </div>
-       
-      </div>
-    </div>
-    <div class="listing col">
- 
-      <div class="img-count row">
-        <img src="/images/svg/camera.svg" alt="image count">
-        <span>5</span>
-      </div>
-      <img class="listing-img" src="/images/alloy-tube.jpg" alt="listing preview">
-      <div class="listing-header">
-        <p>Stainless Tubing</p>
-      </div>
-      <div class="listing-body">
-        <p class="price">R2 000</p>
-        <p class="location">Location</p>
-      </div>
-    </div>
-    <div class="listing col">
- 
-      <div class="img-count row">
-        <img src="/images/svg/camera.svg" alt="image count">
-        <span>5</span>
-      </div>
-      <img class="listing-img" src="/images/alloy-tube.jpg" alt="listing preview">
-      <div class="listing-header">
-        <p>Stainless Tubing</p>
-      </div>
-      <div class="listing-body">
-        <p class="price">R2 000</p>
-        <p class="location">Location</p>
-      </div>
-    </div>   
-     <div class="listing col">
- 
-      <div class="img-count row">
-        <img src="/images/svg/camera.svg" alt="image count">
-        <span>5</span>
-      </div>
-      <img class="listing-img" src="/images/alloy-tube.jpg" alt="listing preview">
-      <div class="listing-header">
-        <p>Stainless Tubing</p>
-      </div>
-      <div class="listing-body">
-        <p class="price">R2 000</p>
-        <p class="location">Location</p>
-      </div>
-    </div> -->
-
   </div>
 
   <h1 class="title">Browse</h1>
+  <div class="listing-container">
+
+    <%- include ('./partials/listings-displayAll.ejs') %>
+  </div>
   <div class="row">
     <a href="/listings">
       <img src="/images/svg/browse.svg" alt="" style="width: 40px;">

@@ -726,7 +726,7 @@ section {
   -ms-flex-direction: column;
   flex-direction: column;
   min-height: 90%;
-  margin-top: 120px;
+  margin-top: 80px;
 }
 
 .not-found {
@@ -889,12 +889,13 @@ footer {
   -webkit-box-align: start;
   -ms-flex-align: start;
   align-items: start;
-  width: 220px;
+  width: 280px;
   position: relative;
   border-radius: 20px;
   cursor: pointer;
   margin: 0 20px;
   margin-bottom: 25px;
+  margin-top: 25px;
 }
 .listing-header {
   margin-left: 5%;
