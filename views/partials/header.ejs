@@ -12,6 +12,7 @@
             <% } if (title==='Listing' ) { %>
                 <link rel="stylesheet" href="/css/listing.css">
                 <link rel="stylesheet" href="/css/vendor/leaflet.css">
+                
                 <script defer src="/js/slider.js"></script>
                 <% } %>
         <% } else { %>
@@ -36,7 +37,9 @@
             <!-- <link rel="stylesheet" href="/css/vendor/autoComplete.min.css"> -->
 
             <% if (title === 'post') { %>      
+                <script defer src="/js/vendor/bundle.min.js"></script>
             <script defer src="/js/post.js"></script>
+           
             <% } %>
             <script defer src="/js/vendor/anime.min.js"></script>
             <script defer src="/js/vendor/modernizr-3.11.2.min.js"></script>
