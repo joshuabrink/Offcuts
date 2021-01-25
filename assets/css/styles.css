@@ -494,10 +494,6 @@ nav {
 nav #logo {
   width: 15%;
 }
-nav .dropdown {
-  position: absolute;
-  right: 54px;
-}
 nav .dropdown > li, nav .dropdown > li > a {
   display: block;
 }
@@ -565,6 +561,10 @@ nav .dropdown .selected {
   -o-transition: box-shadow 0.3s ease;
   transition: box-shadow 0.3s ease;
   box-shadow: -4px -4px 6px rgba(255, 255, 255, 0.7), 4px 4px 6px #c0d3de, inset -4px -4px 12px rgba(255, 255, 255, 0.1), inset 4px 4px 12px #e8eff3;
+}
+nav .dropdown.loc-container {
+  position: absolute;
+  right: 54px;
 }
 nav .search {
   width: 65%;

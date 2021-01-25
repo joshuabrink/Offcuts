@@ -106,7 +106,6 @@ router.get('/boost', (req, res, next) => {
   Listings.findUsersListings(req.user._id + '').then(listings => {
     res.render('boost', { title: 'Boost', user: req.user, listings: listings })
   })
-  
 })
 
 router.get('/listings/', (req, res, next) => {
