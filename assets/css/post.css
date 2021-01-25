@@ -8,8 +8,12 @@
   padding: 15px;
 }
 .type img {
-  width: 100%;
+  width: 150px;
   border-radius: 20px;
+}
+
+.sec-type {
+  min-width: 27%;
 }
 
 /*# sourceMappingURL=post.css.map */

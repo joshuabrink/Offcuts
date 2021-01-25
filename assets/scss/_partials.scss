@@ -166,9 +166,12 @@ nav {
 
   //DROPDOWN
   .dropdown {
-    position: absolute;
-    right: 54px;
+
     @include dropdown(135px, 100%);
+    &.loc-container {
+      position: absolute;
+      right: 54px;
+    }
   }
 
   //SEARCH
