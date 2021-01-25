@@ -231,6 +231,9 @@ button {
 svg .light {
   fill: #739db6;
 }
+svg .bg {
+  fill: #e8eff3;
+}
 svg .dark {
   fill: #547285;
 }
@@ -493,6 +496,11 @@ nav {
 }
 nav #logo {
   width: 15%;
+}
+nav .dropdown {
+  margin-block: 0;
+  margin-inline: 0;
+  padding-inline: 0;
 }
 nav .dropdown > li, nav .dropdown > li > a {
   display: block;
