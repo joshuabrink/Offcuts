@@ -3,7 +3,7 @@ $borderRadius: 10px;
 $imageBig: 100px;
 $imageSmall: 60px;
 $padding: 10px;
-
+@import "partials";
 // body {
 //    background-color: lighten($baseColor, 30%);
 //    * { box-sizing: border-box; }
@@ -23,6 +23,9 @@ $padding: 10px;
 //    height: $imageSmall;
 //    width: $imageSmall;
 // }
+.tablePic{
+   width: 200px;
+}
 
 .table-users {
    border: 1px solid darken($baseColor, 5%);
@@ -31,14 +34,14 @@ $padding: 10px;
    max-width: calc(100% - 2em);
    margin: 1em auto;
    overflow: hidden;
-   width: 800px;
+   width: 70%;
 }
 
 table {
    width: 100%;
    
    td, th { 
-      color: darken($baseColor, 10%);
+      
       padding: $padding; 
    }
    
@@ -54,13 +57,13 @@ table {
    }
    
    th { 
-      background-color: lighten($baseColor, 50%);
+      background-color: lighten($bg-color, 50%);
       font-weight: 300;
    }
    
    tr {     
-      &:nth-child(2n) { background-color: white; }
-      &:nth-child(2n+1) { background-color: lighten($baseColor, 55%) }
+      &:nth-child(2n) { background-color: $bg-color; }
+      &:nth-child(2n+1) { background-color: lighten($bg-color, 55%) }
    }
 }
 
@@ -107,7 +110,7 @@ table {
 @media screen and (max-width: 500px) {
    .header {
       background-color: transparent;
-      color: lighten($baseColor, 60%);
+      color: $text-color;
       font-size: 2em;
       font-weight: 700;
       padding: 0;
@@ -156,6 +159,7 @@ table {
       margin: 0.5rem 0;
       padding: 0;
    }
+
    
    .table-users { 
       border: none; 

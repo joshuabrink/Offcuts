@@ -17,11 +17,11 @@
 
           <% for( let i = 0; i < listings.length; i++ ) { %>
          <tr>
-            <td><img src="<%= listings[i].images[0] %>" alt="" /></td>
-            <td><%= listings[i].title %></td>
-            <td><%= listings[i].description %></td>
-            <td><%= listings[i].price %></td>
-            <td> </td>
+            <td style="width: 100px;"><img class="tablePic" src="<%= listings[i].images[0] %>" alt="" /></td>
+            <td style="width: 220px;"><%= listings[i].title %></td>
+            <td style="width: 300px;"><%= listings[i].description %></td>
+            <td style="width: 120px;">R <%= listings[i].price %></td>
+            <td style="width: 100px;"></td>
          </tr>
          <% } %>
    
