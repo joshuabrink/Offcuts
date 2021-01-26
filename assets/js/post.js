@@ -23,7 +23,7 @@ form.addEventListener('submit', e => {
   ajax.onreadystatechange = function (e) {
     if (ajax.readyState === 4) {
       if (ajax.status === 200) {
-        window.location.replace(ajax.redirect)
+        window.location.replace(ajax.responseURL)
       } else {
         // error!
       }
