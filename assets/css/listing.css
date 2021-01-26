@@ -469,6 +469,7 @@ form .autoComplete_list > li:only-child {
   border-radius: 20px;
 }
 form .autoComplete_list > li {
+  cursor: pointer;
   padding: 10px;
 }
 form .autoComplete_list > li > span {
