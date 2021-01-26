@@ -3,9 +3,16 @@
   <section>
     <div class="col post w-33">
       <h1 class="title">Post</h1>
-      <form action="/newListing" method="post">
+      <form action="/newListing" method="post" id="post-form">
         <label for="images">Images</label>
-        <input type="file" name="images" id="images" class="neu">
+        <!-- <input type="file" name="images" id="images" class="neu"> -->
+
+        <div id="drop-region" class="neu bg-color">
+            <div class="drop-message">
+                Drag & Drop images or click to upload
+            </div>
+            <div id="image-preview"></div>
+        </div>
         <label for="title">Title</label>
         <input type="text" name="title" id="title" class="neu">
         <label for="price">Price</label>
@@ -23,6 +30,7 @@
 
         <label for="type">Type</label>
         <div class="row between type neu-static">
+          <input type="hidden" name="type" id="type" value = 'other-other'>
           <div class="col">
             <!-- <img class="preview-img" src="/images/types/bar-square.svg" alt="Preview of following Checkbox's"> -->
             <object class="preview-img" data="/images/types/bar-square.svg" width="150" height="150"></object>
@@ -81,11 +89,23 @@
         <label for="description">Description</label>
         <textarea class="neu" name="description" id="description" cols="30" rows="6"></textarea>
       
-          <label for="autcomplete"></label>
-          <input class="autocomplete neu" type="text" value="">
-       <div class="results">
+          <label for="autoCompleteGeo">Location</label>
+          <input id="autoCompleteGeo" class="autoCompleteGeo neu" type="search" dir="ltr" 
+          spellcheck="false" 
+          autocorrect="off" 
+          autocomplete="off" 
+          autocapitalize="off" 
+          maxlength="2048" 
+          tabindex="1"
+           role="combobox" 
+           aria-haspopup="true" 
+           aria-expanded="false" 
+           aria-controls="autoComplete_list" 
+           aria-autocomplete="both" placeholder="Search">
+          <input type="hidden" name="location" id="location">
+          <div class="results">
          
-       </div>
+          </div>
  
 
         <input type="submit" value="Post" class="neu">

@@ -9,12 +9,13 @@
         </title>
         <% if (title==='post' ) { %>
             <link rel="stylesheet" href="/css/post.css">
-            <% } if (title==='Listing' ) { %>
+        <% } if (title==='Listing' ) { %>
                 <link rel="stylesheet" href="/css/listing.css">
                 <link rel="stylesheet" href="/css/vendor/leaflet.css">
+               
                 
                 <script defer src="/js/slider.js"></script>
-                <% } %>
+        <% } %>
         <% } else { %>
             <title>Offcuts</title>
             <% } %>
@@ -34,20 +35,25 @@
             <link rel="stylesheet" href="/css/vendor/normalize.css">
             <link rel="stylesheet" href="/css/vendor/ol-ext.min.css">
             <link rel="stylesheet" href="/css/table.css">
+           
             <!-- <link rel="stylesheet" href="/css/vendor/autoComplete.min.css"> -->
 
-            <% if (title === 'post') { %>      
-                <script defer src="/js/vendor/bundle.min.js"></script>
-            <script defer src="/js/post.js"></script>
-           
-            <% } %>
+        
             <script defer src="/js/vendor/anime.min.js"></script>
             <script defer src="/js/vendor/modernizr-3.11.2.min.js"></script>
             <script defer src="/js/vendor/autoComplete.min.js"></script>
+          
+
 
             <script defer src="/js/plugins.js"></script>
             <script defer src="/js/animation.js"></script>
             <script defer src="/js/darkmode.js"></script>
+
+            <% if (title === 'post') { %>      
+                <script defer src="/js/vendor/bundle.min.js"></script>
+                <script defer src="/js/post.js"></script>
+           
+            <% } %>
 
             <meta name="theme-color" content="#fafafa">
 
