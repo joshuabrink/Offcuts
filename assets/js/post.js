@@ -12,7 +12,7 @@ form.addEventListener('submit', e => {
   formData.append('material', document.querySelector('#material').value)
   formData.append('description', document.querySelector('#description').value)
   formData.append('location', document.querySelector('#location').value)
-  formData.append('date', '2002-07-15')
+  formData.append('date', Date.now())
   formData.append('type', document.querySelector('#type').value)
 
   const uploadLocation = 'http://localhost:3000/newListing'
@@ -49,7 +49,7 @@ for (let i = 0; i < baseTypes.length; i++) {
     secContainer.innerHTML = ''
     const newTypes = typeObj[baseType.value]
     prevImg.setAttribute('data', '/images/types/' + baseType.value + '-' + newTypes[0] + '.svg')
-    // typeInput.value.split[]
+    typeInput.value = baseType.value + '-' + typeInput.value.split('-')[1]
 
     for (let j = 0; j < newTypes.length; j++) {
       const newType = newTypes[j]
@@ -66,6 +66,7 @@ for (let i = 0; i < baseTypes.length; i++) {
       for (let k = 0; k < secChecks.length; k++) {
         const secCheck = secChecks[k]
         secCheck.addEventListener('click', e => {
+          typeInput.value = baseType.value + '-' + secCheck.value
           prevImg.setAttribute('data', '/images/types/' + baseType.value + '-' + secCheck.value + '.svg')
         })
       }
@@ -73,7 +74,7 @@ for (let i = 0; i < baseTypes.length; i++) {
   })
 }
 
-const input = document.querySelector('.autocomplete')
+// const input = document.querySelector('.autocomplete')
 const provider = new GeoSearch.OpenStreetMapProvider()
 const resultList = document.querySelector('.results')
 

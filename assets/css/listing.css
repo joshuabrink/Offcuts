@@ -513,7 +513,6 @@ nav .dropdown .flyout-alt {
 nav .dropdown .flyout-content {
   position: absolute;
   top: 100%;
-  background: #e8eff3;
   left: -99999px;
   width: 135px;
   padding: 0;

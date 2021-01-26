@@ -28,6 +28,11 @@ body.dark-mode {
     background-color: $bg-dark;
   }
 
+  tr {     
+    &:nth-child(2n) { background-color: lighten($bg-dark, 5%); }
+    &:nth-child(2n+1) { background-color: $bg-dark; }
+ }
+
   a,p,h1,h2,h3,h4,h5,label,td,th {
     color: $text-dark;
   }

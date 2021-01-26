@@ -20,6 +20,12 @@ body.dark-mode ::placeholder {
 body.dark-mode .bg-color {
   background-color: #739db6;
 }
+body.dark-mode tr:nth-child(2n) {
+  background-color: #84a9bf;
+}
+body.dark-mode tr:nth-child(2n+1) {
+  background-color: #739db6;
+}
 body.dark-mode a, body.dark-mode p, body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4, body.dark-mode h5, body.dark-mode label, body.dark-mode td, body.dark-mode th {
   color: #e8eff3;
 }
