@@ -86,6 +86,9 @@ body.dark-mode .flyout-content li:hover:hover {
 body.dark-mode svg .light {
   fill: #e8eff3;
 }
+body.dark-mode svg .bg {
+  fill: #739db6;
+}
 body.dark-mode svg .dark {
   fill: #f9fdff;
 }

@@ -51,6 +51,9 @@ svg {
   .light {
     fill: $text-color;
   }
+  .bg {
+    fill: $bg-color;
+  }
   .dark {
     fill: $dark-color;
   }
@@ -166,7 +169,9 @@ nav {
 
   //DROPDOWN
   .dropdown {
-
+    margin-block: 0;
+    margin-inline: 0;
+    padding-inline: 0;
     @include dropdown(135px, 100%);
     &.loc-container {
       position: absolute;
@@ -239,7 +244,6 @@ nav {
 
 .flash {
   z-index: 100;
-  background-color: $bg-color;
   position: absolute;
   top: 15%;
   left: 5%;
