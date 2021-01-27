@@ -6,13 +6,14 @@ const form = document.querySelector('#post-form')
 
 form.addEventListener('submit', e => {
   e.preventDefault()
+  const formatDate = date => date.toISOString().slice(0, 10)
   formData.append('title', document.querySelector('#title').value)
   formData.append('price', document.querySelector('#price').value)
   formData.append('quantity', document.querySelector('#quantity').value)
   formData.append('material', document.querySelector('#material').value)
   formData.append('description', document.querySelector('#description').value)
   formData.append('location', document.querySelector('#location').value)
-  formData.append('date', Date.now())
+  formData.append('date', formatDate(new Date()))
   formData.append('type', document.querySelector('#type').value)
 
   const uploadLocation = 'http://localhost:3000/newListing'
