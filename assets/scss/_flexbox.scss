@@ -127,6 +127,13 @@
   @include flexbox;
 }
 
+.flex-1 {
+  @include flex(1 1 0);
+}
+.flex-2 {
+  @include flex(2 1 0);
+}
+
 .center {
   @include justify-content(center);
 }

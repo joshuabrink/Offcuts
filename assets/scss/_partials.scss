@@ -109,7 +109,7 @@ form {
       font-weight: 800;
     }
     &_list {
-    width: 60%;
+  
     padding: 0;
     margin: 0;
     border-radius: 20px;
@@ -212,7 +212,7 @@ nav {
       flex-direction: row-reverse;
     }
     &-filter {
-      width: 40%;
+     
       @include prefix("transition", all 0.2s, (o, webkit));
       span {
         margin-left: 10px;

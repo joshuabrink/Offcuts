@@ -65,7 +65,7 @@ const getChangedImages = (dbImages, upImages) => {
 // set storage of images
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const dest = 'assets/uploads'
+    const dest = 'assets/' + req.user._id + 'uploads'
     cb(null, dest)
   },
   filename: function (req, file, cb) {

@@ -332,63 +332,65 @@ const autoCompleteJS = new autoComplete({
 })
 // account icon initials
 const hi = document.querySelector('#acc-icon')
-const username = document.getElementById('name').value
-const surname = document.getElementById('surname').value
+
+const username = document.getElementById('account-name').value
+const surname = document.getElementById('account-surname').value
+
 const initials = username.charAt(0).concat(surname.charAt(0))
 hi.querySelector('text').textContent = initials
 
-//display promoted
+// display promoted
 const asyncReq = async (action, method, body, callback) => {
   return await fetch(action, {
     method: method,
     headers: {
-      "Content-type": "application/json",
+      'Content-type': 'application/json'
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   })
     .then(function (res) {
-      return res.json(); //convert response into readable data and return it to the callback functions
+      return res.json() // convert response into readable data and return it to the callback functions
     })
     .then(callback)
     .catch(function (err) {
-      console.log(err);
-    });
-};
+      console.log(err)
+    })
+}
 
-const promoted = document.querySelector('.promoted');
-asyncReq('listings/promoted', 'post',{},(listings)=>{
-    for(var i = 0 ; i < listings.length; i++){
-      let img = listings[i].images[0];
-      img = img.substring(0, img.lastIndexOf('\'') + 1) + 'thumb-' + img.substring(img.lastIndexOf('\'') + 1);
-      promoted.innerHTML+=`<a class="listing col neu" href="/listings/${listings[i].material}/${ listings[i].type }/${ listings[i]._id }">
+const promoted = document.querySelector('.promoted')
+asyncReq('listings/promoted', 'post', {}, (listings) => {
+  for (let i = 0; i < listings.length; i++) {
+    let img = listings[i].images[0]
+    img = img.substring(0, img.lastIndexOf('\'') + 1) + 'thumb-' + img.substring(img.lastIndexOf('\'') + 1)
+    promoted.innerHTML += `<a class="listing col neu" href="/listings/${listings[i].material}/${listings[i].type}/${listings[i]._id}">
 
       <div class="img-count row bg-color">
         <svg height="24" viewBox="0 0 24 24" width="24"><circle class="light" cx="12" cy="12" r="3.2"/><path class="light" d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
         <!-- <img src="/images/svg/camera.svg" alt="image count"> -->
-        <span>${ listings[i].images.length } </span>
+        <span>${listings[i].images.length} </span>
       </div>
       
-        <img class="listing-img" loading="lazy" onerror="this.src='/images/svg/notfound.svg'" src="${ img }" alt="listing preview" >
+        <img class="listing-img" loading="lazy" onerror="this.src='/images/svg/notfound.svg'" src="${img}" alt="listing preview" >
      
        
         
       <div class="listing-header">
-        <p class="truncate-overflow">${ listings[i].title }</p>
+        <p class="truncate-overflow">${listings[i].title}</p>
       </div>
       <div class="listing-body">
-        <p class="price">R ${ listings[i].price }</p>
+        <p class="price">R ${listings[i].price}</p>
         <div class="location row">
           <svg height="24" viewBox="0 0 24 24" width="24" class="top">
             <path class="light" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
         </svg>
           <!-- <img src="/images/svg/location.svg" alt="loaction"> -->
-          <p>${ listings[i].location }</p>
+          <p>${listings[i].location}</p>
         </div>
       </div>
 
     </a>`
-    }
-});
+  }
+})
 
 // eslint-disable-next-line no-new
 // new autoComplete({
