@@ -332,10 +332,10 @@ const autoCompleteJS = new autoComplete({
 })
 // account icon initials
 const hi = document.querySelector('#acc-icon')
-//const username = document.getElementById('name').value
-//const surname = document.getElementById('surname').value
-//const initials = username.charAt(0).concat(surname.charAt(0))
-//hi.querySelector('text').textContent = initials
+const username = document.getElementById('name').value
+const surname = document.getElementById('surname').value
+const initials = username.charAt(0).concat(surname.charAt(0))
+hi.querySelector('text').textContent = initials
 
 //display promoted
 const asyncReq = async (action, method, body, callback) => {
