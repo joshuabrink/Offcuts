@@ -114,6 +114,12 @@ router.get('/listings/', (req, res, next) => {
   })
 })
 
+router.post('/listings/promoted', (req, res, next) => {
+  Listings.findListings({promoted:'true'}, 8).then(listings => {
+  res.send(listings)
+  })
+})
+
 router.get('/listings/search/:query', (req, res, next) => {
   const { query } = req.params
   Listings.searchListings(query).then(titles => {
