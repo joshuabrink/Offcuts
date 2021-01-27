@@ -58,14 +58,15 @@ class Listing {
 
   async searchListings (query) {
     return await this.collection.aggregate(
-      {
+      [{
         $search: {
-          regex: {
-            path: 'title',
-            query: query + '(.*)'
+          index: 'auto',
+          autocomplete: {
+            query: query,
+            path: 'title'
           }
         }
-      }).limit(5).toArray().then((listings, err) => {
+      }]).limit(5).toArray().then((listings, err) => {
       if (err) return err
       return listings
     })
