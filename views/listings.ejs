@@ -5,9 +5,23 @@
     <h1 class="title">Browse</h1>
    
   </div>
+
+
+    <form action="" class="row between filter w-70">
+      <button class="neu">
+       <a href="">Filter</a>
+      </button>
+      <select name="sort" id="" class="neu">
+        <option value="price">Price</option>
+        <option value="date">Date</option>
+        <option value="title">Title</option>
+      </select>
+
+    </form>
+ 
   <div class="listing-container">
 
-    <%- include ('./partials/listings-display.ejs') %>
+    <%- include ('./partials/listings-displayAll.ejs') %>
 
 
   </div>

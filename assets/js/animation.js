@@ -167,6 +167,8 @@ function topMenuClose (e) {
 
 function locationListen (e) {
   const filter = document.querySelector('.search-filter')
+  if (!filter.classList.contains('flex-1')) filter.classList.add('flex-1')
+
   const cf = containsFilter(filter, this.innerText)
   if (cf) return
 
@@ -186,9 +188,12 @@ function locationListen (e) {
 
 function deleteListen (newLocation, link) {
   const close = newLocation.querySelector('svg')
+  const filter = document.querySelector('.search-filter')
   close.addEventListener('click', e => {
     link.style.boxShadow = 'none'
     newLocation.remove()
+
+    if (filter.classList.contains('flex-1') && !filter.childElementCount > 0) filter.classList.remove('flex-1')
   })
 }
 
@@ -239,7 +244,7 @@ const autoCompleteJS = new autoComplete({
       // Fetch External Data Source
       const query = document.querySelector('#autoComplete').value
       // Fetch External Data Source
-      const source = await fetch(`http://localhost:3000/listings/search/\`${query}\`/`, {
+      const source = await fetch(`http://localhost:3000/listings/search/${query}/`, {
         method: 'GET'
       })
       const data = await source.json()
@@ -280,6 +285,7 @@ const autoCompleteJS = new autoComplete({
     container: (source) => {
       source.classList.add('neu-static')
       source.classList.add('bg-color')
+      source.classList.add('flex-1')
     }
   },
   resultItem: {
