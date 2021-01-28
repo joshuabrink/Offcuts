@@ -11,6 +11,7 @@ const fs = require('fs')
 const pino = require('pino')
 // const expressPino = require('express-pino-logger')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' })
+const jsonParser = require('body-parser').json()
 
 // CUSTOM LIBRARIES
 const { DatabaseError } = require('../lib/errorHandle/errors')
@@ -26,35 +27,39 @@ const thumbStr = (imagePath) => {
 }
 const delImages = async (imagePaths) => {
   const promises = []
-  for (let i = 0; i < imagePaths.length; i++) {
-    const imagePath = imagePaths[i]
+  imagePaths = imagePaths.map(path => {
+    if (path.indexOf('assets') === -1) {
+      return 'assets' + path
+    }
+    return path
+  })
+  imagePaths.forEach(imagePath => {
     promises.push(new Promise((resolve, reject) => {
       fs.unlink(imagePath, err => {
         if (err) return reject(err)
-        fs.unlink(thumbStr(imagePath), err => {
-          if (err) return reject(err)
-
-          resolve(imagePath)
-        })
+        resolve(imagePath)
       })
     }))
-  }
-  Promise.all(promises).then((val, err) => {
-    if (err) return (err)
-    return true
+    promises.push(new Promise((resolve, reject) => {
+      fs.unlink(thumbStr(imagePath), err => {
+        if (err) return reject(err)
+        resolve(imagePath)
+      })
+    }))
   })
+  await Promise.allSettled(promises)
 }
 
 const getChangedImages = (dbImages, upImages) => {
-  dbImages = dbImages.map(img => 'assets\\' + img)
-  return dbImages.map(x => {
+  const pathedImages = dbImages.map(img => 'assets' + img)
+  return pathedImages.map(x => {
     if (!upImages.some(y => { return y === x })) {
       return { value: x, query: false }
     }
     return null
   })
     .concat(upImages.map(x => {
-      if (!dbImages.some(y => { return y === x })) {
+      if (!pathedImages.some(y => { return y === x })) {
         return { value: x, query: true }
       }
       return null
@@ -65,7 +70,8 @@ const getChangedImages = (dbImages, upImages) => {
 // set storage of images
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const dest = 'assets/' + req.user._id + 'uploads'
+    const dest = 'assets/uploads/' + req.user._id + '/'
+    fs.mkdirSync(dest, { recursive: true })
     cb(null, dest)
   },
   filename: function (req, file, cb) {
@@ -115,8 +121,8 @@ router.get('/listings/', (req, res, next) => {
 })
 
 router.post('/listings/promoted', (req, res, next) => {
-  Listings.findListings({promoted:'true'}, 8).then(listings => {
-  res.send(listings)
+  Listings.findListings({ promoted: 'true' }, 8).then(listings => {
+    res.send(listings)
   })
 })
 
@@ -153,8 +159,8 @@ router.get('/listings/:material/:type', validateFilter, (req, res, next) => {
 
 router.get('/listings/:material/:type/:id', validateFilter, (req, res, next) => {
   logger.info('first-level: ' + req.params.material +
-  '\n second-level: ' + req.params.type +
-  '\n third-level: ' + req.params.id)
+    '\n second-level: ' + req.params.type +
+    '\n third-level: ' + req.params.id)
   const { id } = req.params
 
   Listings.findById(id).then(listing => {
@@ -203,11 +209,11 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
 
   const paths = req.files.map(file => { return file.path })
 
-  Listings.updateListing(listingID, { $set: fields }).then((listing) => {
+  Listings.updateListing(listingID, { $set: fields }).then(async (listing) => {
     const changedImages = getChangedImages(listing.images, paths)
 
-    const remove = []
-    const add = []
+    let remove = []
+    let add = []
 
     for (let i = 0; i < changedImages.length; i++) {
       const value = changedImages[i].value
@@ -216,7 +222,7 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
         sharp(value)
           .resize(200, 200)
           .jpeg({ quality: 50 })
-          .toFile(req.files[i].destination + '/thumb-' + req.files[i].originalname).catch(err => {
+          .toFile(req.files[0].destination + '/thumb-' + req.files[i].originalname).catch(err => {
             if (err) return next(err)
           })
       } else {
@@ -224,27 +230,28 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
       }
     }
 
-    delImages(remove).then((val, err) => {
-      if (err) return next(err)
-      const pullQuery = { $pull: { images: { $in: remove } } }
-      const pushQuery = { $push: { images: { $each: add } } }
+    const deletedImages = await delImages(remove)
+    if (deletedImages instanceof Error) return next(deletedImages)
+    remove = remove.map(path => path.substr(path.indexOf('uploads') - 1))
+    add = add.map(path => path.substr(path.indexOf('uploads') - 1))
+    const pullQuery = { $pull: { images: { $in: remove } } }
+    const pushQuery = { $push: { images: { $each: add } } }
 
-      Listings.updateListing(listing._id, pullQuery).then(pullListing => {
-        if (pullListing instanceof Error) return next(new DatabaseError('Error updating image paths'))
-        Listings.updateListing(listing._id, pushQuery).then(pushListing => {
-          if (pushListing instanceof Error) return next(new DatabaseError('Error updating image paths'))
-          if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
-            return res.status(200).json(listing)
-          }
-          req.flash('success_messages', 'Your Listing was updated')
-          return res.redirect('back')
-        })
+    Listings.updateListing(listing._id, pullQuery).then(pullListing => {
+      if (pullListing instanceof Error) return next(new DatabaseError('Error updating image paths'))
+      Listings.updateListing(listing._id, pushQuery).then(pushListing => {
+        if (pushListing instanceof Error) return next(new DatabaseError('Error updating image paths'))
+        if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
+          return res.status(200).json(listing)
+        }
+        req.flash('success_messages', 'Your Listing was updated')
+        return res.redirect('back')
       })
     })
   })
 })
 
-router.post('/deleteListing', loggedIn, (req, res, next) => {
+router.post('/deleteListing', loggedIn, jsonParser, (req, res, next) => {
   const { listingID } = req.body
 
   const userID = req.session.passport.user
@@ -258,18 +265,18 @@ router.post('/deleteListing', loggedIn, (req, res, next) => {
       return next(new BadRequestError('Incorrect authorization'))
     }
 
-    Listings.deleteListing(listingID).then((listing) => {
+    Listings.deleteListing(listingID).then(async (listing) => {
       if (listing instanceof Error) return next(new DatabaseError('Error deleting Listing'))
 
-      delImages(listing.images).then((val, err) => {
-        if (err) return next(err)
-        if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
-          return res.status(200).json(listing)
-        }
+      const deletedImages = await delImages(listing.images)
+      if (deletedImages instanceof Error) return next(deletedImages)
 
-        req.flash('success_messages', `Your Listing ${listing.title} was deleted`)
-        return res.redirect('back')
-      })
+      if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
+        return res.status(200).json(listing)
+      }
+
+      req.flash('success_messages', `Your Listing ${listing.title} was deleted`)
+      return res.redirect('back')
     })
   })
 })

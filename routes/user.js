@@ -7,7 +7,7 @@ const router = express.Router()
 const passport = require('passport')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
-const fs = require('fs')
+// const fs = require('fs')
 const jsonParser = require('body-parser').json()
 
 // CUSTOM LIBRARIES
@@ -16,32 +16,6 @@ const { BadRequestError, NotFoundError } = require('../lib/errorHandle/userFacin
 const { Users, Listings } = require('../lib/mongoUtil')
 const { validateUser, validateFields } = require('../lib/validate')
 const { loggedIn } = require('../lib/auth')
-
-// HELPER FUNCTIONS
-const thumbStr = (imagePath) => {
-  return imagePath.substring(0, imagePath.lastIndexOf('\\') + 1) + 'thumb-' +
-    imagePath.substring(imagePath.lastIndexOf('\\') + 1)
-}
-const delImages = async (imagePaths) => {
-  const promises = []
-  for (let i = 0; i < imagePaths.length; i++) {
-    const imagePath = imagePaths[i]
-    promises.push(new Promise((resolve, reject) => {
-      fs.unlink(imagePath, err => {
-        if (err) return reject(err)
-        fs.unlink(thumbStr(imagePath), err => {
-          if (err) return reject(err)
-
-          resolve(imagePath)
-        })
-      })
-    }))
-  }
-  Promise.all(promises).then((val, err) => {
-    if (err) return err
-    return true
-  })
-}
 
 // ROUTES
 router.post('/login', jsonParser, (req, res, next) => {
@@ -193,7 +167,7 @@ router.post('/register', jsonParser, validateUser, (req, res, next) => {
               if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
                 return res.status(200).json(addedUser)
               }
-              req.flash('success_messages', 'Register Successful')
+              req.flash('success_messages', 'Please validate your email')
               return res.redirect('back')
             }
           })
@@ -201,6 +175,15 @@ router.post('/register', jsonParser, validateUser, (req, res, next) => {
       })
     })
   })
+})
+
+router.post('/validateUser/:token', (req, res, next) => {
+  const id = jwt.verify(req.params.token, process.env.EMAIL_SECRET)
+
+  Users.updateUser(id.user, { $set: { validateEmail: true } }).then(user => {
+    req.flash('success_messages', 'Register Successful')
+    res.redirect('/')
+  }).catch(err => console.log(err))
 })
 
 router.post('/deleteAccount', loggedIn, (req, res, next) => {
@@ -212,27 +195,21 @@ router.post('/deleteAccount', loggedIn, (req, res, next) => {
       if (listings instanceof Error) return next(new DatabaseError('Error getting Listings'))
       const deletePromises = []
 
-      for (let i = 0; i < listings.length; i++) {
-        const listing = listings[i]
+      listings.forEach(listing => {
         deletePromises.push(new Promise((resolve, reject) => {
           Listings.deleteListing(listing._id).then(async (deletedListing) => {
             if (deletedListing instanceof Error) return reject(next(new DatabaseError('Error deleting Listings')))
-            await delImages(listing.images).then((val, err) => {
-              if (err) reject(err)
-              resolve(deletedListing)
-            })
+            resolve(deletedListing)
           })
         }))
-      }
-
-      Promise.all(deletePromises).then((val, err) => {
-        if (err) return next(err)
-        if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
-          return res.status(200).json(user)
-        }
-        req.flash('success_messages', `Your Account ${user.email} was deleted`)
-        return res.redirect('back')
       })
+      const deletedListings = await Promise.allSettled(deletePromises)
+      if (deletedListings instanceof Error) return next(deletedImages)
+      if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
+        return res.status(200).json(user)
+      }
+      req.flash('success_messages', `Your Account ${user.email} was deleted`)
+      return res.redirect('back')
     })
   })
 })
