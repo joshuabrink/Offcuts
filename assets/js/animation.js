@@ -331,11 +331,15 @@ const autoCompleteJS = new autoComplete({
   }
 })
 // account icon initials
-const hi = document.querySelector('#acc-icon')
-const username = document.getElementById('account-name').value
-const surname = document.getElementById('account-surname').value
-const initials = username.charAt(0).concat(surname.charAt(0))
-hi.querySelector('text').textContent = initials
+try {
+  const hi = document.querySelector('#acc-icon')
+  const username = document.getElementById('account-name').value
+  const surname = document.getElementById('account-surname').value
+  const initials = username.charAt(0).concat(surname.charAt(0))
+  hi.querySelector('text').textContent = initials
+} catch (error) {
+
+}
 
 // display promoted
 const asyncReq = async (action, method, body, callback) => {

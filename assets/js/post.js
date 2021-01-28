@@ -3,34 +3,71 @@ const secContainer = document.querySelector('.sec-type')
 const prevImg = document.querySelector('.preview-img')
 const formData = new FormData()
 const form = document.querySelector('#post-form')
+const imagesInput = document.querySelector('#images')
+const materials = ['stainless', 'tool', 'carbon', 'alloy', 'other']
 
-form.addEventListener('submit', e => {
-  e.preventDefault()
-  const formatDate = date => date.toISOString().slice(0, 10)
-  formData.append('title', document.querySelector('#title').value)
-  formData.append('price', document.querySelector('#price').value)
-  formData.append('quantity', document.querySelector('#quantity').value)
-  formData.append('material', document.querySelector('#material').value)
-  formData.append('description', document.querySelector('#description').value)
-  formData.append('location', document.querySelector('#location').value)
-  formData.append('date', formatDate(new Date()))
-  formData.append('type', document.querySelector('#type').value)
+// validation
+const options = {
+  errorClassName: 'error',
+  // set a custom rule
+  rules: {
+    material: function (value) {
+      if (materials.indexOf(value) === -1) {
+        return false
+      }
+      return true
+    }
 
-  const uploadLocation = 'http://localhost:3000/newListing'
+  },
 
-  const ajax = new XMLHttpRequest()
-  ajax.open('POST', uploadLocation, true)
-
-  ajax.onreadystatechange = function (e) {
-    if (ajax.readyState === 4) {
-      if (ajax.status === 200) {
-        window.location.replace(ajax.responseURL)
-      } else {
-        // error!
+  // set a incorrect message text
+  messages: {
+    en: {
+      material: {
+        incorrect: 'A material must be selected'
       }
     }
   }
-  ajax.send(formData)
+}
+
+const validator = new Validator(form, function (err, res) {
+  return res
+}, options)
+
+const date = document.querySelector('#date')
+
+date.value = new Date().toISOString().slice(0, 10)
+
+form.addEventListener('submit', e => {
+  e.preventDefault()
+  if (validator.validate() === true) {
+    formData.append('title', document.querySelector('#title').value)
+    formData.append('price', document.querySelector('#price').value)
+    formData.append('quantity', document.querySelector('#quantity').value)
+    formData.append('material', document.querySelector('#material').value)
+    formData.append('description', document.querySelector('#description').value)
+    formData.append('location', document.querySelector('#location').value)
+    formData.append('date', new Date().toISOString().slice(0, 10))
+    formData.append('type', document.querySelector('#type').value)
+
+    const uploadLocation = 'http://localhost:3000/newListing'
+
+    const ajax = new XMLHttpRequest()
+    ajax.open('POST', uploadLocation, true)
+
+    ajax.onreadystatechange = function (e) {
+      if (ajax.readyState === 4) {
+        if (ajax.status === 200) {
+          window.location.replace(ajax.responseURL)
+        } else {
+          // error!
+        }
+      }
+    }
+    ajax.send(formData)
+  } else {
+
+  }
 })
 
 const typeObj = {
@@ -50,7 +87,8 @@ for (let i = 0; i < baseTypes.length; i++) {
     secContainer.innerHTML = ''
     const newTypes = typeObj[baseType.value]
     prevImg.setAttribute('data', '/images/types/' + baseType.value + '-' + newTypes[0] + '.svg')
-    typeInput.value = baseType.value + '-' + typeInput.value.split('-')[1]
+    // typeInput.value = baseType.value + '-' + typeInput.value.split('-')[1]
+    typeInput.value = baseType.value
 
     for (let j = 0; j < newTypes.length; j++) {
       const newType = newTypes[j]
@@ -140,7 +178,7 @@ const autoCompleteGeo = new autoComplete({
   threshold: 3,
   debounce: 300,
   resultsList: {
-    destination: '.results',
+    destination: '#location',
     container: (source) => {
       source.classList.add('neu-static')
       source.classList.add('bg-color')
@@ -211,16 +249,16 @@ const // where files are dropped + file selector is opened
 const imagePreviewRegion = document.getElementById('image-preview')
 
 // open file selector when clicked on the drop region
-const fakeInput = document.createElement('input')
-fakeInput.type = 'file'
-fakeInput.accept = 'image/*'
-fakeInput.multiple = true
+// const fakeInput = document.createElement('input')
+// fakeInput.type = 'file'
+// fakeInput.accept = 'image/*'
+// fakeInput.multiple = true
 dropRegion.addEventListener('click', function () {
-  fakeInput.click()
+  imagesInput.click()
 })
 
-fakeInput.addEventListener('change', function () {
-  const files = fakeInput.files
+imagesInput.addEventListener('change', function () {
+  const files = imagesInput.files
   handleFiles(files)
 })
 dropRegion.addEventListener('dragenter', preventDefault, false)
@@ -271,7 +309,7 @@ dropRegion.addEventListener('drop', handleDrop, false)
 
 function handleFiles (files) {
   for (let i = 0, len = files.length; i < len; i++) {
-    if (validateImage(files[i])) { previewAnduploadImage(files[i]) }
+    if (validateImage(files[i])) { previewAddToForm(files[i]) }
   }
 }
 
@@ -279,21 +317,21 @@ function validateImage (image) {
   // check the type
   const validTypes = ['image/jpeg', 'image/png', 'image/gif']
   if (validTypes.indexOf(image.type) === -1) {
-    alert('Invalid File Type')
+    // alert('Invalid File Type')
     return false
   }
 
   // check the size
   const maxSizeInBytes = 5e6 // 5MB
   if (image.size > maxSizeInBytes) {
-    alert('File too large')
+    // alert('File too large')
     return false
   }
 
   return true
 }
 
-function previewAnduploadImage (image) {
+function previewAddToForm (image) {
   // container
   const imgView = document.createElement('div')
   imgView.className = 'image-view'
@@ -316,6 +354,7 @@ function previewAnduploadImage (image) {
   reader.readAsDataURL(image)
 
   // add FormData
+  // imagesInput.files.push(image)
 
   formData.append('images', image)
 }
