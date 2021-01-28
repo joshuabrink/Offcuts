@@ -8,6 +8,9 @@ const passport = require('passport')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const fs = require('fs')
+const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+const CryptoJS = require("crypto-js");
 const jsonParser = require('body-parser').json()
 
 // CUSTOM LIBRARIES
@@ -186,22 +189,65 @@ router.post('/register', jsonParser, validateUser, (req, res, next) => {
         } else if (foundUser instanceof Error) {
           return next(new DatabaseError('Error searching user'))
         } else {
-          Users.addUser(newUser).then((addedUser) => {
-            if (addedUser instanceof Error) {
-              return next(new DatabaseError('Error adding user'))
+
+          var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'offcutsgroup@gmail.com',
+              pass: 'Braun19981998'
+            },
+            tls: { rejectUnauthorized: false }
+          });
+
+          jwt.sign({ user: newUser._id, exp: Math.floor(Date.now() / 1000) + (60 * 60) }, process.env.EMAIL_SECRET, function (err, token) {
+          const mailOptions = {
+            from: 'offcutsgroup@gmail.com',
+            to: newUser.email,
+            subject: 'Confirm Email',
+            text: 'Please click the link to confirm email ' + 'http://localhost:3000/validateEmail/' + token
+          };
+          //sent email
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              return next(error);
             } else {
-              if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
-                return res.status(200).json(addedUser)
-              }
-              req.flash('success_messages', 'Register Successful')
-              return res.redirect('back')
+              
+              //let ee = CryptoJS.AES.encrypt('Registration email sent', process.env.SECRET).toString();
+              Users.addUser(newUser).then((addedUser) => {
+
+                if (addedUser instanceof Error) {
+                  return next(new DatabaseError('Error adding user'))
+                } else {
+                  if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
+                    return res.status(200).json(addedUser)
+                  }
+                  req.flash('success_messages', 'Register Successful')
+                  return res.redirect('back')
+                }
+              })
+             
             }
-          })
+          });
+         
+        });
+
+
         }
       })
     })
   })
 })
+
+router.get('/validateEmail/:token', (req, res, next) => {
+  const id = jwt.verify(req.params.token, process.env.EMAIL_SECRET)
+
+  Users.updateUser(id.user, { $set: { validated: 'true' } }).then(user => {
+    req.flash('success_messages', 'Register Successful')
+    res.redirect('/')
+  }).catch(err => console.log(err))
+})
+
+
 
 router.post('/deleteAccount', loggedIn, (req, res, next) => {
   const id = req.session.passport.user
