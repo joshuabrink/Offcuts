@@ -100,6 +100,18 @@ form {
   height: fit-content;
   @include form($text-color);
 
+  div.error {
+    padding: 4px;
+    // background: #f3584c;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    margin-top: -10px;
+  }
+  input.error {
+    background: #f3584c26;
+  }
+
   .radio {
     @include radio;
   }
@@ -109,38 +121,37 @@ form {
       font-weight: 800;
     }
     &_list {
-  
-    padding: 0;
-    margin: 0;
-    border-radius: 20px;
-    &:focus {
-      outline: none;
-    }
-    & > li:first-child {
+      padding: 0;
+      margin: 0;
       border-radius: 20px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-    & > li:last-child {
-      border-radius: 20px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
-    & > li:only-child {
-      border-radius: 20px;
-    }
-    & > li {
-      // border-radius: 20px;
-      cursor: pointer;
-      padding: 10px;
-      & > span {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        max-width: 70%;
+      &:focus {
+        outline: none;
+      }
+      & > li:first-child {
+        border-radius: 20px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      & > li:last-child {
+        border-radius: 20px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+      & > li:only-child {
+        border-radius: 20px;
+      }
+      & > li {
+        // border-radius: 20px;
+        cursor: pointer;
+        padding: 10px;
+        & > span {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          max-width: 70%;
+        }
       }
     }
-  }
   }
 
   // select,
@@ -212,7 +223,6 @@ nav {
       flex-direction: row-reverse;
     }
     &-filter {
-     
       @include prefix("transition", all 0.2s, (o, webkit));
       span {
         margin-left: 10px;

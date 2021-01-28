@@ -1,3 +1,6 @@
+.post #images {
+  display: none;
+}
 .post input, .post select, .post textarea {
   margin-bottom: 20px;
 }

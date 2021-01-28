@@ -2,6 +2,10 @@
 
 .post {
 
+  #images {
+    display: none;
+  }
+
   input,select,textarea {
     margin-bottom: 20px;
     &[type="submit"] {
@@ -13,8 +17,6 @@
     width: 100%;
   }
 }
-
-
 
 .type {
 
