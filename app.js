@@ -39,7 +39,7 @@
   })
 
   // app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }))
+  app.use(bodyParser.urlencoded({ extended: true, limit: '25mb' }))
 
   // Passport Config
   require('./lib/passport')(passport)
