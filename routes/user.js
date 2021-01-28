@@ -186,7 +186,6 @@ router.post('/register', jsonParser, validateUser, (req, res, next) => {
                   return next(error)
                 } else {
                   // let ee = CryptoJS.AES.encrypt('Registration email sent', process.env.SECRET).toString();
-
                 }
               })
             })
@@ -196,7 +195,7 @@ router.post('/register', jsonParser, validateUser, (req, res, next) => {
               if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
                 return res.status(200).json(addedUser)
               }
-              req.flash('success_messages', 'Register Successful')
+              req.flash('success_messages', 'Please verify your email')
               return res.redirect('back')
             }
           })
