@@ -4,23 +4,25 @@
     <div class="col post w-33">
       <h1 class="title">Post</h1>
       <form action="/newListing" method="post" id="post-form">
-        <label for="images">Images</label>
-        <!-- <input type="file" name="images" id="images" class="neu"> -->
-
+        <input type="hidden" name="date" id="date">
+        <label for="drop-region">Images</label>
         <div id="drop-region" class="neu bg-color">
             <div class="drop-message">
                 Drag & Drop images or click to upload
             </div>
             <div id="image-preview"></div>
         </div>
+        <input type="file" multiple name="images" id="images" data-rule="required|maxfilesize-5-MB|fileextension-jpg-png-gif">
+
         <label for="title">Title</label>
-        <input type="text" name="title" id="title" class="neu">
+        <input type="text" name="title" id="title" class="neu" data-rule="required|length-5-20">
         <label for="price">Price</label>
-        <input type="text" name="price" id="price" class="neu">
+        <input type="text" name="price" id="price" class="neu" data-rule="required|float">
         <label for="quantity">Quantity</label>
-        <input type="number" name="quantity" id="quantity" class="neu">
+        <input type="number" name="quantity" id="quantity" class="neu" data-rule="notzero|integer">
         <label for="material">Material</label>
-        <select name="material" id="material" class="neu">
+        <select name="material" id="material" class="neu" data-rule="required|material">
+          <option value="" selected></option>
           <option value="stainless">Stainless</option>
           <option value="alloy">Alloy</option>
           <option value="carbon">Carbon</option>
@@ -30,7 +32,7 @@
 
         <label for="type">Type</label>
         <div class="row between type neu-static">
-          <input type="hidden" name="type" id="type" value = 'other-other'>
+          <input type="hidden" name="type" id="type" value='other-other' data-rule="required">
           <div class="col">
             <!-- <img class="preview-img" src="/images/types/bar-square.svg" alt="Preview of following Checkbox's"> -->
             <object class="preview-img" data="/images/types/bar-square.svg" width="150" height="150"></object>
@@ -87,7 +89,7 @@
           </div>
         </div>
         <label for="description">Description</label>
-        <textarea class="neu" name="description" id="description" cols="30" rows="6"></textarea>
+        <textarea class="neu" name="description" id="description" cols="30" rows="6" data-rule="required|length-5-150"></textarea>
       
           <label for="autoCompleteGeo">Location</label>
           <input id="autoCompleteGeo" class="autoCompleteGeo neu" type="search" dir="ltr" 
@@ -102,26 +104,27 @@
            aria-expanded="false" 
            aria-controls="autoComplete_list" 
            aria-autocomplete="both" placeholder="Search">
-          <input type="hidden" name="location" id="location" value="24,24">
-          <div class="results">
-         
-          </div>
 
-          
-<form action="https://sandbox.payfast.co.za/eng/process" method="post">
-  <input type="hidden" name="merchant_id" value="10000100">
-  <input type="hidden" name="merchant_key" value="46f0cd694581a">
-  <input type="hidden" name="amount" value="100.00">
-  <input type="hidden" name="item_name" value="Test Product">
-  <input type="submit" value="Boost" class="neu">
-</form> 
+          <input type="hidden" name="location" id="location" value="24,24">
+
+          <div class="results"></div>
+
+          <button class="neu">
+            Boost
+          </button>
  
 
         <input type="submit" value="Post" class="neu">
 
-   
-
       </form>
+
+      <!-- <form action="https://sandbox.payfast.co.za/eng/process" method="post">
+        <input type="hidden" name="merchant_id" value="10000100">
+        <input type="hidden" name="merchant_key" value="46f0cd694581a">
+        <input type="hidden" name="amount" value="100.00">
+        <input type="hidden" name="item_name" value="Test Product">
+        <input type="submit" value="Boost" class="neu">
+      </form>  -->
     </div>
 
   </section>
