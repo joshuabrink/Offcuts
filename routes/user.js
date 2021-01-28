@@ -7,14 +7,10 @@ const router = express.Router()
 const passport = require('passport')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
-<<<<<<< HEAD
-// const fs = require('fs')
-=======
-const fs = require('fs')
-const nodemailer = require('nodemailer');
-const jwt = require('jsonwebtoken');
-const CryptoJS = require("crypto-js");
->>>>>>> e97c319aefd75d97a1579dd9f6e124745c458136
+
+const nodemailer = require('nodemailer')
+const jwt = require('jsonwebtoken')
+
 const jsonParser = require('body-parser').json()
 
 // CUSTOM LIBRARIES
@@ -167,84 +163,58 @@ router.post('/register', jsonParser, validateUser, (req, res, next) => {
         } else if (foundUser instanceof Error) {
           return next(new DatabaseError('Error searching user'))
         } else {
-
-          var transporter = nodemailer.createTransport({
+          const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
               user: 'offcutsgroup@gmail.com',
               pass: 'Braun19981998'
             },
             tls: { rejectUnauthorized: false }
-          });
+          })
+          Users.addUser(newUser).then((addedUser) => {
+            jwt.sign({ user: newUser._id, exp: Math.floor(Date.now() / 1000) + (60 * 60) }, process.env.EMAIL_SECRET, (err, token) => {
+              if (err) return next(err)
+              const mailOptions = {
+                from: 'offcutsgroup@gmail.com',
+                to: newUser.email,
+                subject: 'Confirm Email',
+                text: 'Please click the link to confirm email ' + 'http://localhost:3000/validateEmail/' + token
+              }
+              // sent email
+              transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                  return next(error)
+                } else {
+                  // let ee = CryptoJS.AES.encrypt('Registration email sent', process.env.SECRET).toString();
 
-          jwt.sign({ user: newUser._id, exp: Math.floor(Date.now() / 1000) + (60 * 60) }, process.env.EMAIL_SECRET, function (err, token) {
-          const mailOptions = {
-            from: 'offcutsgroup@gmail.com',
-            to: newUser.email,
-            subject: 'Confirm Email',
-            text: 'Please click the link to confirm email ' + 'http://localhost:3000/validateEmail/' + token
-          };
-          //sent email
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              return next(error);
+                }
+              })
+            })
+            if (addedUser instanceof Error) {
+              return next(new DatabaseError('Error adding user'))
             } else {
-<<<<<<< HEAD
               if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
                 return res.status(200).json(addedUser)
               }
-              req.flash('success_messages', 'Please validate your email')
+              req.flash('success_messages', 'Register Successful')
               return res.redirect('back')
-=======
-              
-              //let ee = CryptoJS.AES.encrypt('Registration email sent', process.env.SECRET).toString();
-              Users.addUser(newUser).then((addedUser) => {
-
-                if (addedUser instanceof Error) {
-                  return next(new DatabaseError('Error adding user'))
-                } else {
-                  if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
-                    return res.status(200).json(addedUser)
-                  }
-                  req.flash('success_messages', 'Register Successful')
-                  return res.redirect('back')
-                }
-              })
-             
->>>>>>> e97c319aefd75d97a1579dd9f6e124745c458136
             }
-          });
-         
-        });
-
-
+          })
         }
       })
     })
   })
 })
 
-<<<<<<< HEAD
-router.post('/validateUser/:token', (req, res, next) => {
-  const id = jwt.verify(req.params.token, process.env.EMAIL_SECRET)
-
-  Users.updateUser(id.user, { $set: { validateEmail: true } }).then(user => {
-=======
 router.get('/validateEmail/:token', (req, res, next) => {
   const id = jwt.verify(req.params.token, process.env.EMAIL_SECRET)
 
   Users.updateUser(id.user, { $set: { validated: 'true' } }).then(user => {
->>>>>>> e97c319aefd75d97a1579dd9f6e124745c458136
     req.flash('success_messages', 'Register Successful')
     res.redirect('/')
   }).catch(err => console.log(err))
 })
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> e97c319aefd75d97a1579dd9f6e124745c458136
 router.post('/deleteAccount', loggedIn, (req, res, next) => {
   const id = req.session.passport.user
   Users.deleteUser(id).then((user) => {
