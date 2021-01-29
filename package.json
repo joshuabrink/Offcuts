@@ -7,7 +7,8 @@
   "scripts": {
     "start": "nodemon app.js | pino-pretty",
     "sass": "sass --watch ./assets/scss/:./assets/css/",
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "ci": "start-server-and-test http://localhost:3000"
   },
   "repository": {
     "type": "git",
@@ -56,6 +57,7 @@
     "mocha": "^8.2.1",
     "pino": "^6.11.0",
     "pino-pretty": "^4.3.0",
+    "start-server-and-test": "^1.11.7",
     "supertest": "^6.1.3"
   },
   "directories": {

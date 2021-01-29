@@ -3,7 +3,5 @@ node_js:
  - "14"
 install:
  - npm install 
-before_script:
- - npm start &
 script:
  - npm test
