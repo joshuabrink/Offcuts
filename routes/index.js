@@ -25,6 +25,11 @@ router.get('/about', (req, res) => {
   // res.send('working')
   res.render('about', { user: req.user })
 })
+//click event for search button
+router.post('/search', (req, res, next) => {
+  //do stuff
+
+})
 
 router.get('/geojson/countries', (req, res) => {
   // res.send('working')

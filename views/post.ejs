@@ -89,7 +89,26 @@
           </div>
         </div>
         <label for="description">Description</label>
-        <textarea class="neu" name="description" id="description" cols="30" rows="6" data-rule="required|length-5-150"></textarea>
+        <textarea class="neu" name="description" id="description" cols="30" rows="6" data-rule="required|length-5-150" style="resize: none;">
+        </textarea>
+
+        <input type="text" list="provinces-post" class="flyout-content neu-static"/>
+        <datalist id="provinces-post">
+           <option class="flex center">Gauteng</option>
+           <option class="flex center">Western Cape</option>
+           <option class="flex center">Northern Cape</option>
+           <option class="flex center">Eastern Cape</option>
+           <option class="flex center">North West</option>
+           <option class="flex center">Mpumalanga</option>
+           <option class="flex center">Free State</option>
+           <option class="flex center">KwaZulu-Natal.</option>
+           <option class="flex center">Limpopo</option>
+        </datalist>
+
+        <input type="text" list="suburb-post" class="flyout-content neu-static"/>
+        <datalist id="suburb-post">
+           <option class="flex center">Depends on the province</option>
+        </datalist>
       
           <label for="autoCompleteGeo">Location</label>
           <input id="autoCompleteGeo" class="autoCompleteGeo neu" type="search" dir="ltr" 

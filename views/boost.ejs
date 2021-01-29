@@ -1,7 +1,7 @@
 <%- include ('./partials/header.ejs') %>
 
 <section>
-    <h1 class="title">Boost your Listings</h1>
+    <h1 class="title">Your Listings</h1>
     <div class="table-users neu">
       
       
@@ -12,6 +12,7 @@
             <th>Description</th>
             <th>Price</th>
             <th>Boost</th>
+            <th>Delete Listing</th>
          </tr>
          <% if (typeof listings !== 'undefined') { %>
 
@@ -21,7 +22,8 @@
             <td style="width: 220px;"><%= listings[i].title %></td>
             <td style="width: 300px;"><%= listings[i].description %></td>
             <td style="width: 120px;">R <%= listings[i].price %></td>
-            <td style="width: 100px;"></td>
+            <td style="width: 100px;"><input type="checkbox"></td>
+            <td style="width: 100px;"><input type="checkbox"></td>
          </tr>
          <% } %>
    
@@ -31,6 +33,10 @@
              <h2>No Listings Found</h2>
            </div>
          <% } %>
+         <tr>
+            <!--Add row below listings with the option to boost-->
+            <input type="submit">
+         </tr>
   
       </table>
    </div>
