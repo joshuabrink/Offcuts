@@ -63,11 +63,18 @@
 <body>
     <nav class="flex bg-color">
 
-        <a href="/" id="logo">
-            <%- include ('../svgs/logo.ejs') %>
-        </a>
+        <div class="w-20 row around">
 
-        <form class="search" action="/search" method="post">
+            <a href="/" id="logo">
+                <%- include ('../svgs/logo.ejs') %>
+            </a>
+            <a href="/listings" class="icon">
+                <%- include ('../svgs/browse.ejs') %>
+            </a>
+        </div>
+
+           
+        <form class="search w-60" action="/search" method="post">
             <div class="row">
                 <%- include ('./dropdown.ejs') %>
                 <input id="autoComplete" type="search" name="search" class="search-input neu" dir="ltr" 
@@ -92,8 +99,8 @@
 
         </form>
 
-        <div class="nav-list row around">
-            <a class="dark-mode-button" href="#">dark</a>
+        <div class="w-20 row around">
+           
             <%- include ('../svgs/account.ejs') %>
             <a href="/post">Post</a>
         </div>
