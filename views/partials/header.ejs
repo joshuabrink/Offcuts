@@ -63,15 +63,15 @@
 <body>
     <nav class="flex bg-color">
 
-        <div class="w-20 row around">
+        <!-- <div class="w-20 row around"> -->
 
-            <a href="/" id="logo">
+            <a href="/" id="logo" class="w-150px">
                 <%- include ('../svgs/logo.ejs') %>
             </a>
-            <a href="/listings" class="icon">
+            <a href="/listings" class="w-150px row">
                 <%- include ('../svgs/browse.ejs') %>
             </a>
-        </div>
+        <!-- </div> -->
 
            
         <form class="search w-60" action="/search" method="post">
@@ -100,11 +100,11 @@
 
         </form>
 
-        <div class="w-20 row around">
+        <!-- <div class="w-20 row around"> -->
            
             <%- include ('../svgs/account.ejs') %>
-            <a href="/post">Post</a>
-        </div>
+            <a class="w-150px txt-center" href="/post">Post</a>
+        <!-- </div> -->
     </nav>
 
     <% if(typeof success_messages !='undefined' ) { %>
