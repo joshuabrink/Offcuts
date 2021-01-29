@@ -4,6 +4,6 @@ node_js:
 install:
  - npm install 
 before_script:
- - npm start 
+ - npm start &
 script:
  - npm test
