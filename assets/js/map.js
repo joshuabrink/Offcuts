@@ -28,6 +28,15 @@
 const mapEl = document.querySelector('#map')
 
 const marker = new L.marker([mapEl.dataset.lat, mapEl.dataset.long])
+const style = {
+  weight: 2,
+  opacity: 1,
+  color: 'black',
+  dashArray: '3',
+  fillOpacity: 0.7
+}
+// const pt = turf.point([-77, 44])
+const points = turf.helper.point([parseFloat(mapEl.dataset.long), parseFloat(mapEl.dataset.lat)])
 
 function sendData () {
   return fetch('/geojson/countries', {
@@ -40,16 +49,6 @@ function sendData () {
     .then(response => response.json())
     .then(data => { return data })
 }
-
-const style = {
-  weight: 2,
-  opacity: 1,
-  color: 'black',
-  dashArray: '3',
-  fillOpacity: 0.7
-}
-// const pt = turf.point([-77, 44])
-const points = turf.helper.point([parseFloat(mapEl.dataset.long), parseFloat(mapEl.dataset.lat)])
 
 function getData () {
   return fetch('/geojson/countries')

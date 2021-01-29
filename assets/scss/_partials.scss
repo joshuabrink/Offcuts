@@ -65,10 +65,14 @@ svg {
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
-  margin-top: -10px;
+  width: 26px;
+  height: 26px;
+  // margin-top: -10px;
   cursor: pointer;
+}
+
+.txt-center {
+  text-align: center;
 }
 
 .bold {

@@ -113,23 +113,13 @@ for (let i = 0; i < baseTypes.length; i++) {
   })
 }
 
-// const input = document.querySelector('.autocomplete')
-const provider = new GeoSearch.OpenStreetMapProvider()
+const provider = new GeoSearch.OpenStreetMapProvider({
+  params: {
+    // https://nominatim.org/release-docs/develop/api/Search/#parameters
+    countrycodes: 'za', limit: 5, polygon_svg: 1, format: 'json'
+  }
+})
 const resultList = document.querySelector('.results')
-
-// input.addEventListener('keyup', (event) => {
-//   event.preventDefault()
-
-//   setTimeout(async () => {
-//     const results = await provider.search({ query: input.value, limit: 5 })
-//     resultList.innerHTML = ''
-//     for (let i = 0; i < results.length; i++) {
-//       const res = results[i]
-
-//       resultList.innerHTML += `<li>${res.label}</li>`
-//     }
-//   }, 300)
-// })
 
 const autoCompleteGeo = new autoComplete({
   name: 'locations',
@@ -144,7 +134,7 @@ const autoCompleteGeo = new autoComplete({
       // Fetch External Data Source
       const query = document.querySelector('#autoCompleteGeo').value
       // Fetch External Data Source
-      const data = await provider.search({ query: query, limit: 5 })
+      const data = await provider.search({ query: query })
       // Saves the fetched data into local storage
       localStorage.setItem('acData', JSON.stringify(data))
       // Retrieve the cached data from local storage
