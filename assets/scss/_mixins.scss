@@ -329,6 +329,9 @@ $color: #e8eff3;
     &:hover > .flyout-content {
       left: -55px;
     }
+    &:hover > .flyout-content.acc {
+      left: 7px;
+    }
     &-alt:hover > .flyout-content {
       top: 0;
       left: 100%;
