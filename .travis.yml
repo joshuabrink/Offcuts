@@ -1,8 +1,6 @@
 language: node_js
 node_js:
  - "14"
-env:
-  - "URL2=mongodb+srv://josh:20SuperDuper20%21@cluster0.eqfmn.mongodb.net/test?retryWrites=true&w=majority"
 install:
  - npm install 
 script:
