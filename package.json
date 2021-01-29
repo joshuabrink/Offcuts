@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon",
     "sass": "sass --watch ./assets/scss/:./assets/css/",
-    "test": "mocha --reporter --timeout 5000 spec",
+    "test": "mocha --reporter spec --timeout 5000 ",
     "travis":"start-server-and-test start http://localhost:3000 test"
   },
   "repository": {
