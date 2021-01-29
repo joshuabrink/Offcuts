@@ -5,7 +5,7 @@
   "main": "app.js",
   "module": "main.js",
   "scripts": {
-    "start": "nodemon \"|pino-pretty\"",
+    "start": "nodemon",
     "sass": "sass --watch ./assets/scss/:./assets/css/",
     "test": "mocha --reporter spec",
     "travis":"start-server-and-test start http://localhost:3000 test"
