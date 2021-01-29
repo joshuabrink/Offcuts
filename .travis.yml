@@ -5,5 +5,3 @@ script:
   - npm install
   - node app.js & 
   - npm test
-env:
-  - URL2=mongodb+srv://josh:20SuperDuper20!@cluster0.eqfmn.mongodb.net/test?retryWrites=true&w=majority DB=test
