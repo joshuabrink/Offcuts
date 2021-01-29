@@ -5,11 +5,10 @@
   "main": "app.js",
   "module": "main.js",
   "scripts": {
-    "start": "nodemon app.js \"|pino-pretty\"",
+    "start": "nodemon \"|pino-pretty\"",
     "sass": "sass --watch ./assets/scss/:./assets/css/",
     "test": "mocha --reporter spec",
-    "ci": "start-server-and-test http://localhost:3000",
-    "travis-test": "node app.js start http://127.0.0.1:3000 test"
+    "travis":"start-server-and-test start http://localhost:3000 test"
   },
   "repository": {
     "type": "git",
