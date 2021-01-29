@@ -222,7 +222,7 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
         sharp(value)
           .resize(200, 200)
           .jpeg({ quality: 50 })
-          .toFile(req.files[0].destination + '/thumb-' + req.files[i].originalname).catch(err => {
+          .toFile(req.files[0].destination + '/thumb-' + req.files[0].originalname).catch(err => {
             if (err) return next(err)
           })
       } else {
