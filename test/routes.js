@@ -9,6 +9,7 @@ server.set('env', 'test')
 
 const EMAIL = '     johnsmith@gmail.com    '
 const NAME = 'john  '
+const SURNAME = 'smith'
 const NUMBER = '0827976439  '
 let PASSWORD = '!123Password123*'
 const UPPASSWORD = '!123Password123*!'
@@ -52,6 +53,7 @@ describe('Server Request', function () {
       server.post('/register')
         .send({
           name: NAME,
+          surname: SURNAME,
           email: EMAIL,
           number: NUMBER,
           password: PASSWORD,
