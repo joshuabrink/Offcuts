@@ -113,12 +113,20 @@ for (let i = 0; i < baseTypes.length; i++) {
   })
 }
 
-const provider = new GeoSearch.OpenStreetMapProvider({
+// const provider = new GeoSearch.OpenStreetMapProvider({
+//   params: {
+//     // https://nominatim.org/release-docs/develop/api/Search/#parameters
+//     countrycodes: 'za', limit: 5, polygon_svg: 1, format: 'json'
+//   }
+// })
+const provider = new HereProvider({
   params: {
-    // https://nominatim.org/release-docs/develop/api/Search/#parameters
-    countrycodes: 'za', limit: 5, polygon_svg: 1, format: 'json'
+    apiKey: '7ccPTfO75yxMYESAcpye',
+    limit: 5
+
   }
 })
+
 const resultList = document.querySelector('.results')
 
 const autoCompleteGeo = new autoComplete({
