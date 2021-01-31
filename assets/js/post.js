@@ -5,6 +5,29 @@ const formData = new FormData()
 const form = document.querySelector('#post-form')
 const imagesInput = document.querySelector('#images')
 const materials = ['stainless', 'tool', 'carbon', 'alloy', 'other']
+// var citiesJson  = require('./za.json');
+
+// var select = document.getElementById("suburb-post");
+
+// console.log(citiesJson[1].city)
+
+// for(var i = 0; i < citiesJson.length; i++) {
+//   var opt = citiesJson[i].city;
+//   select.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+// }​
+
+var select = document.getElementById("selectNumber"); 
+var options = ["1", "2", "3", "4", "5"]; 
+
+for(var i = 0; i < options.length; i++) {
+    var opt = options[i];
+
+    var el = document.createElement("option");
+    el.text = opt;
+    el.value = opt;
+
+    select.add(el);
+}​
 
 // validation
 const options = {
