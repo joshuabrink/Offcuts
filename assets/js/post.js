@@ -26,32 +26,41 @@ function getData () {
   const citiesData = await getData()
 
   const provinceSelect = document.querySelector('#province-select')
-  let citiesSelect = '<select name="cities-select" id="cities-select">'
+  // let citiesSelect = '<select name="cities-select" id="cities-select">'
+  const citiesSelect = document.createElement('select')
+  citiesSelect.id = 'cities-select'
+  citiesSelect.name = 'cities-select'
 
   provinceSelect.addEventListener('change', e => {
+    const currentCitiesChild = document.querySelector('#cities-select')
+    if (currentCitiesChild) {
+      citiesSelect.innerHTML = ''
+      currentCitiesChild.remove()
+    }
     citiesData.forEach(el => {
       if (el.admin_name === e.target.value) {
-        citiesSelect += '<option value=' + el.city + '>' + el.city + '</option>'
+        citiesSelect.innerHTML += '<option value="' + el.city + '">' + el.city + '</option>'
       // provinceSelect.insertAdjacentHTML('afterend',)
       }
     })
-    citiesSelect += '</select>'
-    provinceSelect.insertAdjacentHTML('afterend', citiesSelect)
+    // citiesSelect += '</select>'
+    provinceSelect.parentNode.insertBefore(citiesSelect, provinceSelect.nextSibling)
+    // provinceSelect.insertAdjacentHTML('afterend', citiesSelect)
   })
 })()
 
-const select = document.getElementById('selectNumber')
-const options2 = ['1', '2', '3', '4', '5']
+// const select = document.getElementById('selectNumber')
+// const options2 = ['1', '2', '3', '4', '5']
 
-for (let i = 0; i < options2.length; i++) {
-  const opt = options2[i]
+// for (let i = 0; i < options2.length; i++) {
+//   const opt = options2[i]
 
-  const el = document.createElement('option')
-  el.text = opt
-  el.value = opt
+//   const el = document.createElement('option')
+//   el.text = opt
+//   el.value = opt
 
-  select.add(el)
-}
+//   select.add(el)
+// }
 
 // validation
 const options = {
