@@ -7,6 +7,12 @@ const imagesInput = document.querySelector('#images')
 const materials = ['stainless', 'tool', 'carbon', 'alloy', 'other']
 // var citiesJson  = require('./za.json');
 
+function getData () {
+  return fetch('/geojson/cities')
+    .then(response => response.json())
+    .then(data => { return data })
+}
+
 // var select = document.getElementById("suburb-post");
 
 // console.log(citiesJson[1].city)
@@ -14,20 +20,38 @@ const materials = ['stainless', 'tool', 'carbon', 'alloy', 'other']
 // for(var i = 0; i < citiesJson.length; i++) {
 //   var opt = citiesJson[i].city;
 //   select.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
-// }​
+// }
 
-var select = document.getElementById("selectNumber"); 
-var options = ["1", "2", "3", "4", "5"]; 
+(async () => {
+  const citiesData = await getData()
 
-for(var i = 0; i < options.length; i++) {
-    var opt = options[i];
+  const provinceSelect = document.querySelector('#province-select')
+  let citiesSelect = '<select name="cities-select" id="cities-select">'
 
-    var el = document.createElement("option");
-    el.text = opt;
-    el.value = opt;
+  provinceSelect.addEventListener('change', e => {
+    citiesData.forEach(el => {
+      if (el.admin_name === e.target.value) {
+        citiesSelect += '<option value=' + el.city + '>' + el.city + '</option>'
+      // provinceSelect.insertAdjacentHTML('afterend',)
+      }
+    })
+    citiesSelect += '</select>'
+    provinceSelect.insertAdjacentHTML('afterend', citiesSelect)
+  })
+})()
 
-    select.add(el);
-}​
+const select = document.getElementById('selectNumber')
+const options2 = ['1', '2', '3', '4', '5']
+
+for (let i = 0; i < options2.length; i++) {
+  const opt = options2[i]
+
+  const el = document.createElement('option')
+  el.text = opt
+  el.value = opt
+
+  select.add(el)
+}
 
 // validation
 const options = {
@@ -142,111 +166,124 @@ for (let i = 0; i < baseTypes.length; i++) {
 //     countrycodes: 'za', limit: 5, polygon_svg: 1, format: 'json'
 //   }
 // })
-const provider = new GeoSearch.HereProvider({
-  params: {
-    apiKey: '7ccPTfO75yxMYESAcpye',
-    limit: 5
 
-  }
-})
+// function getData () {
+//   return fetch('https://s.fleet.ls.hereapi.com/1/static.json?region=ZAF&content=TC_VEH_TYPES&apiKey=FrD2J3pgZLqZmUnKW4fFopO6s0FuXBftiDabM_p4qto')
+//     .then(response => response.json())
+//     .then(data => { return data })
+// }
+
+// const params = {
+//   apiKey: 'FrD2J3pgZLqZmUnKW4fFopO6s0FuXBftiDabM_p4qto',
+//   limit: 100,
+//   region: 'ZAF'
+//   // in: 'countryCode:ZAF'
+
+// }
+// const provider = new GeoSearch.HereProvider({
+//   params: params,
+//   searchUrl: 'https://s.fleet.ls.hereapi.com/static.json',
+//   reverseUrl: 'https://fleet.ls.hereapi.com/static.json'
+// })
 
 const resultList = document.querySelector('.results')
 
-const autoCompleteGeo = new autoComplete({
-  name: 'locations',
-  selector: '#autoCompleteGeo',
-  observer: false,
-  data: {
-    src: async () => {
-      // Loading placeholder text
-      document
-        .querySelector('#autoCompleteGeo')
-        .setAttribute('placeholder', 'Loading...')
-      // Fetch External Data Source
-      const query = document.querySelector('#autoCompleteGeo').value
-      // Fetch External Data Source
-      const data = await provider.search({ query: query })
-      // Saves the fetched data into local storage
-      localStorage.setItem('acData', JSON.stringify(data))
-      // Retrieve the cached data from local storage
-      const localData = JSON.parse(localStorage.getItem('acData'))
-      // Post loading placeholder text
-      document
-        .querySelector('#autoCompleteGeo')
-        .setAttribute('placeholder', autoCompleteJS.placeHolder)
-      // Returns Fetched data
-      return localData
-    },
-    key: ['label'],
-    results: (list) => {
-      // Filter duplicates
-      const filteredResults = Array.from(
-        new Set(list.map((value) => value.match))
-      ).map((val2) => {
-        return list.find((value) => value.match === val2)
-      })
+// const autoCompleteGeo = new autoComplete({
+//   name: 'locations',
+//   selector: '#autoCompleteGeo',
+//   observer: false,
+//   data: {
+//     src: async () => {
+//       // Loading placeholder text
+//       document
+//         .querySelector('#autoCompleteGeo')
+//         .setAttribute('placeholder', 'Loading...')
+//       // Fetch External Data Source
+//       const query = document.querySelector('#autoCompleteGeo').value
+//       // Fetch External Data Source
+//       // const data = await provider.search({ content: 'TC_VEH_TYPES' })
+//       const data = await getData()
+//       // Saves the fetched data into local storage
+//       localStorage.setItem('acData', JSON.stringify(data))
+//       // Retrieve the cached data from local storage
+//       const localData = JSON.parse(localStorage.getItem('acData'))
+//       // Post loading placeholder text
+//       document
+//         .querySelector('#autoCompleteGeo')
+//         .setAttribute('placeholder', autoCompleteJS.placeHolder)
+//       // Returns Fetched data
+//       return localData
+//     },
+//     key: ['label'],
+//     results: (list) => {
+//       // Filter duplicates
+//       const filteredResults = Array.from(
+//         new Set(list.map((value) => value.match))
+//       ).map((val2) => {
+//         return list.find((value) => value.match === val2)
+//       })
 
-      return filteredResults
-    }
-  },
-  trigger: {
-    event: ['input', 'focus']
-  },
-  placeHolder: 'Search',
-  searchEngine: 'strict',
-  highlight: true,
-  maxResults: 5,
-  threshold: 3,
-  debounce: 300,
-  resultsList: {
-    destination: '#location',
-    container: (source) => {
-      source.classList.add('neu-static')
-      source.classList.add('bg-color')
-    }
-  },
-  resultItem: {
-    content: (data, element) => {
-      // Prepare Value's Key
-      const key = Object.keys(data.value).find(
-        (key) => data.value[key] === element.innerText
-      )
-      element.classList.add('row')
-      element.classList.add('between')
-      element.classList.add('neu')
+//       return filteredResults
+//     }
+//   },
+//   trigger: {
+//     event: ['input', 'focus']
+//   },
+//   placeHolder: 'Search',
+//   searchEngine: 'strict',
+//   highlight: true,
+//   maxResults: 5,
+//   threshold: 3,
+//   debounce: 300,
+//   resultsList: {
+//     destination: '#location',
+//     container: (source) => {
+//       source.classList.add('neu-static')
+//       source.classList.add('bg-color')
+//     }
+//   },
+//   resultItem: {
+//     content: (data, element) => {
+//       // Prepare Value's Key
+//       const key = Object.keys(data.value).find(
+//         (key) => data.value[key] === element.innerText
+//       )
+//       element.classList.add('row')
+//       element.classList.add('between')
+//       element.classList.add('neu')
 
-      // Modify Results Item
-      // element.style = 'display: flex; justify-content: space-between;'
-      element.innerHTML = `<span>
-        ${element.innerHTML}</span>
-        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase;">
-      ${key}</span>`
-    }
-  },
-  noResults: (dataFeedback, generateList) => {
-    // Generate autoComplete List
-    generateList(autoCompleteJS, dataFeedback, dataFeedback.results)
-    // No Results List Item
-    const result = document.createElement('li')
-    result.setAttribute('class', 'no_result')
-    result.setAttribute('tabindex', '1')
-    result.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${dataFeedback.query}"</span>`
-    document
-      .querySelector(`#${autoCompleteJS.resultsList.idName}`)
-      .appendChild(result)
-  },
-  onSelection: (feedback) => {
-    document.querySelector('#autoCompleteGeo').blur()
-    // Prepare User's Selected Value
-    const selection = feedback.selection.value[feedback.selection.key]
-    // Render selected choice to selection div
-    // document.querySelector('.selection').innerHTML = selection
-    // Replace Input value with the selected value
-    document.querySelector('#autoCompleteGeo').value = selection
-    // Console log autoComplete data feedback
-    console.log(feedback)
-  }
-})
+//       // Modify Results Item
+//       // element.style = 'display: flex; justify-content: space-between;'
+//       element.innerHTML = `<span>
+//         ${element.innerHTML}</span>
+//         <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase;">
+//       ${key}</span>`
+//     }
+//   },
+//   noResults: (dataFeedback, generateList) => {
+//     // Generate autoComplete List
+//     generateList(autoCompleteJS, dataFeedback, dataFeedback.results)
+//     // No Results List Item
+//     const result = document.createElement('li')
+//     result.setAttribute('class', 'no_result')
+//     result.setAttribute('tabindex', '1')
+//     result.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${dataFeedback.query}"</span>`
+//     document
+//       .querySelector(`#${autoCompleteJS.resultsList.idName}`)
+//       .appendChild(result)
+//   },
+//   onSelection: (feedback) => {
+//     document.querySelector('#autoCompleteGeo').blur()
+//     // Prepare User's Selected Value
+//     const selection = feedback.selection.value[feedback.selection.key]
+//     // Render selected choice to selection div
+//     // document.querySelector('.selection').innerHTML = selection
+//     // Replace Input value with the selected value
+//     document.querySelector('#autoCompleteGeo').value = selection
+//     // Console log autoComplete data feedback
+//     console.log(feedback)
+//   }
+// })
 
 function preventDefault (e) {
   e.preventDefault()

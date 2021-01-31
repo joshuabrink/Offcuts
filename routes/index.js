@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { Listings } = require('../lib/mongoUtil')
-const { District, Local, Countries } = require('../lib/geo')
+const { District, Local, Countries, Cities } = require('../lib/geo')
 const turf = require('@turf/helpers')
 const jsonParser = require('body-parser').json()
 
@@ -25,16 +25,16 @@ router.get('/about', (req, res) => {
   // res.send('working')
   res.render('about', { user: req.user })
 })
-//click event for search button
+// click event for search button
 router.post('/search', (req, res, next) => {
-  //do stuff
+  // do stuff
 
 })
 
-router.get('/geojson/countries', (req, res) => {
+router.get('/geojson/cities', (req, res) => {
   // res.send('working')
 
-  const data = Local()
+  const data = Cities()
 
   res.send(data)
 })
