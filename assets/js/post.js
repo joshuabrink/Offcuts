@@ -119,7 +119,7 @@ for (let i = 0; i < baseTypes.length; i++) {
 //     countrycodes: 'za', limit: 5, polygon_svg: 1, format: 'json'
 //   }
 // })
-const provider = new HereProvider({
+const provider = new GeoSearch.HereProvider({
   params: {
     apiKey: '7ccPTfO75yxMYESAcpye',
     limit: 5
