@@ -87,17 +87,17 @@ const provinceSelect = document.querySelector('#province-select')
 
 const cityChild = {
   childName: 'city',
-  field: { city: 'municipality' },
+  field: 'city',
   getData: getCities
 }
 const municipalityChild = {
   childName: 'municipality',
-  field: { municipality: 'district' },
+  field: 'municipality',
   getData: getMunics,
   childRecursive: cityChild
 }
 
-createSelect(provinceSelect, { district: 'province' }, getDistricts, municipalityChild)
+createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
 
 // createSelect('district', 'municipalities', 'DISTRICT', getMunics)
 
