@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const { Listings, Districts, Munics } = require('../lib/mongoUtil')
+const { Listings, Districts, Munics, Cities } = require('../lib/mongoUtil')
 // const { District, Local, Countries, Cities } = require('../lib/geo')
 const turf = require('@turf/helpers')
+
 const jsonParser = require('body-parser').json()
 
 router.get('/', (req, res, next) => {
@@ -53,6 +54,13 @@ router.get('/getMunicipalities/:district', (req, res) => {
   const { district } = req.params
   Munics.findMunics({ DISTRICT: district }).then(districts => {
     res.send(districts)
+  })
+})
+
+router.get('/getCities/:municipality', (req, res) => {
+  const { municipality } = req.params
+  Cities.findCities({ MN_MDB_C: municipality }).then(cities => {
+    res.send(cities)
   })
 })
 

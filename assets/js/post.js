@@ -19,6 +19,12 @@ function getMunics (district) {
     .then(data => { return data })
 }
 
+function getCities (municipality) {
+  return fetch('/getCities/' + municipality)
+    .then(response => response.json())
+    .then(data => { return data })
+}
+
 // var select = document.getElementById("suburb-post");
 
 // console.log(districtsJson[1].city)
@@ -37,16 +43,28 @@ function getMunics (district) {
 * @param {Function} childRec
 */
 const createSelect = (parentSelect, childName, fieldName, getData, childRec = null) => {
-  const childSelect = document.createElement('select')
-  childSelect.id = childName + '-select'
-  childSelect.name = childName + '-select'
   parentSelect.addEventListener('change', async (e) => {
+    const childSelect = document.createElement('select')
+    childSelect.id = childName + '-select'
+    childSelect.name = childName + '-select'
+
+    const childLabel = document.createElement('label')
+    childLabel.setAttribute('for', childName + '-select')
+    childLabel.innerText = childName.charAt(0).toUpperCase() + childName.slice(1)
+
     const data = await getData(e.target.value)
     const currentChild = document.querySelector('#' + childName + '-select')
     if (currentChild) {
       childSelect.innerHTML = ''
       currentChild.remove()
     }
+    const currentLabel = document.querySelector('[for="' + childName + '-select"]')
+    if (currentLabel) {
+      childSelect.innerHTML = ''
+      currentLabel.remove()
+    }
+    childSelect.append(document.createElement('option'))
+
     data.forEach(el => {
       const newOption = document.createElement('option')
       newOption.innerText = el[fieldName]
@@ -54,11 +72,8 @@ const createSelect = (parentSelect, childName, fieldName, getData, childRec = nu
       childSelect.append(newOption)
     })
     if (childRec) {
-      createSelect(childSelect, childRec.childName, childRec.fieldName, childRec.getData)
+      createSelect(childSelect, childRec.childName, childRec.fieldName, childRec.getData, childRec.childRecursive)
     }
-    const childLabel = document.createElement('label')
-    childLabel.setAttribute('for', childName + '-select')
-    childLabel.innerText = childName.charAt(0).toUpperCase() + childName.slice(1)
 
     parentSelect.parentNode.insertBefore(childSelect, parentSelect.nextSibling)
     parentSelect.parentNode.insertBefore(childLabel, parentSelect.nextSibling)
@@ -66,8 +81,20 @@ const createSelect = (parentSelect, childName, fieldName, getData, childRec = nu
 }
 
 const provinceSelect = document.querySelector('#province-select')
-const childRecursive = { childName: 'municipality', fieldName: 'MUNICNAME', getData: getMunics }
-createSelect(provinceSelect, 'district', 'DISTRICT_N', getDistrics, childRecursive)
+
+const cityChild = {
+  childName: 'city',
+  fieldName: 'MP_NAME',
+  getData: getCities
+}
+const municipalityChild = {
+  childName: 'municipality',
+  fieldName: 'MUNICNAME',
+  getData: getMunics,
+  childRecursive: cityChild
+}
+
+createSelect(provinceSelect, 'district', 'DISTRICT_N', getDistrics, municipalityChild)
 
 // createSelect('district', 'municipalities', 'DISTRICT', getMunics)
 
