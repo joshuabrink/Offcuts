@@ -33,7 +33,7 @@
   app.use(function (req, res, next) {
     res.setHeader(
       'Content-Security-Policy',
-      "default-src 'self' https://nominatim.openstreetmap.org/ https://geocode.search.hereapi.com/v1/; font-src 'self'; img-src 'self' 'unsafe-inline' blob: http://localhost:3000/ data: http://*.tile.openstreetmap.org/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://www.google.com/"
+      "default-src 'self' https://nominatim.openstreetmap.org/ https://geocode.search.hereapi.com/v1/ https://s.fleet.ls.hereapi.com/1/static.json; font-src 'self'; img-src 'self' 'unsafe-inline' blob: http://localhost:3000/ data: http://*.tile.openstreetmap.org/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://www.google.com/"
     )
     next()
   })

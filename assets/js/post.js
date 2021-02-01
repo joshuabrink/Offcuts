@@ -5,49 +5,105 @@ const formData = new FormData()
 const form = document.querySelector('#post-form')
 const imagesInput = document.querySelector('#images')
 const materials = ['stainless', 'tool', 'carbon', 'alloy', 'other']
-// var citiesJson  = require('./za.json');
+// var districtsJson  = require('./za.json');
 
-function getData () {
-  return fetch('/geojson/cities')
+function getDistrics (province) {
+  return fetch('/getDistricts/' + province)
+    .then(response => response.json())
+    .then(data => { return data })
+}
+
+function getMunics (district) {
+  return fetch('/getMunicipalities/' + district)
     .then(response => response.json())
     .then(data => { return data })
 }
 
 // var select = document.getElementById("suburb-post");
 
-// console.log(citiesJson[1].city)
+// console.log(districtsJson[1].city)
 
-// for(var i = 0; i < citiesJson.length; i++) {
-//   var opt = citiesJson[i].city;
+// for(var i = 0; i < districtsJson.length; i++) {
+//   var opt = districtsJson[i].city;
 //   select.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
 // }
 
-(async () => {
-  const citiesData = await getData()
-
-  const provinceSelect = document.querySelector('#province-select')
-  // let citiesSelect = '<select name="cities-select" id="cities-select">'
-  const citiesSelect = document.createElement('select')
-  citiesSelect.id = 'cities-select'
-  citiesSelect.name = 'cities-select'
-
-  provinceSelect.addEventListener('change', e => {
-    const currentCitiesChild = document.querySelector('#cities-select')
-    if (currentCitiesChild) {
-      citiesSelect.innerHTML = ''
-      currentCitiesChild.remove()
+/**
+* Creates Select from async XHR request data
+* @param {String} parentName
+* @param {String} childName
+* @param {String} fieldName
+* @param {Function} getData
+* @param {Function} childRec
+*/
+const createSelect = (parentSelect, childName, fieldName, getData, childRec = null) => {
+  const childSelect = document.createElement('select')
+  childSelect.id = childName + '-select'
+  childSelect.name = childName + '-select'
+  parentSelect.addEventListener('change', async (e) => {
+    const data = await getData(e.target.value)
+    const currentChild = document.querySelector('#' + childName + '-select')
+    if (currentChild) {
+      childSelect.innerHTML = ''
+      currentChild.remove()
     }
-    citiesData.forEach(el => {
-      if (el.admin_name === e.target.value) {
-        citiesSelect.innerHTML += '<option value="' + el.city + '">' + el.city + '</option>'
-      // provinceSelect.insertAdjacentHTML('afterend',)
-      }
+    data.forEach(el => {
+      const newOption = document.createElement('option')
+      newOption.innerText = el[fieldName]
+      newOption.value = el.DISTRICT
+      childSelect.append(newOption)
     })
-    // citiesSelect += '</select>'
-    provinceSelect.parentNode.insertBefore(citiesSelect, provinceSelect.nextSibling)
-    // provinceSelect.insertAdjacentHTML('afterend', citiesSelect)
+    if (childRec) {
+      createSelect(childSelect, childRec.childName, childRec.fieldName, childRec.getData)
+    }
+    const childLabel = document.createElement('label')
+    childLabel.setAttribute('for', childName + '-select')
+    childLabel.innerText = childName.charAt(0).toUpperCase() + childName.slice(1)
+
+    parentSelect.parentNode.insertBefore(childSelect, parentSelect.nextSibling)
+    parentSelect.parentNode.insertBefore(childLabel, parentSelect.nextSibling)
   })
-})()
+}
+
+const provinceSelect = document.querySelector('#province-select')
+const childRecursive = { childName: 'municipality', fieldName: 'MUNICNAME', getData: getMunics }
+createSelect(provinceSelect, 'district', 'DISTRICT_N', getDistrics, childRecursive)
+
+// createSelect('district', 'municipalities', 'DISTRICT', getMunics)
+
+// (async () => {
+//   const districts = await getDistrics()
+
+//   const provinceSelect = document.querySelector('#province-select')
+//   // let districtsSelect = '<select name="districts-select" id="districts-select">'
+//   const districtsSelect = document.createElement('select')
+//   districtsSelect.id = 'districts-select'
+//   districtsSelect.name = 'districts-select'
+
+//   provinceSelect.addEventListener('change', e => {
+//     const currentdistrictsChild = document.querySelector('#districts-select')
+//     if (currentdistrictsChild) {
+//       districtsSelect.innerHTML = ''
+//       currentdistrictsChild.remove()
+//     }
+//     districts.forEach(el => {
+//       if (el.admin_name === e.target.value) {
+//         const districtOption = document.createElement('option')
+//         districtOption.innerText = el.DISTRICT_N
+//         districtOption.value = el.DISTRICT
+//         districtsSelect.append(districtOption)
+//         districtOption.addEventListener('change', e => {
+
+//         })
+//         // districtsSelect.innerHTML += '<option value="' + el.city + '">' + el.city + '</option>'
+//       // provinceSelect.insertAdjacentHTML('afterend',)
+//       }
+//     })
+//     // districtsSelect += '</select>'
+//     provinceSelect.parentNode.insertBefore(districtsSelect, provinceSelect.nextSibling)
+//     // provinceSelect.insertAdjacentHTML('afterend', districtsSelect)
+//   })
+// })()
 
 // const select = document.getElementById('selectNumber')
 // const options2 = ['1', '2', '3', '4', '5']
@@ -177,7 +233,7 @@ for (let i = 0; i < baseTypes.length; i++) {
 // })
 
 // function getData () {
-//   return fetch('https://s.fleet.ls.hereapi.com/1/static.json?region=ZAF&content=TC_VEH_TYPES&apiKey=FrD2J3pgZLqZmUnKW4fFopO6s0FuXBftiDabM_p4qto')
+//   return fetch('https://s.fleet.ls.hereapi.com/1/static.json?content=TC_VEH_TYPES&apiKey=FrD2J3pgZLqZmUnKW4fFopO6s0FuXBftiDabM_p4qto')
 //     .then(response => response.json())
 //     .then(data => { return data })
 // }
@@ -197,102 +253,102 @@ for (let i = 0; i < baseTypes.length; i++) {
 
 const resultList = document.querySelector('.results')
 
-// const autoCompleteGeo = new autoComplete({
-//   name: 'locations',
-//   selector: '#autoCompleteGeo',
-//   observer: false,
-//   data: {
-//     src: async () => {
-//       // Loading placeholder text
-//       document
-//         .querySelector('#autoCompleteGeo')
-//         .setAttribute('placeholder', 'Loading...')
-//       // Fetch External Data Source
-//       const query = document.querySelector('#autoCompleteGeo').value
-//       // Fetch External Data Source
-//       // const data = await provider.search({ content: 'TC_VEH_TYPES' })
-//       const data = await getData()
-//       // Saves the fetched data into local storage
-//       localStorage.setItem('acData', JSON.stringify(data))
-//       // Retrieve the cached data from local storage
-//       const localData = JSON.parse(localStorage.getItem('acData'))
-//       // Post loading placeholder text
-//       document
-//         .querySelector('#autoCompleteGeo')
-//         .setAttribute('placeholder', autoCompleteJS.placeHolder)
-//       // Returns Fetched data
-//       return localData
-//     },
-//     key: ['label'],
-//     results: (list) => {
-//       // Filter duplicates
-//       const filteredResults = Array.from(
-//         new Set(list.map((value) => value.match))
-//       ).map((val2) => {
-//         return list.find((value) => value.match === val2)
-//       })
+const autoCompleteGeo = new autoComplete({
+  name: 'locations',
+  selector: '#autoCompleteGeo',
+  observer: false,
+  data: {
+    src: async () => {
+      // Loading placeholder text
+      document
+        .querySelector('#autoCompleteGeo')
+        .setAttribute('placeholder', 'Loading...')
+      // Fetch External Data Source
+      const query = document.querySelector('#autoCompleteGeo').value
+      // Fetch External Data Source
+      // const data = await provider.search({ content: 'TC_VEH_TYPES' })
+      const data = await getData()
+      // Saves the fetched data into local storage
+      localStorage.setItem('acData', JSON.stringify(data))
+      // Retrieve the cached data from local storage
+      const localData = JSON.parse(localStorage.getItem('acData'))
+      // Post loading placeholder text
+      document
+        .querySelector('#autoCompleteGeo')
+        .setAttribute('placeholder', autoCompleteJS.placeHolder)
+      // Returns Fetched data
+      return localData
+    },
+    key: ['label'],
+    results: (list) => {
+      // Filter duplicates
+      const filteredResults = Array.from(
+        new Set(list.map((value) => value.match))
+      ).map((val2) => {
+        return list.find((value) => value.match === val2)
+      })
 
-//       return filteredResults
-//     }
-//   },
-//   trigger: {
-//     event: ['input', 'focus']
-//   },
-//   placeHolder: 'Search',
-//   searchEngine: 'strict',
-//   highlight: true,
-//   maxResults: 5,
-//   threshold: 3,
-//   debounce: 300,
-//   resultsList: {
-//     destination: '#location',
-//     container: (source) => {
-//       source.classList.add('neu-static')
-//       source.classList.add('bg-color')
-//     }
-//   },
-//   resultItem: {
-//     content: (data, element) => {
-//       // Prepare Value's Key
-//       const key = Object.keys(data.value).find(
-//         (key) => data.value[key] === element.innerText
-//       )
-//       element.classList.add('row')
-//       element.classList.add('between')
-//       element.classList.add('neu')
+      return filteredResults
+    }
+  },
+  trigger: {
+    event: ['input', 'focus']
+  },
+  placeHolder: 'Search',
+  searchEngine: 'strict',
+  highlight: true,
+  maxResults: 5,
+  threshold: 3,
+  debounce: 300,
+  resultsList: {
+    destination: '#location',
+    container: (source) => {
+      source.classList.add('neu-static')
+      source.classList.add('bg-color')
+    }
+  },
+  resultItem: {
+    content: (data, element) => {
+      // Prepare Value's Key
+      const key = Object.keys(data.value).find(
+        (key) => data.value[key] === element.innerText
+      )
+      element.classList.add('row')
+      element.classList.add('between')
+      element.classList.add('neu')
 
-//       // Modify Results Item
-//       // element.style = 'display: flex; justify-content: space-between;'
-//       element.innerHTML = `<span>
-//         ${element.innerHTML}</span>
-//         <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase;">
-//       ${key}</span>`
-//     }
-//   },
-//   noResults: (dataFeedback, generateList) => {
-//     // Generate autoComplete List
-//     generateList(autoCompleteJS, dataFeedback, dataFeedback.results)
-//     // No Results List Item
-//     const result = document.createElement('li')
-//     result.setAttribute('class', 'no_result')
-//     result.setAttribute('tabindex', '1')
-//     result.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${dataFeedback.query}"</span>`
-//     document
-//       .querySelector(`#${autoCompleteJS.resultsList.idName}`)
-//       .appendChild(result)
-//   },
-//   onSelection: (feedback) => {
-//     document.querySelector('#autoCompleteGeo').blur()
-//     // Prepare User's Selected Value
-//     const selection = feedback.selection.value[feedback.selection.key]
-//     // Render selected choice to selection div
-//     // document.querySelector('.selection').innerHTML = selection
-//     // Replace Input value with the selected value
-//     document.querySelector('#autoCompleteGeo').value = selection
-//     // Console log autoComplete data feedback
-//     console.log(feedback)
-//   }
-// })
+      // Modify Results Item
+      // element.style = 'display: flex; justify-content: space-between;'
+      element.innerHTML = `<span>
+        ${element.innerHTML}</span>
+        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase;">
+      ${key}</span>`
+    }
+  },
+  noResults: (dataFeedback, generateList) => {
+    // Generate autoComplete List
+    generateList(autoCompleteJS, dataFeedback, dataFeedback.results)
+    // No Results List Item
+    const result = document.createElement('li')
+    result.setAttribute('class', 'no_result')
+    result.setAttribute('tabindex', '1')
+    result.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${dataFeedback.query}"</span>`
+    document
+      .querySelector(`#${autoCompleteJS.resultsList.idName}`)
+      .appendChild(result)
+  },
+  onSelection: (feedback) => {
+    document.querySelector('#autoCompleteGeo').blur()
+    // Prepare User's Selected Value
+    const selection = feedback.selection.value[feedback.selection.key]
+    // Render selected choice to selection div
+    // document.querySelector('.selection').innerHTML = selection
+    // Replace Input value with the selected value
+    document.querySelector('#autoCompleteGeo').value = selection
+    // Console log autoComplete data feedback
+    console.log(feedback)
+  }
+})
 
 function preventDefault (e) {
   e.preventDefault()

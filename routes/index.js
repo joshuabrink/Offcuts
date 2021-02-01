@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const { Listings } = require('../lib/mongoUtil')
-const { District, Local, Countries, Cities } = require('../lib/geo')
+const { Listings, Districts, Munics } = require('../lib/mongoUtil')
+// const { District, Local, Countries, Cities } = require('../lib/geo')
 const turf = require('@turf/helpers')
 const jsonParser = require('body-parser').json()
 
@@ -31,21 +31,46 @@ router.post('/search', (req, res, next) => {
 
 })
 
-router.get('/geojson/cities', (req, res) => {
-  // res.send('working')
+const provMap = {
+  Gauteng: 'GT',
+  'Eastern Cape': 'EC',
+  'Western Cape': 'WC',
+  'KwaZulu-Natal': 'KZN',
+  Limpopo: 'LIM',
+  Mpumalanga: 'MP',
+  'Northern Cape': 'NC'
+}
 
-  const data = Cities()
-
-  res.send(data)
+router.get('/getDistricts/:province', (req, res) => {
+  let { province } = req.params
+  province = provMap[province]
+  Districts.findDistricts({ PROVINCE: province }).then(municipalities => {
+    res.send(municipalities)
+  })
 })
 
-router.post('/geojson/countries', jsonParser, (req, res) => {
-  // res.send('working')
-  const points = turf.point(req.body)
-
-  const data = District()
-
-  res.send(data)
+router.get('/getMunicipalities/:district', (req, res) => {
+  const { district } = req.params
+  Munics.findMunics({ DISTRICT: district }).then(districts => {
+    res.send(districts)
+  })
 })
+
+// router.get('/geojson/cities', (req, res) => {
+//   // res.send('working')
+
+//   const data = Cities()
+
+//   res.send(data)
+// })
+
+// router.post('/geojson/countries', jsonParser, (req, res) => {
+//   // res.send('working')
+//   const points = turf.point(req.body)
+
+//   const data = District()
+
+//   res.send(data)
+// })
 
 module.exports = router
