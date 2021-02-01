@@ -7,7 +7,7 @@ const imagesInput = document.querySelector('#images')
 const materials = ['stainless', 'tool', 'carbon', 'alloy', 'other']
 // var districtsJson  = require('./za.json');
 
-function getDistrics (province) {
+function getDistricts (province) {
   return fetch('/getDistricts/' + province)
     .then(response => response.json())
     .then(data => { return data })
@@ -42,8 +42,11 @@ function getCities (municipality) {
 * @param {Function} getData
 * @param {Function} childRec
 */
-const createSelect = (parentSelect, childName, fieldName, getData, childRec = null) => {
+const createSelect = (parentSelect, field, getData, childRec = null) => {
   parentSelect.addEventListener('change', async (e) => {
+    const childName = Object.keys(field)[0]
+    const childValue = Object.values(field)[0]
+
     const childSelect = document.createElement('select')
     childSelect.id = childName + '-select'
     childSelect.name = childName + '-select'
@@ -67,12 +70,12 @@ const createSelect = (parentSelect, childName, fieldName, getData, childRec = nu
 
     data.forEach(el => {
       const newOption = document.createElement('option')
-      newOption.innerText = el[fieldName]
-      newOption.value = el.DISTRICT
+      newOption.innerText = el[childName]
+      newOption.value = el[childName]
       childSelect.append(newOption)
     })
     if (childRec) {
-      createSelect(childSelect, childRec.childName, childRec.fieldName, childRec.getData, childRec.childRecursive)
+      createSelect(childSelect, childRec.field, childRec.getData, childRec.childRecursive)
     }
 
     parentSelect.parentNode.insertBefore(childSelect, parentSelect.nextSibling)
@@ -84,17 +87,17 @@ const provinceSelect = document.querySelector('#province-select')
 
 const cityChild = {
   childName: 'city',
-  fieldName: 'MP_NAME',
+  field: { city: 'municipality' },
   getData: getCities
 }
 const municipalityChild = {
   childName: 'municipality',
-  fieldName: 'MUNICNAME',
+  field: { municipality: 'district' },
   getData: getMunics,
   childRecursive: cityChild
 }
 
-createSelect(provinceSelect, 'district', 'DISTRICT_N', getDistrics, municipalityChild)
+createSelect(provinceSelect, { district: 'province' }, getDistricts, municipalityChild)
 
 // createSelect('district', 'municipalities', 'DISTRICT', getMunics)
 

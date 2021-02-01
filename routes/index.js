@@ -45,21 +45,21 @@ const provMap = {
 router.get('/getDistricts/:province', (req, res) => {
   let { province } = req.params
   province = provMap[province]
-  Districts.findDistricts({ PROVINCE: province }).then(municipalities => {
+  Districts.findDistricts({ province: province }).then(municipalities => {
     res.send(municipalities)
   })
 })
 
 router.get('/getMunicipalities/:district', (req, res) => {
   const { district } = req.params
-  Munics.findMunics({ DISTRICT: district }).then(districts => {
+  Munics.findMunics({ district: district }).then(districts => {
     res.send(districts)
   })
 })
 
 router.get('/getCities/:municipality', (req, res) => {
   const { municipality } = req.params
-  Cities.findCities({ MN_MDB_C: municipality }).then(cities => {
+  Cities.findCities({ municipality: municipality }).then(cities => {
     res.send(cities)
   })
 })
