@@ -20,8 +20,8 @@ class City {
     })
   }
 
-  async findCities (filter, limit = 0) {
-    return await this.collection.find(filter).limit(limit).toArray().then((cities, err) => {
+  async findCities (filter, limit = 0, sort = 0) {
+    return await this.collection.find(filter).limit(limit).sort({ city: 1 }).toArray().then((cities, err) => {
       if (err) return err
       return cities
     })
