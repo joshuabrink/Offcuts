@@ -2,9 +2,8 @@
 
 <section>
     <h1 class="title">Your Listings</h1>
+<h3 class="query-result"></h3>
     <div class="table-users neu">
-      
-      
       <table cellspacing="0">
          <tr class="bg-color">
             <th>Picture</th>
@@ -23,7 +22,9 @@
             <td style="width: 300px;"><%= listings[i].description %></td>
             <td style="width: 120px;">R <%= listings[i].price %></td>
             <td style="width: 100px;"><input type="checkbox"></td>
-            <td style="width: 100px;"><a style="color: rgb(250, 0, 0);" href="/deleteListing/<%=listings[i]._id%>">Delete</a></td>
+            <td class="delete-container" style="width: 100px;">
+               <a class="neu delete-link" href="<%=listings[i]._id%>" >Delete</a>
+            </td>
          </tr>
          <% } %>
    
@@ -33,10 +34,10 @@
              <h2>No Listings Found</h2>
            </div>
          <% } %>
-         <tr>
+         <!-- <tr> -->
             <!--Add row below listings with the option to boost-->
-            <input type="submit">
-         </tr>
+            <!-- <input type="submit">
+         </tr> -->
   
       </table>
    </div>

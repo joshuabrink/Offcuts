@@ -107,10 +107,10 @@ router.get('/post', loggedIn, (req, res) => {
   return defaultRendor(res, req, 'post')
 })
 
-router.get('/boost', (req, res, next) => {
+router.get('/userListings', (req, res, next) => {
   // res.send('working')
   Listings.findUsersListings(req.user._id + '').then(listings => {
-    res.render('boost', { title: 'Boost', user: req.user, listings: listings })
+    res.render('userListings', { title: 'UserListings', user: req.user, listings: listings })
   })
 })
 
@@ -251,8 +251,8 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
   })
 })
 
-router.get('/deleteListing/:listingID', loggedIn, jsonParser, (req, res, next) => {
-  //const { listingID } = req.body
+router.delete('/deleteListing/:listingID', loggedIn, jsonParser, (req, res, next) => {
+  // const { listingID } = req.body
   const { listingID } = req.params
 
   const userID = req.session.passport.user
@@ -276,8 +276,10 @@ router.get('/deleteListing/:listingID', loggedIn, jsonParser, (req, res, next) =
         return res.status(200).json(listing)
       }
 
-      req.flash('success_messages', `Your Listing ${listing.title} was deleted`)
-      return res.redirect('back')
+      // req.flash('success_messages', `Your Listing ${foundListing.title} was deleted`)
+      return res.send({ msg: `Deleted listing ${foundListing.title}` })
+    // return res.redirect('back')
+    // return res.render('userListings', { title: 'UserListing', listing: foundListing, user: req.user })
     })
   })
 })
