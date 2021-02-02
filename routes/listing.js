@@ -251,7 +251,7 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
   })
 })
 
-router.post('/deleteListing/:id', loggedIn, jsonParser, (req, res, next) => {
+router.get('/deleteListing/:listingID', loggedIn, jsonParser, (req, res, next) => {
   //const { listingID } = req.body
   const { listingID } = req.params
 
