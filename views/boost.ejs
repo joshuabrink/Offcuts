@@ -23,7 +23,7 @@
             <td style="width: 300px;"><%= listings[i].description %></td>
             <td style="width: 120px;">R <%= listings[i].price %></td>
             <td style="width: 100px;"><input type="checkbox"></td>
-            <td style="width: 100px;"><input type="checkbox"></td>
+            <td style="width: 100px;"><a style="color: rgb(250, 0, 0);" href="/deleteListing/<%=listings[i]._id%>">Delete</a></td>
          </tr>
          <% } %>
    

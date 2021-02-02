@@ -251,8 +251,9 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
   })
 })
 
-router.post('/deleteListing', loggedIn, jsonParser, (req, res, next) => {
-  const { listingID } = req.body
+router.post('/deleteListing/:id', loggedIn, jsonParser, (req, res, next) => {
+  //const { listingID } = req.body
+  const { listingID } = req.params
 
   const userID = req.session.passport.user
 
