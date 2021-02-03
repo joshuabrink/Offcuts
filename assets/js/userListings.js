@@ -57,7 +57,7 @@ const showResponse = (resultContainer, data) => {
   resultContainer.innerText = data.msg
   setTimeout(() => {
     resultContainer.innerText = ''
-  }, 2000)
+  }, 3000)
 }
 deleteContainers.forEach(el => {
   confirmListen(el, confirmContainer)

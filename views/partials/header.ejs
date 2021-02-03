@@ -8,6 +8,7 @@
             <%= title.charAt(0).toUpperCase() + title.slice(1) %>
         </title>
         <% if (title==='post') { %>
+
             <link rel="stylesheet" href="/css/post.css">
         <% } if (title==='Listing' ) { %>
                 <link rel="stylesheet" href="/css/listing.css">
@@ -50,6 +51,7 @@
 
             <% if (title === 'post') { %>      
                 <script defer src="/js/vendor/bundle.min.js"></script>
+     
                 <script defer src="/js/post.js"></script>
            
             <% } %>

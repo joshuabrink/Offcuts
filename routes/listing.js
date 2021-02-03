@@ -47,7 +47,7 @@ const delImages = async (imagePaths) => {
       })
     }))
   })
-  await Promise.allSettled(promises)
+  return await Promise.allSettled(promises).catch(err => { return err })
 }
 
 const getChangedImages = (dbImages, upImages) => {
@@ -75,7 +75,7 @@ const storage = multer.diskStorage({
     cb(null, dest)
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname.toLowerCase().split(' ').join('-'))
+    cb(null, Date.now() + '-' + file.originalname.toLowerCase().split(' ').join('-'))
   }
 })
 
@@ -174,16 +174,18 @@ router.post('/newListing', loggedIn, upload, validateListing, (req, res, next) =
 
   const paths = []
 
-  for (let i = 0; i < req.files.length; i++) {
-    const path = req.files[i].path
-    sharp(path)
-      .resize(200, 200)
-      .jpeg({ quality: 50 })
-      .toFile(req.files[i].destination + '/thumb-' + req.files[i].originalname)
-      .catch(err => {
-        if (err) return next(err)
-      })
-    paths.push(path.substr(path.indexOf('\\')))
+  if (req.files) {
+    for (let i = 0; i < req.files.length; i++) {
+      const path = req.files[i].path
+      sharp(path)
+        .resize(200, 200)
+        .jpeg({ quality: 50 })
+        .toFile(thumbStr(req.files[i].path))
+        .catch(err => {
+          if (err) return next(err)
+        })
+      paths.push(path.substr(path.indexOf('\\')))
+    }
   }
 
   fields.images = paths
@@ -198,7 +200,7 @@ router.post('/newListing', loggedIn, upload, validateListing, (req, res, next) =
     }
 
     req.flash('success_messages', 'Listing has been posted')
-    return res.redirect('back')
+    return res.redirect('/userListings')
   })
 })
 
@@ -206,8 +208,10 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
   const { listingID } = req.body
 
   const fields = res.locals.listing
-
-  const paths = req.files.map(file => { return file.path })
+  let paths = []
+  if (req.files) {
+    paths = req.files.map(file => { return file.path })
+  }
 
   Listings.updateListing(listingID, { $set: fields }).then(async (listing) => {
     const changedImages = getChangedImages(listing.images, paths)
@@ -222,7 +226,8 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
         sharp(value)
           .resize(200, 200)
           .jpeg({ quality: 50 })
-          .toFile(req.files[0].destination + '/thumb-' + req.files[0].originalname).catch(err => {
+          .toFile(thumbStr(req.files[0].path))
+          .catch(err => {
             if (err) return next(err)
           })
       } else {
@@ -231,7 +236,10 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
     }
 
     const deletedImages = await delImages(remove)
-    if (deletedImages instanceof Error) return next(deletedImages)
+    deletedImages.forEach(delImg => {
+      if (delImg instanceof Error) return next(deletedImages)
+    })
+
     remove = remove.map(path => path.substr(path.indexOf('uploads') - 1))
     add = add.map(path => path.substr(path.indexOf('uploads') - 1))
     const pullQuery = { $pull: { images: { $in: remove } } }
@@ -245,13 +253,13 @@ router.post('/updateListing', loggedIn, upload, validateListing, (req, res, next
           return res.status(200).json(listing)
         }
         req.flash('success_messages', 'Your Listing was updated')
-        return res.redirect('back')
+        return res.redirect('/userListings')
       })
     })
   })
 })
 
-router.delete('/deleteListing/:listingID', loggedIn, jsonParser, (req, res, next) => {
+router.delete('/deleteListing/:listingID', loggedIn, (req, res, next) => {
   // const { listingID } = req.body
   const { listingID } = req.params
 
@@ -270,7 +278,9 @@ router.delete('/deleteListing/:listingID', loggedIn, jsonParser, (req, res, next
       if (listing instanceof Error) return next(new DatabaseError('Error deleting Listing'))
 
       const deletedImages = await delImages(listing.images)
-      if (deletedImages instanceof Error) return next(deletedImages)
+      deletedImages.forEach(delImg => {
+        if (delImg instanceof Error) return next(deletedImages)
+      })
 
       if (req.headers.env === 'test' && process.env.NODE_ENV === 'test') {
         return res.status(200).json(listing)
@@ -278,7 +288,7 @@ router.delete('/deleteListing/:listingID', loggedIn, jsonParser, (req, res, next
 
       // req.flash('success_messages', `Your Listing ${foundListing.title} was deleted`)
       return res.send({ msg: `Deleted listing ${foundListing.title}` })
-    // return res.redirect('back')
+      // return res.redirect('/userListings')
     // return res.render('userListings', { title: 'UserListing', listing: foundListing, user: req.user })
     })
   })
