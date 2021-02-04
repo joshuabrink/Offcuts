@@ -99,9 +99,15 @@ window.addEventListener('click', function (e) {
 * @param {Function} childRec
 */
 const createSelect = (parentSelect, field, getData, childRec = null) => {
+<<<<<<< HEAD
   const parentTrigger = document.querySelector('.custom-select-trigger')
   parentTrigger.addEventListener('change', async (e) => {
     const childName = field
+=======
+  parentSelect.addEventListener('change', async (e) => {
+    const childName = Object.keys(field)[0]
+    const childValue = Object.values(field)[0]
+>>>>>>> 6acf9f7ce4296dbd73a94958a376567f7fd07a62
 
     const childLabel = document.createElement('label')
     childLabel.setAttribute('for', childName + '-select')
@@ -186,6 +192,55 @@ const municipalityChild = {
 }
 
 createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
+
+// createSelect('district', 'municipalities', 'DISTRICT', getMunics)
+
+// (async () => {
+//   const districts = await getDistrics()
+
+//   const provinceSelect = document.querySelector('#province-select')
+//   // let districtsSelect = '<select name="districts-select" id="districts-select">'
+//   const districtsSelect = document.createElement('select')
+//   districtsSelect.id = 'districts-select'
+//   districtsSelect.name = 'districts-select'
+
+//   provinceSelect.addEventListener('change', e => {
+//     const currentdistrictsChild = document.querySelector('#districts-select')
+//     if (currentdistrictsChild) {
+//       districtsSelect.innerHTML = ''
+//       currentdistrictsChild.remove()
+//     }
+//     districts.forEach(el => {
+//       if (el.admin_name === e.target.value) {
+//         const districtOption = document.createElement('option')
+//         districtOption.innerText = el.DISTRICT_N
+//         districtOption.value = el.DISTRICT
+//         districtsSelect.append(districtOption)
+//         districtOption.addEventListener('change', e => {
+
+//         })
+//         // districtsSelect.innerHTML += '<option value="' + el.city + '">' + el.city + '</option>'
+//       // provinceSelect.insertAdjacentHTML('afterend',)
+//       }
+//     })
+//     // districtsSelect += '</select>'
+//     provinceSelect.parentNode.insertBefore(districtsSelect, provinceSelect.nextSibling)
+//     // provinceSelect.insertAdjacentHTML('afterend', districtsSelect)
+//   })
+// })()
+
+// const select = document.getElementById('selectNumber')
+// const options2 = ['1', '2', '3', '4', '5']
+
+// for (let i = 0; i < options2.length; i++) {
+//   const opt = options2[i]
+
+//   const el = document.createElement('option')
+//   el.text = opt
+//   el.value = opt
+
+//   select.add(el)
+// }
 
 // validation
 const options = {
