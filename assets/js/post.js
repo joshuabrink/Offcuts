@@ -99,15 +99,9 @@ window.addEventListener('click', function (e) {
 * @param {Function} childRec
 */
 const createSelect = (parentSelect, field, getData, childRec = null) => {
-<<<<<<< HEAD
   const parentTrigger = document.querySelector('.custom-select-trigger')
   parentTrigger.addEventListener('change', async (e) => {
     const childName = field
-=======
-  parentSelect.addEventListener('change', async (e) => {
-    const childName = Object.keys(field)[0]
-    const childValue = Object.values(field)[0]
->>>>>>> 6acf9f7ce4296dbd73a94958a376567f7fd07a62
 
     const childLabel = document.createElement('label')
     childLabel.setAttribute('for', childName + '-select')
