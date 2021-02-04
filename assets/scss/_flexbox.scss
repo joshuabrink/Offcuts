@@ -104,11 +104,16 @@
   &.end {
     @include align-items(flex-end);
   }
+  &-default {
+    @include col(initial, initial)
+  }
 }
 
 .row {
-  @include row(center, center);
-
+  @include row;
+  &-default {
+    @include row(initial, initial)
+  }
   &.around {
     @include justify-content(space-around);
   }
