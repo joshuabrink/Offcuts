@@ -286,15 +286,10 @@ router.delete('/deleteListing/:listingID', loggedIn, (req, res, next) => {
         return res.status(200).json(listing)
       }
 
-<<<<<<< HEAD
-      req.flash('success_messages', `Your Listing ${listing.title} was deleted`)
-      return res.redirect('back')
-=======
       // req.flash('success_messages', `Your Listing ${foundListing.title} was deleted`)
       return res.send({ msg: `Deleted listing ${foundListing.title}` })
       // return res.redirect('/userListings')
     // return res.render('userListings', { title: 'UserListing', listing: foundListing, user: req.user })
->>>>>>> 868972f4713362d417ecc9d8c4ed56b70ca57036
     })
   })
 })
