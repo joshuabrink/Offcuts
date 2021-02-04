@@ -64,6 +64,20 @@ router.get('/getCities/:municipality', (req, res) => {
   })
 })
 
+router.get('/boostListing', (req, res) =>{
+  var checked = 0;
+
+  //var table = document.getElementById('listingTable');
+  var checks = document.getElementsByTagName("input");
+
+  for(var i = 0; i < checks.length; i++){
+      if(checks[i].checked){
+        checked++;
+      }
+  }
+var y = checked;
+})
+
 // router.get('/geojson/cities', (req, res) => {
 //   // res.send('working')
 
