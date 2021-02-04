@@ -1,3 +1,4 @@
+
 const baseTypes = document.querySelectorAll('.base-type input')
 const secContainer = document.querySelector('.sec-type')
 const prevImg = document.querySelector('.preview-img')
@@ -25,23 +26,66 @@ function getCities (municipality) {
     .then(data => { return data })
 }
 
-for (const dropdown of document.querySelectorAll('.custom-select-wrapper')) {
-  const trigger = dropdown.querySelector('.custom-select__trigger')
-  trigger.addEventListener('click', function () {
-    dropdown.querySelector('.custom-select').classList.toggle('open')
-    for (const option of dropdown.querySelectorAll('.custom-option')) {
-      option.addEventListener('click', function () {
-        dropdown.querySelector('.custom-select__trigger span').innerText = this.innerText
-        dropdown.querySelector('.custom-select').classList.remove('open')
-      })
-    }
+function getChildrenHeight (parent) {
+  let totalHeight = 0
+  Array.from(parent.children).forEach(el => {
+    totalHeight += el.clientHeight
   })
+  return totalHeight
+}
+
+function toggleDropdown (dropdown) {
+  // const height = getChildrenHeight(dropdown)
+  const open = dropdown.parentElement.classList.contains('open')
+  const heightAnime = {
+    targets: dropdown,
+    height: [0, getChildrenHeight(dropdown)],
+    duration: 300,
+    easing: 'easeInOutSine'
+  }
+  const optionAnime = {
+    targets: dropdown.querySelectorAll('.custom-option'),
+    opacity: [0, 1],
+    delay: anime.stagger(100),
+    easing: 'easeInOutSine'
+  }
+  // const arrowAnime = {
+  //   targets:
+  // }
+  if (open) {
+    heightAnime.direction = 'reverse'
+    optionAnime.direction = 'reverse'
+    anime(heightAnime)
+    anime(optionAnime)
+    dropdown.parentElement.classList.remove('open')
+  } else {
+    anime(heightAnime)
+    anime(optionAnime)
+    dropdown.parentElement.classList.add('open')
+  }
+}
+
+for (const dropdown of document.querySelectorAll('.custom-select')) {
+  const trigger = dropdown.querySelector('.custom-select-trigger')
+  const optionsContainer = dropdown.querySelector('.custom-options')
+  trigger.addEventListener('click', function (e) {
+    toggleDropdown(optionsContainer)
+  })
+  for (const option of dropdown.querySelectorAll('.custom-option')) {
+    option.addEventListener('click', function (e) {
+      trigger.querySelector('span').innerText = this.innerText
+      toggleDropdown(optionsContainer)
+      // dropdown.classList.remove('open')
+    })
+  }
 }
 
 window.addEventListener('click', function (e) {
-  for (const select of document.querySelectorAll('.custom-select')) {
-    if (!select.contains(e.target)) {
-      select.classList.remove('open')
+  for (const dropdown of document.querySelectorAll('.custom-select')) {
+    const optionsContainer = dropdown.querySelector('.custom-options')
+    if (!dropdown.contains(e.target) && dropdown.classList.contains('open')) {
+      toggleDropdown(optionsContainer)
+      // select.classList.toggle('open')
     }
   }
 })
@@ -55,17 +99,26 @@ window.addEventListener('click', function (e) {
 * @param {Function} childRec
 */
 const createSelect = (parentSelect, field, getData, childRec = null) => {
-  parentSelect.addEventListener('change', async (e) => {
+  const parentTrigger = document.querySelector('.custom-select-trigger')
+  parentTrigger.addEventListener('change', async (e) => {
     const childName = field
-
-    const childSelect = document.createElement('select')
-    childSelect.classList.add('neu')
-    childSelect.id = childName + '-select'
-    childSelect.name = childName + '-select'
 
     const childLabel = document.createElement('label')
     childLabel.setAttribute('for', childName + '-select')
     childLabel.innerText = childName.charAt(0).toUpperCase() + childName.slice(1)
+
+    const childSelect = document.createElement('div')
+    childSelect.classList.add('neu-static', 'cutstom-select', 'col-default')
+    childSelect.id = childName + '-select'
+    childSelect.name = childName + '-select'
+
+    const optionsContainer = document.createElement('div')
+    optionsContainer.classList.add('custom-options')
+    childSelect.append(optionsContainer)
+
+    const childTrigger = document.createElement('div')
+    childTrigger.classList.add('custom-select-trigger', 'row', 'between')
+    childTrigger.innerHTML = '<span>Select</span><div class="arrow"></div>'
 
     const data = await getData(e.target.value)
     const currentChild = document.querySelector('#' + childName + '-select')
@@ -75,16 +128,18 @@ const createSelect = (parentSelect, field, getData, childRec = null) => {
     }
     const currentLabel = document.querySelector('[for="' + childName + '-select"]')
     if (currentLabel) {
-      childSelect.innerHTML = ''
+      currentLabel.innerHTML = ''
       currentLabel.remove()
     }
-    childSelect.append(document.createElement('option'))
+
+    // optionsContainer.append(document.createElement('option'))
 
     data.forEach(el => {
-      const newOption = document.createElement('option')
+      const newOption = document.createElement('span')
+      newOption.classList.add('custom-option', 'bg-color', 'neu-i')
       newOption.innerText = el[childName]
       newOption.value = el[childName]
-      childSelect.append(newOption)
+      optionsContainer.append(newOption)
     })
     if (childRec) {
       createSelect(childSelect, childRec.field, childRec.getData, childRec.childRecursive)
@@ -96,6 +151,27 @@ const createSelect = (parentSelect, field, getData, childRec = null) => {
 }
 
 const provinceSelect = document.querySelector('#province-select')
+
+// Options for the observer (which mutations to observe)
+const config = { attributes: true, childList: true, subtree: true }
+
+// Callback function to execute when mutations are observed
+const callback = function (mutationsList, observer) {
+  // Use traditional 'for loops' for IE 11
+  for (const mutation of mutationsList) {
+    if (mutation.type === 'childList') {
+      console.log('A child node has been added or removed.')
+    } else if (mutation.type === 'attributes') {
+      console.log('The ' + mutation.attributeName + ' attribute was modified.')
+    }
+  }
+}
+
+// Create an observer instance linked to the callback function
+const observer = new MutationObserver(callback)
+
+// Start observing the target node for configured mutations
+observer.observe(provinceSelect, config)
 
 const cityChild = {
   childName: 'city',
@@ -109,7 +185,7 @@ const municipalityChild = {
   childRecursive: cityChild
 }
 
-// createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
+createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
 
 // validation
 const options = {
