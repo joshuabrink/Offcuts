@@ -98,81 +98,61 @@ window.addEventListener('click', function (e) {
 * @param {Function} getData
 * @param {Function} childRec
 */
-const createSelect = (parentSelect, field, getData, childRec = null) => {
-  const parentTrigger = document.querySelector('.custom-select-trigger')
-  parentTrigger.addEventListener('change', async (e) => {
-    const childName = field
+const createSelect = async (parentSelect, field, getData, childRec = null) => {
+  // const parentTrigger = parentSelect.querySelector('.custom-select-trigger')
+  // Start observing the target node for configured mutations
 
-    const childLabel = document.createElement('label')
-    childLabel.setAttribute('for', childName + '-select')
-    childLabel.innerText = childName.charAt(0).toUpperCase() + childName.slice(1)
+  // parentTrigger.addEventListener('change', async (e) => {
+  const childName = field
 
-    const childSelect = document.createElement('div')
-    childSelect.classList.add('neu-static', 'cutstom-select', 'col-default')
-    childSelect.id = childName + '-select'
-    childSelect.name = childName + '-select'
+  const childLabel = document.createElement('label')
+  childLabel.setAttribute('for', childName + '-select')
+  childLabel.innerText = childName.charAt(0).toUpperCase() + childName.slice(1)
 
-    const optionsContainer = document.createElement('div')
-    optionsContainer.classList.add('custom-options')
-    childSelect.append(optionsContainer)
+  const childSelect = document.createElement('div')
+  childSelect.classList.add('neu-static', 'cutstom-select', 'col-default')
+  childSelect.id = childName + '-select'
+  childSelect.name = childName + '-select'
 
-    const childTrigger = document.createElement('div')
-    childTrigger.classList.add('custom-select-trigger', 'row', 'between')
-    childTrigger.innerHTML = '<span>Select</span><div class="arrow"></div>'
+  const optionsContainer = document.createElement('div')
+  optionsContainer.classList.add('custom-options')
+  childSelect.append(optionsContainer)
 
-    const data = await getData(e.target.value)
-    const currentChild = document.querySelector('#' + childName + '-select')
-    if (currentChild) {
-      childSelect.innerHTML = ''
-      currentChild.remove()
-    }
-    const currentLabel = document.querySelector('[for="' + childName + '-select"]')
-    if (currentLabel) {
-      currentLabel.innerHTML = ''
-      currentLabel.remove()
-    }
+  const childTrigger = document.createElement('div')
+  childTrigger.classList.add('custom-select-trigger', 'row', 'between')
+  childTrigger.innerHTML = '<span>Select</span><div class="arrow"></div>'
 
-    // optionsContainer.append(document.createElement('option'))
+  const data = await getData(parentSelect.value)
+  const currentChild = document.querySelector('#' + childName + '-select')
+  if (currentChild) {
+    childSelect.innerHTML = ''
+    currentChild.remove()
+  }
+  const currentLabel = document.querySelector('[for="' + childName + '-select"]')
+  if (currentLabel) {
+    currentLabel.innerHTML = ''
+    currentLabel.remove()
+  }
 
-    data.forEach(el => {
-      const newOption = document.createElement('span')
-      newOption.classList.add('custom-option', 'bg-color', 'neu-i')
-      newOption.innerText = el[childName]
-      newOption.value = el[childName]
-      optionsContainer.append(newOption)
-    })
-    if (childRec) {
-      createSelect(childSelect, childRec.field, childRec.getData, childRec.childRecursive)
-    }
+  // optionsContainer.append(document.createElement('option'))
 
-    parentSelect.parentNode.insertBefore(childSelect, parentSelect.nextSibling)
-    parentSelect.parentNode.insertBefore(childLabel, parentSelect.nextSibling)
+  data.forEach(el => {
+    const newOption = document.createElement('span')
+    newOption.classList.add('custom-option', 'bg-color', 'neu-i')
+    newOption.innerText = el[childName]
+    newOption.value = el[childName]
+    optionsContainer.append(newOption)
   })
+  if (childRec) {
+    createSelect(childSelect, childRec.field, childRec.getData, childRec.childRecursive)
+  }
+
+  parentSelect.parentNode.insertBefore(childSelect, parentSelect.nextSibling)
+  parentSelect.parentNode.insertBefore(childLabel, parentSelect.nextSibling)
+  // })
 }
 
 const provinceSelect = document.querySelector('#province-select')
-
-// Options for the observer (which mutations to observe)
-const config = { attributes: true, childList: true, subtree: true }
-
-// Callback function to execute when mutations are observed
-const callback = function (mutationsList, observer) {
-  // Use traditional 'for loops' for IE 11
-  for (const mutation of mutationsList) {
-    if (mutation.type === 'childList') {
-      console.log('A child node has been added or removed.')
-    } else if (mutation.type === 'attributes') {
-      console.log('The ' + mutation.attributeName + ' attribute was modified.')
-    }
-  }
-}
-
-// Create an observer instance linked to the callback function
-const observer = new MutationObserver(callback)
-
-// Start observing the target node for configured mutations
-observer.observe(provinceSelect, config)
-
 const cityChild = {
   childName: 'city',
   field: 'city',
@@ -185,7 +165,27 @@ const municipalityChild = {
   childRecursive: cityChild
 }
 
-createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
+// Options for the observer (which mutations to observe)
+const config = { attributes: false, childList: true, subtree: false }
+
+// Callback function to execute when mutations are observed
+const callback = function (mutationsList, observer) {
+  // Use traditional 'for loops' for IE 11
+  for (const mutation of mutationsList) {
+    if (mutation.type === 'childList') {
+      createSelect(mutation.target, 'district', getDistricts, municipalityChild)
+      // return mutation.target
+    }
+  }
+  return false
+}
+
+// Create an observer instance linked to the callback function
+const observer = new MutationObserver(callback)
+
+observer.observe(provinceSelect, config)
+
+// createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
 
 // createSelect('district', 'municipalities', 'DISTRICT', getMunics)
 

@@ -567,6 +567,10 @@ form .autoComplete_list > li > span {
   max-width: 70%;
 }
 
+.nav-spacer {
+  height: 10%;
+}
+
 nav {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
@@ -821,8 +825,7 @@ section {
   -webkit-box-orient: vertical;
   -ms-flex-direction: column;
   flex-direction: column;
-  min-height: 90%;
-  margin-top: 120px;
+  min-height: 80%;
 }
 
 .not-found {
