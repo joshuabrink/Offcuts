@@ -25,14 +25,26 @@ function getCities (municipality) {
     .then(data => { return data })
 }
 
-// var select = document.getElementById("suburb-post");
+for (const dropdown of document.querySelectorAll('.custom-select-wrapper')) {
+  const trigger = dropdown.querySelector('.custom-select__trigger')
+  trigger.addEventListener('click', function () {
+    dropdown.querySelector('.custom-select').classList.toggle('open')
+    for (const option of dropdown.querySelectorAll('.custom-option')) {
+      option.addEventListener('click', function () {
+        dropdown.querySelector('.custom-select__trigger span').innerText = this.innerText
+        dropdown.querySelector('.custom-select').classList.remove('open')
+      })
+    }
+  })
+}
 
-// console.log(districtsJson[1].city)
-
-// for(var i = 0; i < districtsJson.length; i++) {
-//   var opt = districtsJson[i].city;
-//   select.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
-// }
+window.addEventListener('click', function (e) {
+  for (const select of document.querySelectorAll('.custom-select')) {
+    if (!select.contains(e.target)) {
+      select.classList.remove('open')
+    }
+  }
+})
 
 /**
 * Creates Select from async XHR request data
@@ -48,6 +60,7 @@ const createSelect = (parentSelect, field, getData, childRec = null) => {
     const childValue = Object.values(field)[0]
 
     const childSelect = document.createElement('select')
+    childSelect.classList.add('neu')
     childSelect.id = childName + '-select'
     childSelect.name = childName + '-select'
 
@@ -97,7 +110,7 @@ const municipalityChild = {
   childRecursive: cityChild
 }
 
-createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
+// createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
 
 // createSelect('district', 'municipalities', 'DISTRICT', getMunics)
 
@@ -180,37 +193,37 @@ const date = document.querySelector('#date')
 
 date.value = new Date().toISOString().slice(0, 10)
 
-form.addEventListener('submit', e => {
-  e.preventDefault()
-  if (validator.validate() === true) {
-    formData.append('title', document.querySelector('#title').value)
-    formData.append('price', document.querySelector('#price').value)
-    formData.append('quantity', document.querySelector('#quantity').value)
-    formData.append('material', document.querySelector('#material').value)
-    formData.append('description', document.querySelector('#description').value)
-    formData.append('location', document.querySelector('#location').value)
-    formData.append('date', new Date().toISOString().slice(0, 10))
-    formData.append('type', document.querySelector('#type').value)
+// form.addEventListener('submit', e => {
+//   e.preventDefault()
+//   if (validator.validate() === true) {
+//     formData.append('title', document.querySelector('#title').value)
+//     formData.append('price', document.querySelector('#price').value)
+//     formData.append('quantity', document.querySelector('#quantity').value)
+//     formData.append('material', document.querySelector('#material').value)
+//     formData.append('description', document.querySelector('#description').value)
+//     formData.append('location', document.querySelector('#location').value)
+//     formData.append('date', new Date().toISOString().slice(0, 10))
+//     formData.append('type', document.querySelector('#type').value)
 
-    const uploadLocation = 'http://localhost:3000/newListing'
+//     const uploadLocation = 'http://localhost:3000/newListing'
 
-    const ajax = new XMLHttpRequest()
-    ajax.open('POST', uploadLocation, true)
+//     const ajax = new XMLHttpRequest()
+//     ajax.open('POST', uploadLocation, true)
 
-    ajax.onreadystatechange = function (e) {
-      if (ajax.readyState === 4) {
-        if (ajax.status === 200) {
-          window.location.replace(ajax.responseURL)
-        } else {
-          // error!
-        }
-      }
-    }
-    ajax.send(formData)
-  } else {
+//     ajax.onreadystatechange = function (e) {
+//       if (ajax.readyState === 4) {
+//         if (ajax.status === 200) {
+//           window.location.replace(ajax.responseURL)
+//         } else {
+//           // error!
+//         }
+//       }
+//     }
+//     ajax.send(formData)
+//   } else {
 
-  }
-})
+//   }
+// })
 
 const typeObj = {
   bar: ['square', 'flat', 'reebar', 'circle'],
@@ -281,104 +294,104 @@ for (let i = 0; i < baseTypes.length; i++) {
 //   reverseUrl: 'https://fleet.ls.hereapi.com/static.json'
 // })
 
-const resultList = document.querySelector('.results')
+// const resultList = document.querySelector('.results')
 
-const autoCompleteGeo = new autoComplete({
-  name: 'locations',
-  selector: '#autoCompleteGeo',
-  observer: false,
-  data: {
-    src: async () => {
-      // Loading placeholder text
-      document
-        .querySelector('#autoCompleteGeo')
-        .setAttribute('placeholder', 'Loading...')
-      // Fetch External Data Source
-      const query = document.querySelector('#autoCompleteGeo').value
-      // Fetch External Data Source
-      // const data = await provider.search({ content: 'TC_VEH_TYPES' })
-      const data = await getData()
-      // Saves the fetched data into local storage
-      localStorage.setItem('acData', JSON.stringify(data))
-      // Retrieve the cached data from local storage
-      const localData = JSON.parse(localStorage.getItem('acData'))
-      // Post loading placeholder text
-      document
-        .querySelector('#autoCompleteGeo')
-        .setAttribute('placeholder', autoCompleteJS.placeHolder)
-      // Returns Fetched data
-      return localData
-    },
-    key: ['label'],
-    results: (list) => {
-      // Filter duplicates
-      const filteredResults = Array.from(
-        new Set(list.map((value) => value.match))
-      ).map((val2) => {
-        return list.find((value) => value.match === val2)
-      })
+// const autoCompleteGeo = new autoComplete({
+//   name: 'locations',
+//   selector: '#autoCompleteGeo',
+//   observer: false,
+//   data: {
+//     src: async () => {
+//       // Loading placeholder text
+//       document
+//         .querySelector('#autoCompleteGeo')
+//         .setAttribute('placeholder', 'Loading...')
+//       // Fetch External Data Source
+//       const query = document.querySelector('#autoCompleteGeo').value
+//       // Fetch External Data Source
+//       // const data = await provider.search({ content: 'TC_VEH_TYPES' })
+//       const data = await getData()
+//       // Saves the fetched data into local storage
+//       localStorage.setItem('acData', JSON.stringify(data))
+//       // Retrieve the cached data from local storage
+//       const localData = JSON.parse(localStorage.getItem('acData'))
+//       // Post loading placeholder text
+//       document
+//         .querySelector('#autoCompleteGeo')
+//         .setAttribute('placeholder', autoCompleteJS.placeHolder)
+//       // Returns Fetched data
+//       return localData
+//     },
+//     key: ['label'],
+//     results: (list) => {
+//       // Filter duplicates
+//       const filteredResults = Array.from(
+//         new Set(list.map((value) => value.match))
+//       ).map((val2) => {
+//         return list.find((value) => value.match === val2)
+//       })
 
-      return filteredResults
-    }
-  },
-  trigger: {
-    event: ['input', 'focus']
-  },
-  placeHolder: 'Search',
-  searchEngine: 'strict',
-  highlight: true,
-  maxResults: 5,
-  threshold: 3,
-  debounce: 300,
-  resultsList: {
-    destination: '#location',
-    container: (source) => {
-      source.classList.add('neu-static')
-      source.classList.add('bg-color')
-    }
-  },
-  resultItem: {
-    content: (data, element) => {
-      // Prepare Value's Key
-      const key = Object.keys(data.value).find(
-        (key) => data.value[key] === element.innerText
-      )
-      element.classList.add('row')
-      element.classList.add('between')
-      element.classList.add('neu')
+//       return filteredResults
+//     }
+//   },
+//   trigger: {
+//     event: ['input', 'focus']
+//   },
+//   placeHolder: 'Search',
+//   searchEngine: 'strict',
+//   highlight: true,
+//   maxResults: 5,
+//   threshold: 3,
+//   debounce: 300,
+//   resultsList: {
+//     destination: '#location',
+//     container: (source) => {
+//       source.classList.add('neu-static')
+//       source.classList.add('bg-color')
+//     }
+//   },
+//   resultItem: {
+//     content: (data, element) => {
+//       // Prepare Value's Key
+//       const key = Object.keys(data.value).find(
+//         (key) => data.value[key] === element.innerText
+//       )
+//       element.classList.add('row')
+//       element.classList.add('between')
+//       element.classList.add('neu')
 
-      // Modify Results Item
-      // element.style = 'display: flex; justify-content: space-between;'
-      element.innerHTML = `<span>
-        ${element.innerHTML}</span>
-        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase;">
-      ${key}</span>`
-    }
-  },
-  noResults: (dataFeedback, generateList) => {
-    // Generate autoComplete List
-    generateList(autoCompleteJS, dataFeedback, dataFeedback.results)
-    // No Results List Item
-    const result = document.createElement('li')
-    result.setAttribute('class', 'no_result')
-    result.setAttribute('tabindex', '1')
-    result.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${dataFeedback.query}"</span>`
-    document
-      .querySelector(`#${autoCompleteJS.resultsList.idName}`)
-      .appendChild(result)
-  },
-  onSelection: (feedback) => {
-    document.querySelector('#autoCompleteGeo').blur()
-    // Prepare User's Selected Value
-    const selection = feedback.selection.value[feedback.selection.key]
-    // Render selected choice to selection div
-    // document.querySelector('.selection').innerHTML = selection
-    // Replace Input value with the selected value
-    document.querySelector('#autoCompleteGeo').value = selection
-    // Console log autoComplete data feedback
-    console.log(feedback)
-  }
-})
+//       // Modify Results Item
+//       // element.style = 'display: flex; justify-content: space-between;'
+//       element.innerHTML = `<span>
+//         ${element.innerHTML}</span>
+//         <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase;">
+//       ${key}</span>`
+//     }
+//   },
+//   noResults: (dataFeedback, generateList) => {
+//     // Generate autoComplete List
+//     generateList(autoCompleteJS, dataFeedback, dataFeedback.results)
+//     // No Results List Item
+//     const result = document.createElement('li')
+//     result.setAttribute('class', 'no_result')
+//     result.setAttribute('tabindex', '1')
+//     result.innerHTML = `<span style="display: flex; align-items: center; font-weight: 100; color: rgba(0,0,0,.2);">Found No Results for "${dataFeedback.query}"</span>`
+//     document
+//       .querySelector(`#${autoCompleteJS.resultsList.idName}`)
+//       .appendChild(result)
+//   },
+//   onSelection: (feedback) => {
+//     document.querySelector('#autoCompleteGeo').blur()
+//     // Prepare User's Selected Value
+//     const selection = feedback.selection.value[feedback.selection.key]
+//     // Render selected choice to selection div
+//     // document.querySelector('.selection').innerHTML = selection
+//     // Replace Input value with the selected value
+//     document.querySelector('#autoCompleteGeo').value = selection
+//     // Console log autoComplete data feedback
+//     console.log(feedback)
+//   }
+// })
 
 function preventDefault (e) {
   e.preventDefault()
@@ -406,11 +419,9 @@ const imagePreviewRegion = document.getElementById('image-preview')
 // fakeInput.type = 'file'
 // fakeInput.accept = 'image/*'
 // fakeInput.multiple = true
-dropRegion.addEventListener('click', function () {
-  imagesInput.click()
-})
+dropRegion.addEventListener('click', (e) => { imagesInput.click() })
 
-imagesInput.addEventListener('change', function () {
+imagesInput.addEventListener('change', (e) => {
   const files = imagesInput.files
   handleFiles(files)
 })
@@ -422,6 +433,7 @@ dropRegion.addEventListener('drop', preventDefault, false)
 function handleDrop (e) {
   const dt = e.dataTransfer
   const files = dt.files
+  imagesInput.files = files
 
   if (files.length) {
     handleFiles(files)
@@ -501,7 +513,10 @@ function previewAddToForm (image) {
 
   // read the image...
   const reader = new FileReader()
-  reader.onload = function (e) {
+  reader.onprogress = (e) => {
+    overlay.style.width = 100 - ((e.loaded / e.total) * 100) + 'px'
+  }
+  reader.onload = (e) => {
     img.src = e.target.result
   }
   reader.readAsDataURL(image)

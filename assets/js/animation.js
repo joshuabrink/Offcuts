@@ -105,7 +105,7 @@ function tabSwapper (tabSelector = '.tab', inputSelector = '.input') {
         targets: '.tab-content',
         duration: 300,
         easing: 'easeInOutQuad',
-        height: document.querySelector('.tab-content .pg-' + (i + 1) + '-body').clientHeight
+        height: document.querySelector('.tab-content .pg-' + (i + 1) + '-body').clientHeight + 20
       })
 
       if (!swaped) {

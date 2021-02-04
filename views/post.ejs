@@ -3,7 +3,7 @@
   <section>
     <div class="col post w-33">
       <h1 class="title">Post</h1>
-      <form action="/newListing" method="post" id="post-form">
+      <form action="/newListing" method="post" id="post-form" enctype="multipart/form-data">
         <input type="hidden" name="date" id="date">
         <label for="drop-region">Images</label>
         <div id="drop-region" class="neu bg-color">
@@ -89,11 +89,11 @@
           </div>
         </div>
         <label for="description">Description</label>
-        <textarea class="neu" name="description" id="description" cols="30" rows="6" data-rule="required|length-5-150" style="resize: none;">
-        </textarea>
+        <textarea class="neu" name="description" id="description" cols="30" rows="6" data-rule="required|length-5-150" style="resize: none;"></textarea>
 
         <label for="province-select">Province</label>
-        <select name="province-select" id="province-select">
+       
+        <!-- <select name="province-select" id="province-select" class="neu">
           <option class="flex center" selected> - </option>
           <option class="flex center">Gauteng</option>
           <option class="flex center">Western Cape</option>
@@ -104,10 +104,23 @@
           <option class="flex center">Free State</option>
           <option class="flex center">KwaZulu-Natal</option>
           <option class="flex center">Limpopo</option>
-        </select>
+        </select> -->
 
-        <!-- <input type="text" list="provinces-post" class="flyout-content neu-static"/>
-        <datalist id="provinces-post">
+        <div class="custom-select-wrapper">
+          <div class="custom-select neu-static">
+              <div class="custom-select__trigger"><span>Gauteng</span>
+                  <div class="arrow"></div>
+              </div>
+              <div class="custom-options">
+                  <span class="custom-option bg-color neu-i selected" data-value="Gauteng">Gauteng</span>
+                  <span class="custom-option bg-color neu-i" data-value="Western Cape">Western Cape</span>
+                  <span class="custom-option bg-color neu-i" data-value="Eastern Cape">Eastern Cape</span>
+              </div>
+          </div>
+      </div>
+
+        <!-- <input type="text" id="province-select" list="province-choice" class="neu-static"/>
+        <datalist id="province-choice">
            <option class="flex center">Gauteng</option>
            <option class="flex center">Western Cape</option>
            <option class="flex center">Northern Cape</option>

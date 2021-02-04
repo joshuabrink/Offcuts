@@ -7,7 +7,7 @@ const supertest = require('supertest')
 const server = supertest.agent('http://localhost:3000')
 server.set('env', 'test')
 
-const EMAIL = '     johnsmith@gmail.com    '
+const EMAIL = '     johnsmith@gmail.co    '
 const NAME = 'john  '
 const SURNAME = 'smith'
 const NUMBER = '0827976439  '
@@ -197,8 +197,7 @@ describe('Server Request', function () {
 
   describe('Delete Listing', function () {
     it('Status 200 and body returned', function (done) {
-      server.post('/deleteListing')
-        .send({ listingID: listingID })
+      server.delete('/deleteListing/' + listingID)
         .expect(200)
         .end(function (err, res) {
           if (err) setErr(err, res.error)
