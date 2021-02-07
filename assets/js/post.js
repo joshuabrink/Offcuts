@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 
 const baseTypes = document.querySelectorAll('.base-type input')
 const secContainer = document.querySelector('.sec-type')
@@ -34,207 +35,142 @@ function getChildrenHeight (parent) {
   return totalHeight
 }
 
-function toggleDropdown (dropdown) {
-  // const height = getChildrenHeight(dropdown)
-  const open = dropdown.parentElement.classList.contains('open')
-  const heightAnime = {
-    targets: dropdown,
-    height: [0, getChildrenHeight(dropdown)],
-    duration: 300,
-    easing: 'easeInOutSine'
-  }
-  const optionAnime = {
-    targets: dropdown.querySelectorAll('.custom-option'),
-    opacity: [0, 1],
-    delay: anime.stagger(100),
-    easing: 'easeInOutSine'
-  }
-  // const arrowAnime = {
-  //   targets:
-  // }
-  if (open) {
-    heightAnime.direction = 'reverse'
-    optionAnime.direction = 'reverse'
-    anime(heightAnime)
-    anime(optionAnime)
-    dropdown.parentElement.classList.remove('open')
-  } else {
-    anime(heightAnime)
-    anime(optionAnime)
-    dropdown.parentElement.classList.add('open')
-  }
-}
+const cityObj = { childObj: null, field: 'city', data: getCities }
+const municipalityObj = { childObj: cityObj, field: 'municipality', data: getMunics }
+const districtObj = { childObj: municipalityObj, field: 'district', data: getDistricts }
 
-for (const dropdown of document.querySelectorAll('.custom-select')) {
-  const trigger = dropdown.querySelector('.custom-select-trigger')
-  const optionsContainer = dropdown.querySelector('.custom-options')
-  trigger.addEventListener('click', function (e) {
-    toggleDropdown(optionsContainer)
-  })
-  for (const option of dropdown.querySelectorAll('.custom-option')) {
-    option.addEventListener('click', function (e) {
-      trigger.querySelector('span').innerText = this.innerText
-      toggleDropdown(optionsContainer)
-      // dropdown.classList.remove('open')
+class SelectLinked {
+  constructor (childObj, currID) {
+    this.select = document.querySelector(currID)
+    this.trigger = this.select.querySelector('.custom-select-trigger')
+    this.optionContainer = this.select.querySelector('.custom-options')
+    if (childObj) {
+      this.child = childObj
+      this.grandChild = childObj.childObj
+      this.childField = childObj.field
+      this.childData = childObj.data
+    }
+    // Options for the observer (which mutations to observe)
+    this.mutationConfig = { attributes: false, childList: true, subtree: true }
+    this.clickListen()
+  }
+
+  clickListen () {
+    const triggerAnim = (e) => {
+      this.animation(this.optionContainer)
+    }
+    const optionAnim = (e) => {
+      this.trigger.querySelector('span').innerText = e.target.innerText
+      this.animation(this.optionContainer)
+    }
+
+    this.trigger.addEventListener('click', triggerAnim.bind(this))
+
+    for (const option of this.optionContainer.querySelectorAll('.custom-option')) {
+      option.addEventListener('click', optionAnim.bind(this))
+    }
+
+    if (this.child) {
+      this.changeListen()
+    }
+  }
+
+  changeListen () {
+    // Create an observer instance linked to the callback function
+    const observer = new MutationObserver(this.mutationCallback.bind(this))
+    observer.observe(this.select, this.mutationConfig)
+  }
+
+  mutationCallback (mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        this.createChild()
+      }
+    }
+    return false
+  }
+
+  async createChild () {
+    const childName = this.childField
+
+    const childLabel = document.createElement('label')
+    childLabel.setAttribute('for', childName + '-select')
+    childLabel.innerText = childName.charAt(0).toUpperCase() + childName.slice(1)
+
+    const childSelect = document.createElement('div')
+    childSelect.classList.add('neu-static', 'custom-select', 'col-default')
+    childSelect.id = childName + '-select'
+    childSelect.name = childName + '-select'
+
+    const optionsContainer = document.createElement('div')
+    optionsContainer.classList.add('custom-options')
+
+    const childTrigger = document.createElement('div')
+    childTrigger.classList.add('custom-select-trigger', 'row', 'between')
+    childTrigger.innerHTML = '<span>Select</span><div class="arrow"></div>'
+
+    // send current selected option text with the childs get data function
+    // i.e
+    // get all districts in Gauteng with getDistricts(Gauteng)
+    const data = await this.childData(this.trigger.querySelector('span').innerText)
+
+    const currentChild = document.querySelector('#' + childName + '-select')
+    if (currentChild) {
+      childSelect.innerHTML = ''
+      currentChild.remove()
+    }
+    const currentLabel = document.querySelector('[for="' + childName + '-select"]')
+    if (currentLabel) {
+      currentLabel.innerHTML = ''
+      currentLabel.remove()
+    }
+
+    data.forEach(el => {
+      const newOption = document.createElement('span')
+      newOption.classList.add('custom-option', 'bg-color', 'neu-i')
+      newOption.innerText = el[childName]
+      newOption.value = el[childName]
+      optionsContainer.append(newOption)
     })
-  }
-}
 
-window.addEventListener('click', function (e) {
-  for (const dropdown of document.querySelectorAll('.custom-select')) {
-    const optionsContainer = dropdown.querySelector('.custom-options')
-    if (!dropdown.contains(e.target) && dropdown.classList.contains('open')) {
-      toggleDropdown(optionsContainer)
-      // select.classList.toggle('open')
+    childSelect.append(childTrigger)
+    childSelect.append(optionsContainer)
+
+    this.select.parentNode.insertBefore(childSelect, this.select.nextSibling)
+    this.select.parentNode.insertBefore(childLabel, this.select.nextSibling)
+
+    const newChild = new SelectLinked(this.grandChild, '#' + childName + '-select')
+  }
+
+  animation (dropdown) {
+    const open = dropdown.parentElement.classList.contains('open')
+    const heightAnime = {
+      targets: dropdown,
+      height: [0, getChildrenHeight(dropdown)],
+      duration: 300,
+      easing: 'easeInOutSine'
+    }
+    const optionAnime = {
+      targets: dropdown.querySelectorAll('.custom-option'),
+      opacity: [0, 1],
+      delay: anime.stagger(100),
+      easing: 'easeInOutSine'
+    }
+    if (open) {
+      heightAnime.direction = 'reverse'
+      optionAnime.direction = 'reverse'
+      anime(heightAnime)
+      anime(optionAnime)
+      dropdown.parentElement.classList.remove('open')
+    } else {
+      anime(heightAnime)
+      anime(optionAnime)
+      dropdown.parentElement.classList.add('open')
     }
   }
-})
-
-/**
-* Creates Select from async XHR request data
-* @param {String} parentName
-* @param {String} childName
-* @param {String} fieldName
-* @param {Function} getData
-* @param {Function} childRec
-*/
-const createSelect = async (parentSelect, field, getData, childRec = null) => {
-  // const parentTrigger = parentSelect.querySelector('.custom-select-trigger')
-  // Start observing the target node for configured mutations
-
-  // parentTrigger.addEventListener('change', async (e) => {
-  const childName = field
-
-  const childLabel = document.createElement('label')
-  childLabel.setAttribute('for', childName + '-select')
-  childLabel.innerText = childName.charAt(0).toUpperCase() + childName.slice(1)
-
-  const childSelect = document.createElement('div')
-  childSelect.classList.add('neu-static', 'cutstom-select', 'col-default')
-  childSelect.id = childName + '-select'
-  childSelect.name = childName + '-select'
-
-  const optionsContainer = document.createElement('div')
-  optionsContainer.classList.add('custom-options')
-  childSelect.append(optionsContainer)
-
-  const childTrigger = document.createElement('div')
-  childTrigger.classList.add('custom-select-trigger', 'row', 'between')
-  childTrigger.innerHTML = '<span>Select</span><div class="arrow"></div>'
-
-  const data = await getData(parentSelect.value)
-  const currentChild = document.querySelector('#' + childName + '-select')
-  if (currentChild) {
-    childSelect.innerHTML = ''
-    currentChild.remove()
-  }
-  const currentLabel = document.querySelector('[for="' + childName + '-select"]')
-  if (currentLabel) {
-    currentLabel.innerHTML = ''
-    currentLabel.remove()
-  }
-
-  // optionsContainer.append(document.createElement('option'))
-
-  data.forEach(el => {
-    const newOption = document.createElement('span')
-    newOption.classList.add('custom-option', 'bg-color', 'neu-i')
-    newOption.innerText = el[childName]
-    newOption.value = el[childName]
-    optionsContainer.append(newOption)
-  })
-  if (childRec) {
-    createSelect(childSelect, childRec.field, childRec.getData, childRec.childRecursive)
-  }
-
-  parentSelect.parentNode.insertBefore(childSelect, parentSelect.nextSibling)
-  parentSelect.parentNode.insertBefore(childLabel, parentSelect.nextSibling)
-  // })
 }
 
-const provinceSelect = document.querySelector('#province-select')
-const cityChild = {
-  childName: 'city',
-  field: 'city',
-  getData: getCities
-}
-const municipalityChild = {
-  childName: 'municipality',
-  field: 'municipality',
-  getData: getMunics,
-  childRecursive: cityChild
-}
-
-// Options for the observer (which mutations to observe)
-const config = { attributes: false, childList: true, subtree: false }
-
-// Callback function to execute when mutations are observed
-const callback = function (mutationsList, observer) {
-  // Use traditional 'for loops' for IE 11
-  for (const mutation of mutationsList) {
-    if (mutation.type === 'childList') {
-      createSelect(mutation.target, 'district', getDistricts, municipalityChild)
-      // return mutation.target
-    }
-  }
-  return false
-}
-
-// Create an observer instance linked to the callback function
-const observer = new MutationObserver(callback)
-
-observer.observe(provinceSelect, config)
-
-// createSelect(provinceSelect, 'district', getDistricts, municipalityChild)
-
-// createSelect('district', 'municipalities', 'DISTRICT', getMunics)
-
-// (async () => {
-//   const districts = await getDistrics()
-
-//   const provinceSelect = document.querySelector('#province-select')
-//   // let districtsSelect = '<select name="districts-select" id="districts-select">'
-//   const districtsSelect = document.createElement('select')
-//   districtsSelect.id = 'districts-select'
-//   districtsSelect.name = 'districts-select'
-
-//   provinceSelect.addEventListener('change', e => {
-//     const currentdistrictsChild = document.querySelector('#districts-select')
-//     if (currentdistrictsChild) {
-//       districtsSelect.innerHTML = ''
-//       currentdistrictsChild.remove()
-//     }
-//     districts.forEach(el => {
-//       if (el.admin_name === e.target.value) {
-//         const districtOption = document.createElement('option')
-//         districtOption.innerText = el.DISTRICT_N
-//         districtOption.value = el.DISTRICT
-//         districtsSelect.append(districtOption)
-//         districtOption.addEventListener('change', e => {
-
-//         })
-//         // districtsSelect.innerHTML += '<option value="' + el.city + '">' + el.city + '</option>'
-//       // provinceSelect.insertAdjacentHTML('afterend',)
-//       }
-//     })
-//     // districtsSelect += '</select>'
-//     provinceSelect.parentNode.insertBefore(districtsSelect, provinceSelect.nextSibling)
-//     // provinceSelect.insertAdjacentHTML('afterend', districtsSelect)
-//   })
-// })()
-
-// const select = document.getElementById('selectNumber')
-// const options2 = ['1', '2', '3', '4', '5']
-
-// for (let i = 0; i < options2.length; i++) {
-//   const opt = options2[i]
-
-//   const el = document.createElement('option')
-//   el.text = opt
-//   el.value = opt
-
-//   select.add(el)
-// }
+const provinceSelect = new SelectLinked(districtObj, '#province-select')
 
 // validation
 const options = {
