@@ -86,6 +86,8 @@ table {
 .custom-options {
   display: block;
   height: 0;
+  max-height: 282px;
+  overflow-y: scroll;
   transition: all 0.5s;
   pointer-events: none;
   z-index: 2;
