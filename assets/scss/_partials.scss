@@ -34,7 +34,7 @@ body {
   scroll-behavior: smooth;
   @include prefix(transition, background-color 0.2s, (o, webkit));
   @include font;
-  @include scrollbars(10px, #fff, $bg-color);
+  @include scrollbars(10px, $bg-color, $bg-color);
 }
 
 button {
@@ -181,8 +181,8 @@ nav {
   height: $nav-height;
   margin-left: 1%;
   position: absolute;
-  width: 98%;
-  z-index: 10;
+  width: 100%;
+  z-index: 1;
 
   #logo {
     width: 200px;

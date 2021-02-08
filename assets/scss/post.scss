@@ -93,34 +93,36 @@ table {
 //   user-select: none;
 //   width: 100%;
 // }
-.custom-select {
+.select {
   position: relative;
   // display: flex;
   // flex-direction: column;
   border-radius: 20px;
   margin-bottom: 20px;
 }
-.custom-select-trigger {
+.select-trigger {
   position: relative;
   padding: 0 22px;
   height: 35px;
   cursor: pointer;
 }
-.custom-options {
+.select-options {
   display: block;
   height: 0;
   max-height: 282px;
-  overflow-y: scroll;
+  overflow-y: auto;
   transition: all 0.5s;
   pointer-events: none;
+  scroll-behavior: smooth;
+  @include scrollbars(10px, #e8eff3, #e8eff3);
   z-index: 2;
 }
-.custom-select.open .custom-options {
+.select.open .select-options {
 
   visibility: visible;
   pointer-events: all;
 }
-.custom-option {
+.select-option {
   position: relative;
   display: block;
   opacity: 0;

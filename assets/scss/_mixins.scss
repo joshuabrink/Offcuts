@@ -211,14 +211,19 @@ $prefixes: "webkit", "ms", "o", "none";
   &::-webkit-scrollbar {
     width: $size;
     height: $size;
+    z-index: 100;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: $foreground-color;
+     background: darken($foreground-color, 1);
+    // background: $foreground-color;
+    border-radius: 20px;
+    @include neustyle(darken($foreground-color, 10), false, topleft, false, 1px);
   }
 
   &::-webkit-scrollbar-track {
     background: $background-color;
+    @include neustyle($background-color, false, topleft, true, 1px);
   }
 
   // For Internet Explorer

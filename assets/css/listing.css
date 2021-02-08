@@ -280,18 +280,28 @@ html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 10px;
   height: 10px;
+  z-index: 100;
 }
 html::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
-  background: #fff;
+  background: #e5edf1;
+  border-radius: 20px;
+  -webkit-transition: box-shadow 0.3s ease;
+  -o-transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  box-shadow: -2px -2px 3px rgba(249, 251, 252, 0.7), 2px 2px 3px #9ebccd, inset -2px -2px 6px rgba(225, 234, 240, 0.1), inset 2px 2px 6px #c6d8e2;
 }
 html::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track {
   background: #e8eff3;
+  -webkit-transition: box-shadow 0.3s ease;
+  -o-transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  box-shadow: -2px -2px 5px rgba(255, 255, 255, 0.2), 2px 2px 3px #e8eff3, inset -2px -2px 6px rgba(255, 255, 255, 0.6), inset -1px -1px 1px rgba(255, 255, 255, 0.2), inset 2px 2px 3px #c6d8e2;
 }
 html,
 body {
-  scrollbar-face-color: #fff;
+  scrollbar-face-color: #e8eff3;
   scrollbar-track-color: #e8eff3;
 }
 
@@ -584,8 +594,8 @@ nav {
   height: 10%;
   margin-left: 1%;
   position: absolute;
-  width: 98%;
-  z-index: 10;
+  width: 100%;
+  z-index: 1;
 }
 nav #logo {
   width: 200px;
