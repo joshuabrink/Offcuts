@@ -39,7 +39,9 @@ const provMap = {
   'KwaZulu-Natal': 'KZN',
   Limpopo: 'LIM',
   Mpumalanga: 'MP',
-  'Northern Cape': 'NC'
+  'Northern Cape': 'NC',
+  'Free State': 'FS',
+  'North West': 'NW'
 }
 
 router.get('/getDistricts/:province', (req, res) => {
